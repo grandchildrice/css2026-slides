@@ -163,15 +163,15 @@ Note:
 ## 実例：定理に書かれた「条件」の部分を取り出す
 
 <div class="grid">
-<div><h3>原典の仮説の式（抜粋）</h3><div class="proof-code"><div><mark>qL ⊆ vL</mark></div><div><mark>qR ⊆ vR</mark></div><div><mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark></div><div><mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark></div></div><p class="small">L/R：比較する両側<br>q：支持した参加者　v：集計対象</p></div>
+<div><h3>定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small">括弧群＝仮説。構文的に列挙し、部品を除く実体条件を選別。</p></div>
 <div class="premise-list"><h3>取り出される前提の意味</h3><p><mark>支持した参加者が、<br>その側の集計対象に含まれる。</mark></p><p><mark>その対象の総重みに対して、<br>2/3以上の重みが支持する。</mark></p><p>この条件を、<strong>両側それぞれ</strong>で扱う。</p></div>
 </div>
 <p class="message">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
 <p class="source">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/blob/7650709/GasperBeaconChain/Core/Theories/SlashableBound.lean">quorum_intersection_weight_lower / gasper-lean4 @ 7650709</a>。原ソースの仮説4式を示す。日本語は説明用の要約。</p>
 
 Note:
-原典の定理に置かれた条件です。左側と右側それぞれについて、支持した参加者が集計対象に含まれること、その集計対象の総重みに対して3分の2以上が支持していることを要求しています。
-左の黄色は実際の仮説の式です。記号を覚える必要はなく、右の意味を見てください。「誰を数えるか」「何を分母とするか」まで含む条件を、証明の側から取り出せます。
+どうやって証明から降ってくるかを見せます。定理文は「theorem 名前（仮説）（仮説）…：結論」という形をしています。コロンの手前の括弧が、定理が依存する前提です。ツールはこれをLeanの構文として読み、型やモデルの部品（波括弧の引数）を除いた実体条件だけを選別します。解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から延べ57件が出ました。
+この例では、左側と右側それぞれについて、支持した参加者が集計対象に含まれること、その集計対象の総重みに対して3分の2以上が支持していることを要求しています。記号を覚える必要はなく、右の意味を見てください。「誰を数えるか」「何を分母とするか」まで含む条件を、証明の側から取り出せます。
 この定理は、集計対象の重なりに応じて、支持者の重なりを評価します。両側の参加者集合が同一であることを常に要求する定理ではありません。異なる場合の保証も、その関係を含めて評価するため、先ほどの仮想例と矛盾しません。
 
 ---
