@@ -154,8 +154,8 @@ def scope_scene():
     body += f'<line x1="600" y1="95" x2="600" y2="305" stroke="{ORANGE}" stroke-width="4" stroke-dasharray="9 8"/>'
     body += rect(630, 95, 500, 210, "#fff6ee", ORANGE, 12)
     body += text(880, 152, "前提 P を満たさない実装", 27, ORANGE, "middle", True)
-    body += text(880, 208, "定理は何も言わない", 31, NAVY, "middle", True)
-    body += text(880, 258, "（危険とも安全とも言えない）", 20, "#516575", "middle")
+    body += text(880, 208, "保証対象外", 31, NAVY, "middle", True)
+    body += text(880, 258, "（壊れるとは、言っていない）", 20, "#516575", "middle")
     body += text(600, 345, "境界（P を満たすか）は仕様の手順に書かれていない → 仕様を読むだけでは、実装がどちらにいるか分からない", 23, ORANGE, "middle", True)
     save("diagram-guarantee-scope.svg", body, "仕様準拠の実装の中に、前提Pを満たす領域（保証Qが効く）と満たさない領域（定理は何も言わない）がある。Pを満たすかどうかの境界は仕様の手順に書かれていない", height=390)
 
