@@ -144,20 +144,24 @@ def pipeline_scene():
 
 
 def scope_scene():
-    body = rect(30, 20, 1140, 350, "#f7fafc", "#516575", 14)
-    body += text(60, 66, "仕様 S に従う実装（仕様準拠）＝ この全体", 28, NAVY, bold=True)
-    body += text(1140, 66, "証明が検査したのは：P ⇒ Q", 22, "#516575", "end")
-    body += rect(70, 95, 500, 210, "#eef6fc", BLUE, 12)
-    body += text(320, 152, "前提 P を満たす実装", 27, BLUE, "middle", True)
-    body += text(320, 208, "保証 Q が効く世界", 31, NAVY, "middle", True)
-    body += text(320, 258, "（安全が数学的に保証される）", 20, "#516575", "middle")
-    body += f'<line x1="600" y1="95" x2="600" y2="305" stroke="{ORANGE}" stroke-width="4" stroke-dasharray="9 8"/>'
-    body += rect(630, 95, 500, 210, "#fff6ee", ORANGE, 12)
-    body += text(880, 152, "前提 P を満たさない実装", 27, ORANGE, "middle", True)
-    body += text(880, 208, "保証対象外", 31, NAVY, "middle", True)
-    body += text(880, 258, "（壊れるとは、言っていない）", 20, "#516575", "middle")
-    body += text(600, 345, "境界（P を満たすか）は仕様の手順に書かれていない → 仕様を読むだけでは、実装がどちらにいるか分からない", 23, ORANGE, "middle", True)
-    save("diagram-guarantee-scope.svg", body, "仕様準拠の実装の中に、前提Pを満たす領域（保証Qが効く）と満たさない領域（定理は何も言わない）がある。Pを満たすかどうかの境界は仕様の手順に書かれていない", height=390)
+    body = rect(300, 12, 600, 100, "#f5f1fc", PURPLE, 12)
+    body += text(600, 55, "証明 ＝ 保証書", 30, PURPLE, "middle", True)
+    body += text(600, 93, "「前提 P を満たすなら、安全 Q を保証」", 22, NAVY, "middle")
+    body += arrow("M330 118 V168")
+    body += text(365, 148, "保証が届く", 20, BLUE, "start", True)
+    body += f'<path d="M870 118 V168" fill="none" stroke="{ORANGE}" stroke-width="3.5" stroke-dasharray="8 6"/>'
+    body += text(845, 148, "✕ 届かない", 20, ORANGE, "end", True)
+    body += rect(60, 175, 520, 135, "#eef6fc", BLUE, 12)
+    body += text(320, 218, "前提 P を満たす実装", 26, BLUE, "middle", True)
+    body += text(320, 262, "保証が効く", 29, NAVY, "middle", True)
+    body += text(320, 295, "（安全が数学的に保証される）", 19, "#516575", "middle")
+    body += rect(640, 175, 520, 135, "#fff6ee", ORANGE, 12)
+    body += text(900, 218, "前提 P を満たさない実装", 26, ORANGE, "middle", True)
+    body += text(900, 262, "保証対象外", 29, NAVY, "middle", True)
+    body += text(900, 295, "（壊れるとは、言っていない）", 19, "#516575", "middle")
+    body += text(600, 340, "どちらも仕様どおりに作られている（仕様準拠）", 21, "#516575", "middle", True)
+    body += text(600, 375, "「前提を満たすか」は仕様に書かれていない → 読むだけでは区別がつかない", 22, ORANGE, "middle", True)
+    save("diagram-guarantee-scope.svg", body, "証明は保証書。前提Pを満たすなら安全Qを保証すると書くが、届くのはPを満たす実装だけ。満たさない実装は保証対象外（壊れるとは言っていない）。どちらも仕様準拠で、Pを満たすかは仕様に書かれていない", height=395)
 
 
 def result_chart():
