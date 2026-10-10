@@ -183,7 +183,7 @@ Note:
 ## 前提を、監査で扱える確認候補へ変換する
 
 <div class="grid tl">
-<div><table>
+<div><p class="label">人が読む形（確認一覧）</p><table>
 <thead><tr><th>取り出した条件</th><th>確認候補（例）</th></tr></thead>
 <tbody>
 <tr><td>支持者が集計対象に含まれる</td><td>票の出所と参加者集合が対応しているか。</td></tr>
@@ -191,7 +191,7 @@ Note:
 <tr><td>集合の関係に応じて保証を評価</td><td>参加者の入れ替わり時に、どの集合・重みをモデル化しているか。</td></tr>
 </tbody>
 </table></div>
-<div><p class="label">実際に渡される形（JSON）</p><pre class="json-snippet"><code class="language-json">{
+<div><p class="label">ツールが読む形（SPECA等の入力）</p><pre class="json-snippet"><code class="language-json">{
  "property_id": "CHK-GEN-09",
  "severity": "CRITICAL",
  "lean_artifact": "AccountableSafety.lean#…",
@@ -201,12 +201,12 @@ Note:
   "k_finalized …", "justified …" ]
 }</code></pre></div>
 </div>
-<p class="message">受け取るのは、<strong>条件・原典の定理・仕様の参照先</strong>がつながった一覧。</p>
+<p class="message">人には<strong>確認一覧</strong>、監査ツールには<strong>JSON</strong>を渡す。<br>どちらも、条件・原典の定理・仕様の参照先がつながっている。</p>
 <p class="small">右は実際の成果物形式（実データ）。左の対応付けは使い方の例で、バグ検出性能は別途検証する。</p>
 
 Note:
 機械抽出して終わりではなく、その条件が仕様や実装のどこに対応するかを示します。画面左は、先ほどの前提を実務で確認するならどんな問いになるか、という使い方の例です。
-画面右は実際に渡される成果物の形です。プロパティID、重要度、由来した定理、対応する仕様の箇所、前提条件がJSONでまとまっています。監査者はこのJSONを受け取るだけで、Leanを読む必要はありません。
+画面右は実際に渡される成果物の形です。プロパティID、重要度、由来した定理、対応する仕様の箇所、前提条件がJSONでまとまっています。ただし監査者が素のJSONを読むわけではなく、これはSPECAのような監査パイプラインが次段（コード位置特定・検査）へ渡す入力形式です。人が読むのは左の確認一覧で、どちらもLeanを読む必要はありません。
 研究の出力は、前提条件と、その来歴となる定理、対応する仕様箇所を持つ項目一覧です。左列の具体的なレビュー手順を自動生成し、その効果を評価したわけではありません。
 候補を利用する人は、意味を確認して、コードのチェックなのか、モデル・運用条件の確認なのかを割り当てます。この候補が、仕様の文章だけから得る項目とどれだけ異なるかを調べました。
 
