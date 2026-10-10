@@ -4,119 +4,147 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>仕様どおりに実装すれば安全か — CSS2026</title>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-
   <style>
     /* ===== CSS2026 学会標準スタイル（白背景・ネイビー基調） ===== */
     :root {
-      --navy: #1a3550;
-      --blue: #0369a1;
-      --blue-bg: #eef5fb;
-      --text: #1f2937;
-      --muted: #64748b;
-      --border: #d0dbe5;
+      --navy: #18334c;
+      --blue: #006ba6;
+      --blue-bg: #eef6fc;
+      --text: #263746;
+      --muted: #516575;
+      --border: #cbd8e2;
+      --orange: #b64b12;
+      --purple: #6541a5;
+      --r-main-font: "Helvetica Neue", Arial, "Yu Gothic", Meiryo, sans-serif;
+      --r-main-font-size: 30px;
+      --r-main-color: var(--text);
+      --r-heading-font: var(--r-main-font);
+      --r-heading-text-transform: none;
+      --r-link-color: var(--blue);
     }
-
-    .reveal {
-      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
-                   "Yu Gothic", Meiryo, sans-serif;
-      font-size: 30px;
-      color: var(--text);
-    }
-
+    .reveal { font-family: var(--r-main-font); font-size: 30px; color: var(--text); }
     .reveal .slides { text-align: left; }
-
+    .reveal .slides section { box-sizing: border-box; padding: 28px 44px; }
+    .reveal *, .reveal *::before, .reveal *::after { box-sizing: border-box; }
     /* 見出し */
-    .reveal h1 {
-      font-size: 1.6em;
-      font-weight: 700;
-      color: var(--navy);
-      text-transform: none;
-      line-height: 1.35;
-    }
-    .reveal h2 {
-      font-size: 1.3em;
-      font-weight: 700;
-      color: var(--navy);
-      text-transform: none;
-      border-bottom: 3px solid var(--navy);
-      padding-bottom: 0.3em;
-      margin-bottom: 0.6em;
-    }
-    .reveal h3 {
-      font-size: 0.95em;
-      font-weight: 700;
-      color: var(--blue);
-      text-transform: none;
-      margin: 0.7em 0 0.3em;
-    }
-
+    .reveal h1 { font-size: 58px; font-weight: 700; color: var(--navy); line-height: 1.4; text-transform: none; }
+    .reveal h2 { font-size: 41px; font-weight: 700; color: var(--navy); line-height: 1.35; text-transform: none; margin: 0 0 28px; padding-bottom: 14px; border-bottom: 3px solid var(--navy); }
+    .reveal h3 { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1.5; text-transform: none; margin: 0 0 16px; }
     /* 本文 */
-    .reveal p, .reveal li {
-      font-size: 0.82em;
-      line-height: 1.6;
-    }
-    .reveal li { margin-bottom: 0.25em; }
-    .reveal li > ul { font-size: 0.9em; color: #374151; }
+    .reveal p, .reveal li { font-size: 28px; line-height: 1.6; }
+    .reveal p { margin: 14px 0; }
     .reveal strong { color: var(--navy); }
     .reveal em { color: var(--muted); font-style: normal; }
-
+    .reveal a { text-decoration: underline; text-underline-offset: 4px; }
+    .reveal .eyebrow { font-size: 20px; letter-spacing: .09em; color: var(--blue); font-weight: 700; margin: 0 0 18px; }
+    .reveal .lead { font-size: 35px; font-weight: 700; line-height: 1.55; }
+    .reveal .small { font-size: 22px; line-height: 1.5; }
+    .reveal .source { font-size: 17px; line-height: 1.5; color: var(--muted); margin: 16px 0 0; }
+    .reveal .muted { color: var(--muted); }
+    .reveal .takeaway { margin-top: 24px; padding: 16px 22px; background: var(--blue-bg); border-left: 5px solid var(--blue); font-size: 28px; line-height: 1.5; }
+    .reveal .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; align-items: start; }
+    .reveal .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .reveal .panel { padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: #f8fafc; min-width: 0; }
+    .reveal .panel.blue { background: var(--blue-bg); border-color: #a5cce5; }
+    .reveal .panel.orange { background: #fff6ee; border-color: #e9c4a8; }
+    .reveal .panel.purple { background: #f5f1fc; border-color: #cdbde4; }
+    .reveal .panel p { font-size: 26px; margin: 10px 0 0; }
+    .reveal .panel .small { font-size: 22px; }
+    .reveal .label { font-size: 19px; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
+    .reveal .section-tag { display: inline-block; font-size: 18px; font-weight: 700; letter-spacing: .08em; color: var(--blue); background: var(--blue-bg); border: 1px solid #a5cce5; border-radius: 999px; padding: 3px 14px; margin: 0 0 8px; }
+    .reveal .problem { font-size: 26px; line-height: 1.5; color: var(--orange); margin: 8px 0 4px; }
+    .reveal .cover .agenda-line { font-size: 19px; color: var(--muted); letter-spacing: .05em; margin-top: 14px; }
+    .reveal .arrow { font-size: 42px; text-align: center; color: var(--blue); margin: 12px 0; }
+    .reveal .flow { display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; align-items: center; gap: 12px; margin: 24px 0; }
+    .reveal .flow .panel { text-align: center; }
+    .reveal .flow .arrow { margin: 0; }
+    .reveal .flow .number { font-size: 50px; display: block; color: var(--blue); font-weight: 700; }
+    .reveal .diagram { display: block; width: 100%; height: auto; margin: 14px 0; }
+    .reveal .diagram text { font-family: var(--r-main-font); }
+    .reveal .explanation-visual { display: block; width: 100%; height: 300px; object-fit: contain; margin: 10px 0; }
+    .reveal .result-visual { display: block; width: 100%; height: 330px; object-fit: contain; margin: 12px 0; }
+    .reveal .visual-story { display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 42px; align-items: center; margin: 22px 0; }
+    .reveal .web-illustration { display: block; width: 100%; height: 310px; object-fit: contain; margin: 0; }
+    .reveal .story-copy p { font-size: 30px; line-height: 1.65; margin: 18px 0; }
+    .reveal .story-copy .lead { font-size: 37px; line-height: 1.55; }
+    .reveal .story-copy .small { font-size: 22px; margin: 12px 0; }
+    .reveal .proof-step { padding: 12px 18px; border-left: 5px solid var(--blue); margin: 0 0 16px; background: var(--blue-bg); }
+    .reveal .proof-step strong { font-size: 29px; }
+    .reveal .proof-step p { font-size: 25px; line-height: 1.5; margin: 6px 0 0; }
+    .reveal .premise-list { display: grid; gap: 12px; }
+    .reveal .premise-list p { font-size: 26px; margin: 0; line-height: 1.5; }
+    .reveal .premise-list code { font-size: 17px; overflow-wrap: anywhere; }
+    .reveal .guarantee { padding: 28px; border: 2px solid #a5cce5; border-radius: 12px; background: var(--blue-bg); }
+    .reveal .guarantee .lead { font-size: 37px; }
+    .reveal .hypothesis { font-size: 25px; line-height: 1.55; color: var(--muted); }
+    .reveal .message { font-size: 32px; line-height: 1.55; margin: 24px 0 14px; }
+    .reveal .brand-lockup { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
+    .reveal .brand-lockup h3 { font-size: 36px; margin: 0; color: var(--navy); }
+    .reveal .ethereum-logo { display: block; width: 64px; height: 94px; object-fit: contain; margin: 0; }
+    .reveal .architecture-visual { display: block; width: 100%; height: 350px; object-fit: contain; margin: 12px 0; }
+    .reveal .scenario-visual { display: block; width: 100%; height: 205px; object-fit: contain; margin: 6px 0; }
+    .reveal .route { display: flex; align-items: center; gap: 30px; padding: 18px 22px; background: #f5f7fa; border-radius: 8px; font-size: 28px; }
+    .reveal .route span { font-size: 22px; color: var(--muted); }
+    .reveal .extraction-flow { margin: 34px 0; }
+    .reveal .client-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin: 26px 0; }
+    .reveal .client { padding: 22px 14px; border: 1px solid var(--border); border-radius: 12px; text-align: center; }
+    .reveal .client:nth-child(1) { background: #f5f1fc; }
+    .reveal .client:nth-child(2) { background: #fff7ec; }
+    .reveal .client:nth-child(3) { background: #eef8fb; }
+    .reveal .client:nth-child(4) { background: #fff4f6; }
+    .reveal img { background: transparent; border: 0; box-shadow: none; }
+    .reveal .client img { width: 96px; height: 96px; object-fit: contain; margin: 0 0 16px; }
+    .reveal .client h3 { font-size: 28px; color: var(--navy); margin: 0 0 8px; }
+    .reveal .client p { font-size: 25px; margin: 0; }
+    .reveal .client .small { font-size: 19px; margin-top: 8px; }
     /* キーメッセージ（引用ブロック） */
-    .reveal blockquote {
-      width: 100%;
-      margin: 0.7em 0;
-      padding: 0.6em 1em;
-      background: var(--blue-bg);
-      border-left: 6px solid var(--blue);
-      border-radius: 4px;
-      box-shadow: none;
-      font-size: 0.8em;
-      line-height: 1.55;
-      color: #075985;
-    }
-    .reveal blockquote p { margin: 0; font-size: inherit; }
-
+    .reveal blockquote { width: 100%; margin: 18px 0; padding: 22px 26px; background: var(--blue-bg); border-left: 5px solid var(--blue); border-radius: 4px; box-shadow: none; font-size: 27px; line-height: 1.55; font-style: normal; }
+    .reveal blockquote p { font-size: inherit; margin: 0; }
     /* テーブル */
-    .reveal table { font-size: 0.72em; margin: 0.7em auto; }
-    .reveal th { background: #f1f5f9; color: var(--navy); }
-    .reveal th, .reveal td { padding: 0.4em 0.8em; border: 1px solid var(--border); }
-
+    .reveal table { width: 100%; font-size: 23px; margin: 16px 0; }
+    .reveal th { background: #eef4f8; color: var(--navy); }
+    .reveal th, .reveal td { padding: 14px 18px; border: 1px solid var(--border); line-height: 1.5; vertical-align: top; }
     /* コード */
-    .reveal pre {
-      width: 100%;
-      margin: 0.6em 0;
-      box-shadow: none;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.55em;
-    }
-    .reveal pre code { padding: 0.8em 1em; max-height: 420px; }
-
+    .reveal pre { width: 100%; margin: 16px 0; box-shadow: none; border: 1px solid var(--border); border-radius: 6px; font-size: 21px; line-height: 1.55; }
+    .reveal pre code { padding: 18px 20px; max-height: none; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .reveal code { font-family: Consolas, "Liberation Mono", monospace; }
+    .reveal .proof-code { font-family: Consolas, monospace; font-size: 19px; line-height: 1.8; padding: 20px; background: #f5f7fa; border: 1px solid var(--border); border-radius: 8px; }
+    .reveal .proof-code div { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .reveal mark { color: #513c06; background: #ffe49b; padding: 2px 3px; border-radius: 3px; }
+    .reveal .premise { padding: 14px 18px; margin-bottom: 12px; background: #fff8e6; border-left: 4px solid #b98700; font-size: 24px; }
+    .reveal .big-number { font-size: 100px; line-height: 1.1; font-weight: 700; color: var(--blue); }
+    .reveal .result-layout { display: grid; grid-template-columns: 330px 1fr; gap: 40px; align-items: center; margin: 38px 0 26px; }
+    .reveal .result-bar { display: flex; height: 106px; border-radius: 8px; overflow: hidden; font-weight: 700; color: white; font-size: 29px; }
+    .reveal .result-bar div { display: flex; align-items: center; justify-content: center; }
+    .reveal .result-bar .not-explicit { width: 84.210526%; background: var(--blue); }
+    .reveal .result-bar .disputed { width: 15.789474%; background: #a84c1d; }
+    .reveal .summary { font-size: 44px; line-height: 1.6; font-weight: 700; color: var(--navy); margin: 38px 0; }
     /* スライド番号 */
-    .reveal .slide-number {
-      font-size: 0.55em;
-      color: var(--muted);
-      background: transparent;
-    }
-
+    .reveal .slide-number { font-size: 16px; color: var(--muted); background: white; padding: 6px 12px; }
     /* タイトルスライド */
-    .reveal .slides section:first-child { text-align: center; }
-    .reveal .slides section:first-child h1 { border-bottom: none; }
+    .reveal .cover { padding: 10px 0; }
+    .reveal .cover h1 { margin: 0 0 16px; }
+    .reveal .cover .eyebrow { margin-bottom: 12px; }
+    .reveal .cover .subtitle { font-size: 26px; color: var(--muted); line-height: 1.5; margin: 16px 0; }
+    .reveal .cover .authors { font-size: 21px; line-height: 1.7; margin-top: 24px; }
+    .reveal .cover .cover-claim { font-size: 29px; font-weight: 700; color: var(--blue); margin-top: 24px; }
+    .reveal .hero-logo { width: 78px; height: 112px; object-fit: contain; float: right; margin: 0 30px 0 24px; }
+    @media print { .reveal .source { font-size: 17px; } }
   </style>
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
       <section data-markdown="slides.md"
+               data-charset="utf-8"
                data-separator="\r?\n---\r?\n"
                data-separator-notes="^Note:">
       </section>
     </div>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/markdown/markdown.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
@@ -127,12 +155,13 @@
       width: 1280,
       height: 720,
       margin: 0.04,
-      center: true,
+      center: false,
       controls: true,
       progress: true,
       slideNumber: 'c/t',
       hash: true,
       transition: 'none',
+      scrollActivationWidth: null,
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
     });
   </script>

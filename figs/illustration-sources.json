@@ -1,0 +1,62 @@
+[
+  {
+    "file": "figs/web-infrastructure.png",
+    "title": "Infrastructure",
+    "artist": "WT",
+    "source_page": "https://ethereum.org/en/assets/",
+    "asset_url": "https://ethereum.org/_next/static/media/infrastructure_transparent.3n6b-a9kiks3t.png",
+    "license_reference": "https://github.com/ethereum/ethereum-org-website/blob/dev/LICENSE",
+    "license_notice": "figs/ethereum-illustration-LICENSE.txt",
+    "sha256": "9afaf36d52fbb246fb846dfe80dec01ea20c24b99de59c5c499fc23eb7ed738d",
+    "retrieved": "2026-10-03",
+    "modification": "none"
+  },
+  {
+    "file": "figs/web-finance.png",
+    "title": "Finance",
+    "artist": "WT",
+    "source_page": "https://ethereum.org/en/assets/",
+    "asset_url": "https://ethereum.org/_next/static/media/finance_transparent.111-t5d0dg_nt.png",
+    "license_reference": "https://github.com/ethereum/ethereum-org-website/blob/dev/LICENSE",
+    "license_notice": "figs/ethereum-illustration-LICENSE.txt",
+    "sha256": "3630e754fdf03f2a0bbd677ce5bd3f26de579aab71e7bb66359f4fdf5a8852bf",
+    "retrieved": "2026-10-03",
+    "modification": "none"
+  },
+  {
+    "file": "figs/web-connected-world.svg",
+    "title": "Connected world",
+    "artist": "Katerina Limpitsouni / unDraw",
+    "source_page": "https://undraw.co/illustration/connected-world_anke",
+    "download_method": "Official illustration page SVG download button",
+    "license_reference": "https://undraw.co/license",
+    "license_use": "Illustration in this academic presentation only; not for ML development or redistribution as an illustration pack.",
+    "sha256": "b5b8ccb5ee5b329e8e1b6e8307f11f15dd79147c625e3c40aae51de2844d29bb",
+    "retrieved": "2026-10-03",
+    "modification": "none"
+  },
+  {
+    "file": "figs/web-agreement.svg",
+    "title": "Agreement",
+    "artist": "Katerina Limpitsouni / unDraw",
+    "source_page": "https://undraw.co/illustration/agreement_ftet",
+    "download_method": "Official illustration page SVG download button",
+    "license_reference": "https://undraw.co/license",
+    "license_use": "Illustration in this academic presentation only; not for ML development or redistribution as an illustration pack.",
+    "sha256": "d8645379202f30cfc88dff4798d089e27c49e1e355af71899b3d2056af84d224",
+    "retrieved": "2026-10-03",
+    "modification": "none"
+  },
+  {
+    "file": "figs/web-voting.svg",
+    "title": "Voting",
+    "artist": "Katerina Limpitsouni / unDraw",
+    "source_page": "https://undraw.co/illustration/voting_3ygx",
+    "download_method": "Official illustration page SVG download button",
+    "license_reference": "https://undraw.co/license",
+    "license_use": "Illustration in this academic presentation only; not for ML development or redistribution as an illustration pack.",
+    "sha256": "9a12e254c0b26da953e0d371f05e8e6bd95dcf27cd291c41f448e5f718b494c2",
+    "retrieved": "2026-10-03",
+    "modification": "none"
+  }
+]

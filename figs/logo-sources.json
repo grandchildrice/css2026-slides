@@ -1,0 +1,94 @@
+[
+  {
+    "file": "figs/ethereum.svg",
+    "publisher_site": "https://ethereum.org/en/assets/",
+    "asset_url": "https://ethereum.org/images/assets/svgs/eth-diamond-rainbow.svg",
+    "retrieved": "2026-10-03",
+    "original_sha256": "7b8215c08d4c050f8f1bb74fdca63e6ec6b17d9f171ee14961c36b730afaa003",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners."
+  },
+  {
+    "file": "figs/lighthouse.png",
+    "publisher_site": "https://lighthouse.sigmaprime.io/",
+    "asset_url": "https://lighthouse.sigmaprime.io/favicon.ico",
+    "retrieved": "2026-10-03",
+    "original_sha256": "0d1a7d5fc04ca30976450fcae549e2e3629624ce56f637030d6e7d0aae94a321",
+    "transformation": "ICO to PNG, original colors retained",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners."
+  },
+  {
+    "file": "figs/nimbus.jpg",
+    "publisher_site": "https://nimbus.team/",
+    "asset_url": "https://nimbus.team/community/ethnimbus.jpg",
+    "retrieved": "2026-10-03",
+    "original_sha256": "f43760d8096583854ca0929bf60efe0943c9d12bed9a31fcaee37da60682af34",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners."
+  },
+  {
+    "file": "figs/teku.svg",
+    "publisher_site": "https://docs.teku.consensys.io/",
+    "asset_url": "https://docs.teku.consensys.io/img/logo.svg",
+    "retrieved": "2026-10-03",
+    "original_sha256": "6f9728d5af594cc326dd043fb181dc728c33bdea9426891a7b149b756eccea4d",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners."
+  },
+  {
+    "file": "figs/lodestar.png",
+    "publisher_site": "https://lodestar.chainsafe.io/",
+    "asset_url": "https://lodestar.chainsafe.io/favicons/apple-touch-icon.png",
+    "retrieved": "2026-10-03",
+    "original_sha256": "0fcedb6b8fb7d377059edd4ffd40221232e247a000ce58c7b4faf9b9807dead5",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners."
+  },
+  {
+    "file": "figs/language-rust.svg",
+    "publisher_site": "https://github.com/rust-lang/rust-artwork/",
+    "asset_url": "https://raw.githubusercontent.com/rust-lang/rust-artwork/main/logo/rust-logo.svg",
+    "retrieved": "2026-10-03",
+    "original_sha256": "9a9549ea02d34dec3a610b8299f1b8121c7b10b14a44d3baec46ba15e9a06ca2",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners.",
+    "attribution": "Rust Foundation / Rust project",
+    "license": "CC BY 4.0 and Rust trademark policy",
+    "license_reference": "https://creativecommons.org/licenses/by/4.0/",
+    "policy_reference": "https://rustfoundation.org/policy/rust-trademark-policy/"
+  },
+  {
+    "file": "figs/language-nim.png",
+    "publisher_site": "https://github.com/nim-lang/assets",
+    "asset_url": "https://raw.githubusercontent.com/nim-lang/assets/master/Art/logo-crown.png",
+    "retrieved": "2026-10-03",
+    "original_sha256": "004c5917dd0f553b6580b2f932d728523d776ca0425e62fb1a98e52cbb7c0cfd",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners.",
+    "attribution": "Nim project",
+    "policy_reference": "https://github.com/nim-lang/assets/blob/master/README.md"
+  },
+  {
+    "file": "figs/language-java.png",
+    "publisher_site": "https://dev.java/",
+    "asset_url": "https://dev.java/assets/images/java-logo-vector.png",
+    "retrieved": "2026-10-03",
+    "original_sha256": "d1f0e101d26d783618e7ed008e2ea148b120c8116d232463832b3b63b8431874",
+    "transformation": "none",
+    "usage": "Project identification in an academic presentation; rights retained by the original owners.",
+    "attribution": "Oracle / Java",
+    "policy_reference": "https://www.oracle.com/legal/trademarks.html"
+  },
+  {
+    "file": "figs/language-typescript.svg",
+    "publisher_site": "https://www.typescriptlang.org/branding/",
+    "asset_url": "https://www.typescriptlang.org/branding/typescript-design-assets.zip",
+    "archive_member": "ts-logo-128.svg",
+    "retrieved": "2026-10-03",
+    "original_sha256": "25e995fa85ae9ff6b5749f4ffeb21b2fe71d74e9b8d8db8eac4b9732cd9ef287",
+    "transformation": "none",
+    "attribution": "Microsoft / TypeScript",
+    "policy_reference": "https://www.typescriptlang.org/branding/",
+    "usage": "Nominative academic identification of the implementation language; no endorsement implied."
+  }
+]
