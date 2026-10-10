@@ -21,19 +21,21 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 23, f"Expected 23 slides, got {slides}"
+        assert slides == 24, f"Expected 24 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
         assert page.locator("img.architecture-visual").count() == 1
         assert page.locator("img.scenario-visual").count() == 1
-        assert page.locator("img.web-illustration").count() == 3
+        assert page.locator("img.web-illustration").count() == 2
+        assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
         assert page.locator(".slides section:nth-child(2) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
         assert "証明から前提" in page.locator(".cover-claim").text_content()
         assert page.locator("img.result-visual").count() == 1
-        assert page.locator("pre code").count() == 4
+        assert page.locator("pre code").count() == 5
         assert page.locator("code.language-python").count() == 2
+        assert page.locator("code.language-json").count() == 1
         sample = page.locator("code.language-python").nth(1).text_content()
         expected = "def unpack(bits):\n    return [(bits >> i) & 1\n            for i in range(4)]\nfor bits in range(16):\n    actual = (bits << 1) & 0b1111\n    expected = [0] + unpack(bits)[:3]\n    assert 0 <= actual < 16\n    assert unpack(actual) == expected"
         assert sample == expected

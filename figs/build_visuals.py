@@ -119,6 +119,47 @@ def denominator_scene():
     save("scenario-denominators.svg", body, "仮想例。8人のうち実装Aは1〜6、実装Bは3〜8を対象にする。それぞれ4人が支持し4/6を満たすが、支持者は重ならない。色付きは支持、白は対象内で非支持、灰色は対象外", height=315, attributes='data-scenario="illustrative"')
 
 
+def pipeline_scene():
+    body = rect(30, 55, 310, 190, "#f5f1fc", PURPLE)
+    body += text(185, 110, "理論家（研究・設計）", 28, PURPLE, "middle", True)
+    body += text(185, 152, "プロトコル論文・安全性の議論", 19, NAVY, "middle")
+    body += text(185, 200, "証明：前提 P ⇒ 保証 Q", 24, PURPLE, "middle", True)
+    body += arrow("M352 150 H428")
+    body += text(390, 136, "翻訳", 22, NAVY, "middle")
+    body += rect(440, 55, 320, 190, "#eef6fc", NAVY)
+    body += text(600, 110, "仕様書", 30, NAVY, "middle", True)
+    body += text(600, 152, "consensus-specs（EIPで更新）", 19, NAVY, "middle")
+    body += text(600, 200, "手順 S（文章＋疑似コード）", 24, NAVY, "middle", True)
+    body += arrow("M772 150 H848")
+    body += text(810, 136, "利用", 22, NAVY, "middle")
+    body += rect(860, 55, 310, 190, "#eef6fc", BLUE)
+    body += text(1015, 110, "実装者・監査者", 28, BLUE, "middle", True)
+    body += text(1015, 152, "複数の実装・その確認", 19, NAVY, "middle")
+    body += text(1015, 200, "基準は仕様 S だけ", 24, BLUE, "middle", True)
+    body += f'<path d="M185 250 V292 H545" fill="none" stroke="{ORANGE}" stroke-width="3.5" stroke-dasharray="9 7"/>'
+    body += text(370, 282, "前提 P を知るのは上流だけ", 22, ORANGE, "middle", True)
+    body += text(565, 304, "×", 34, ORANGE, "middle", True)
+    body += text(600, 300, "仕様への転記で落ちる → 下流に届かない", 22, ORANGE, "start", True)
+    save("diagram-spec-pipeline.svg", body, "理論家は前提Pから保証Qへの証明を持つ。仕様書は実装可能な手順Sを記し、実装者・監査者はSだけを基準にする。前提Pを知るのは上流だけで、仕様への転記で落ちる前提は下流に届かない", height=330)
+
+
+def scope_scene():
+    body = rect(30, 20, 1140, 350, "#f7fafc", "#516575", 14)
+    body += text(60, 66, "仕様 S に従う実装（仕様準拠）＝ この全体", 28, NAVY, bold=True)
+    body += text(1140, 66, "証明が検査したのは：P ⇒ Q", 22, "#516575", "end")
+    body += rect(70, 95, 500, 210, "#eef6fc", BLUE, 12)
+    body += text(320, 152, "前提 P を満たす実装", 27, BLUE, "middle", True)
+    body += text(320, 208, "保証 Q が効く世界", 31, NAVY, "middle", True)
+    body += text(320, 258, "（安全が数学的に保証される）", 20, "#516575", "middle")
+    body += f'<line x1="600" y1="95" x2="600" y2="305" stroke="{ORANGE}" stroke-width="4" stroke-dasharray="9 8"/>'
+    body += rect(630, 95, 500, 210, "#fff6ee", ORANGE, 12)
+    body += text(880, 152, "前提 P を満たさない実装", 27, ORANGE, "middle", True)
+    body += text(880, 208, "定理は何も言わない", 31, NAVY, "middle", True)
+    body += text(880, 258, "（危険とも安全とも言えない）", 20, "#516575", "middle")
+    body += text(600, 345, "境界（P を満たすか）は仕様の手順に書かれていない → 仕様を読むだけでは、実装がどちらにいるか分からない", 23, ORANGE, "middle", True)
+    save("diagram-guarantee-scope.svg", body, "仕様準拠の実装の中に、前提Pを満たす領域（保証Qが効く）と満たさない領域（定理は何も言わない）がある。Pを満たすかどうかの境界は仕様の手順に書かれていない", height=390)
+
+
 def result_chart():
     research = json.loads((ROOT.parent / "css2026-slides.json").read_text(encoding="utf-8"))["research"]
     total = research["conditions_with_repetition"]
@@ -146,4 +187,6 @@ if __name__ == "__main__":
     client_scene()
     vote_scene()
     denominator_scene()
+    pipeline_scene()
+    scope_scene()
     result_chart()
