@@ -136,11 +136,14 @@ def pipeline_scene():
     body += text(1015, 100, "実装者・監査者", 26, BLUE, "middle", True)
     body += text(1015, 148, "「前提がない。いつ正しいの？」", 19, NAVY, "middle")
     body += text(1015, 200, "基準は仕様 S だけ", 24, BLUE, "middle", True)
-    body += f'<path d="M185 250 V292 H545" fill="none" stroke="{ORANGE}" stroke-width="3.5" stroke-dasharray="9 7"/>'
-    body += text(370, 282, "前提 P を知るのは上流だけ", 22, ORANGE, "middle", True)
-    body += text(565, 304, "×", 34, ORANGE, "middle", True)
-    body += text(600, 300, "仕様への転記で落ちる → 下流に届かない", 22, ORANGE, "start", True)
-    save("diagram-spec-pipeline.svg", body, "理論家は前提Pから保証Qへの証明を持つ。仕様書は実装可能な手順Sを記し、実装者・監査者はSだけを基準にする。前提Pを知るのは上流だけで、仕様への転記で落ちる前提は下流に届かない", height=330)
+    body += f'<path d="M185 250 V276" fill="none" stroke="{ORANGE}" stroke-width="3.5" stroke-dasharray="9 7"/>'
+    body += f'<path d="M185 276 H1015" fill="none" stroke="{ORANGE}" stroke-width="3.5" stroke-dasharray="9 7"/>'
+    body += text(600, 260, "前提 P を持つのは上流だけ", 21, ORANGE, "middle", True)
+    body += text(597, 288, "×", 30, ORANGE, "middle", True)
+    body += text(1012, 288, "×", 30, ORANGE, "middle", True)
+    body += text(600, 318, "仕様経由 → 転記で落ちる", 20, ORANGE, "middle", True)
+    body += text(600, 346, "直接読む → 証明は Lean。実装者・監査者は読めない", 20, ORANGE, "middle", True)
+    save("diagram-spec-pipeline.svg", body, "理論家は前提Pから保証Qへの証明を持つ。仕様書は実装可能な手順Sを記し、実装者・監査者はSだけを基準にする。前提Pを持つのは上流だけで、下流へ届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで実装者・監査者は読めない", height=360)
 
 
 def scope_scene():
