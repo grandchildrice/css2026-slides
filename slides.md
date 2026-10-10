@@ -20,13 +20,14 @@ Note:
 
 <div class="visual-story">
 <img class="web-illustration" src="figs/web-connected-world.svg" alt="unDraw Connected world：世界各地がつながるネットワークのイラスト">
-<div class="story-copy"><div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum</h3></div><p class="lead">世界中の第三者が運用する、<br>取引・プログラム実行の基盤。</p><p>特定の管理者だけに任せず、<br>参加者どうしで取引履歴を確認する。</p></div>
+<div class="story-copy"><div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum</h3></div><p class="lead">世界中の第三者が運用する、<br>取引・プログラム実行の基盤。</p><p>全員が<mark>同じ取引履歴</mark>を保存・確認する。<br>管理者ではなく数学に依存。<br>だから、善良な参加者は<br><strong>全員同じ動きをしなければならない。</strong></p></div>
 </div>
 <p class="source">解説：<a href="https://ethereum.org/en/developers/docs/nodes-and-clients/">ethereum.org</a> ／ 公式Ethereumロゴ：<a href="https://ethereum.org/en/assets/">brand assets</a> ／ イラスト：Katerina Limpitsouni, <a href="https://undraw.co/illustration/connected-world_anke">unDraw</a></p>
 
 Note:
 イーサリアムは、世界中の第三者が運用するコンピュータで、取引やプログラムの実行結果を共有する基盤です。
-ここでは、分散していること自体を詳しく説明するのではなく、この基盤を動かすソフトに注目します。それは、一つのチームが作った一種類のソフトではありません。
+全員が同じ取引履歴を保存し、互いに確認します。中央の管理者ではなく、数学、つまり計算と経済的な仕組みに依存して動きます。全員で決めるので、善良な参加者は全員が同じ動きをしなければなりません。
+ここで重要なのは、この基盤を動かすソフトが、一つのチームが作った一種類のものではないという点です。
 
 ---
 
@@ -34,14 +35,14 @@ Note:
 
 ## 一つの共通仕様から、別々のソフトが作られる
 
-<p>言語も開発チームも違う。これらが<strong>同じネットワークで動く</strong>。</p>
+<p>実装者は<strong>仕様書を読んでコードを書く</strong>。別々の言語の実装が、同じネットワークで動く。</p>
 <img class="architecture-visual" src="figs/illustration-clients.svg" alt="共通仕様からLighthouse、Nimbus、Teku、Lodestarへ分岐。Rust、Nim、Java、TypeScriptの各言語名の下にも公式言語ロゴを表示">
 <p class="message">共通仕様をもとに、独立した実装が共存する<strong>多実装環境</strong>。</p>
 <p class="source">合意を担当する4実装を例示。このソフトをクライアントと呼ぶ。実装・言語ロゴは公式素材（出典・権利者は補足と <code>figs/logo-sources.json</code>）。</p>
 
 Note:
 たとえば、RustのLighthouse、NimのNimbus、JavaのTeku、TypeScriptのLodestarがあります。上がソフトのロゴ、言語名の下が言語のロゴです。
-複数のチームが共通仕様から独立にソフトを作り、同じネットワークに参加します。これを多実装環境と呼びます。今回のクライアントという語は、このネットワークを動かすソフトです。
+開発の形は、共通の仕様書を読んで、それぞれのチームが自分の言語でコードを書く、というものです。こうして作られた実装が、同じネットワークに参加します。これを多実装環境と呼びます。今回のクライアントという語は、このネットワークを動かすソフトです。
 そこで開発者や監査者は、何を基準に別々の実装を確認するのでしょうか。まず共通仕様を基準にします。
 
 ---
@@ -71,7 +72,7 @@ if previous_epoch_target_balance * 3 >= total_active_balance * 2:
 
 Note:
 合意を担当するソフトの詳細仕様は、consensus-specsという公開文書です。文章と、処理を定義するPythonのコードからなります。
-変数名を覚える必要はありません。この抜粋は、支持する票の重みを集計し、全体の3分の2以上なら状態を更新する手順です。これだけで履歴が直ちに確定するわけではありません。
+開発者はこの疑似コードを読んで、RustやNimなど自分の言語で同じ処理を書きます。変数名を覚える必要はありません。この抜粋は、支持する票の重みを集計し、全体の3分の2以上なら状態を更新する手順です。これだけで履歴が直ちに確定するわけではありません。
 仕様から要求された処理を列挙し、各実装がそのとおり動くか確認する。これは必要な作業です。ただし、同じ計算をしているかだけで、確認が終わるでしょうか。
 
 ---
@@ -80,7 +81,8 @@ Note:
 
 ## 仕様は、証明済みの設計を訳したもの
 
-<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="理論家は前提Pから保証Qへの証明を持つ。仕様書は手順Sを記し、実装者・監査者はSだけを基準にする。前提Pを知るのは上流だけで、転記で落ちた前提は下流に届かない">
+<p>みんなに<mark>安全に合意してほしい</mark>。そこから始まる話。</p>
+<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを知るのは上流だけで、転記で落ちた前提は下流に届かない">
 <p class="message">前提を知るのは上流だけ。<strong>下流は仕様しか持たない</strong>。<br>ならば、証明から機械的に取り出して渡せばよい。</p>
 <p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
 
@@ -117,7 +119,8 @@ Note:
 
 <p>証明は <mark>「この条件なら、この保証」</mark> の形。条件の外では何も言わない。</p>
 <img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="仕様準拠の実装の中に、前提Pを満たす領域と満たさない領域がある。保証Qが効くのはPの内側だけで、Pを満たすかの境界は仕様の手順に書かれていない">
-<p class="message"><strong>仮説：</strong>証明が要求する前提には、仕様の文章に明示されていないものがある。<br><strong>提案：</strong>証明の前提を抽出し、確認項目の候補として渡す。</p>
+<div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
+<div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
 <p class="source">図は説明用の模式図。入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
 
 Note:
