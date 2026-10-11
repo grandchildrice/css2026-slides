@@ -118,6 +118,7 @@ Note:
 ## 「2/3」は合っている。でも、何の2/3か？
 
 <p>仕様：「2/3の重みの支持で正当化」　→　監査：「2/3の計算があるか」　→　コードは2/3。<mark>ヨシ</mark></p>
+<p class="glossary">正当化＝十分な支持が集まった履歴とみなす判定（確定の手前）　／　重み＝預けた担保の量　／　エポック＝時間の区切り</p>
 <p class="small">でも「誰が有権者か」は固定ではない——名簿はエポック毎に変わり、分岐中は枝ごとに別。<br>どの時点の名簿を使うかを散文は指名しないので、<strong>同じ仕様でも分母がずれうる</strong>。</p>
 <p class="label">仮想例：8人・等しい重みで集計（色付き＝支持、白＝対象内で非支持、灰＝対象外）</p>
 <img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする（破線枠）。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
@@ -125,7 +126,8 @@ Note:
 <p class="source">仮想例は説明用。</p>
 
 Note:
-監査で拾われない理由を先に示します。仕様に「2/3の重みの支持で正当化」とあれば、監査の確認は「2/3の計算があるか」になります。コードを見れば2/3の算術はあります。ヨシ。
+監査で拾われない理由を先に示します。まず画面下の用語だけ押さえてください。「正当化」は十分な支持が集まった履歴とみなす判定で、「確定」はその先の、もう覆せないとみなす段階です。「重み」はバリデータが預けた担保の量、「エポック」は投票や名簿の切り替わり単位の時間区切りです。コンセンサスに詳しくない方は、この3語だけで本スライドは読めます。
+仕様に「2/3の重みの支持で正当化」とあれば、監査の確認は「2/3の計算があるか」になります。コードを見れば2/3の算術はあります。ヨシ。
 ところが、その2/3は何を数えた2/3なのでしょうか。なぜ分母がずれうるかというと、仕様の「the validators」という言い方が、実は変数だからです。「誰が有権者か」は登録名簿で決まり、名簿はエポック毎に変動し、分岐中は枝ごとに文字通り別の名簿が存在します。現在の名簿か、その票が指す時点の名簿か——散文はどれかを指名しないので、同じ仕様でも実装ごとに使う名簿がずれえます。
 仮想例では、実装Aは1番から6番、実装Bは3番から8番を対象にしています。どちらも4人を6人で割れば2/3ですが、母集団が違うので同じ保証は使えません。
 そしてこのずれは、実際に起きています。次に実例を見ます。
@@ -140,7 +142,7 @@ Note:
 <p>「2/3の計算があるか」→ コードには2/3があった。<mark>ヨシ</mark></p>
 <p class="label">実際に起きたこと（Nimbus #461）</p>
 <div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
-<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>確定判定に使う状態がずれた</strong>。<br>実バグDBでは <strong>chain split に至り得る</strong>と分類。</p>
+<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
 <p class="message">算術は正しい。壊れていたのは、<strong>計算に渡す状態</strong>。</p>
 <p class="source">Nimbus PR #461（公開・修正済、ethereum-vuln-dataset の impact_type=chain_split）。ずれた状態は、先ほどの仕様抜粋の最終行 justification_bits。前提の非明示が原因とは示していない。</p>
 
@@ -160,7 +162,7 @@ Note:
 <img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外。どちらも仕様準拠だが、Pを満たすかは仕様に書かれていない">
 <div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
 <div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
-<p class="source">図は説明用の模式図。入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
+<p class="source">図は説明用の模式図。Lean＝証明を機械が検査する言語。入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
 
 Note:
 先ほどの例のように、何を全体として数えるか、どの状態を使うかなど、保証が成立するための条件があります。
@@ -178,7 +180,7 @@ Note:
 <div class="flow extraction-flow">
 <div class="panel purple"><h3>安全性の証明</h3><p>条件 ⇒ 保証</p><p class="actor">理論家の成果</p></div>
 <div class="arrow">→</div>
-<div class="panel"><h3>前提を抽出</h3><p><mark>定理の仮説を列挙</mark></p><p class="actor">構文的・LLM不使用</p></div>
+<div class="panel"><h3>前提を抽出</h3><p><mark>定理の前提を列挙</mark></p><p class="actor">構文的・LLM不使用</p></div>
 <div class="arrow">→</div>
 <div class="panel blue"><h3>確認候補へ変換</h3><p>仕様・コードと対応付け</p><p class="actor">研究側が翻訳</p></div>
 </div>
@@ -200,7 +202,7 @@ Note:
 ## 実例：定理に書かれた「条件」の部分を取り出す
 
 <div class="grid">
-<div><h3>定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small">括弧群＝仮説。構文的に列挙し、部品を除く実体条件を選別。</p></div>
+<div><h3>定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small">括弧群＝前提（Leanでは仮説と呼ぶ）。構文的に列挙し、部品を除く実体条件を選別。</p></div>
 <div class="premise-list"><h3>取り出される前提の意味</h3><p><mark>支持した参加者が、<br>その側の集計対象に含まれる。</mark></p><p><mark>その対象の総重みに対して、<br>2/3以上の重みが支持する。</mark></p><p>この条件を、<strong>両側それぞれ</strong>で扱う。</p></div>
 </div>
 <p class="message">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
