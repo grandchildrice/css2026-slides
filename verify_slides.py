@@ -21,7 +21,7 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 26, f"Expected 26 slides, got {slides}"
+        assert slides == 27, f"Expected 27 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
