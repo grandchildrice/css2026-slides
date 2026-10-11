@@ -64,7 +64,8 @@ def client_scene():
     body = rect(10, 92, 235, 196, "#eef6fc", BLUE)
     body += rect(77, 116, 88, 101, "white", BLUE, 4)
     body += f'<path d="M95 142 H148 M95 160 H140 M95 178 H148 M95 196 H132" stroke="{BLUE}" stroke-width="4"/>'
-    body += text(127, 258, "共通の合意層仕様", 25, anchor="middle", bold=True)
+    body += text(127, 238, "例：支持×3 ≥ 総重み×2", 15, NAVY, "middle")
+    body += text(127, 268, "共通の合意層仕様", 23, anchor="middle", bold=True)
     body += f'<path d="M247 190 H273 V47 H1070" fill="none" stroke="{BLUE}" stroke-width="4"/>'
     clients = [("lighthouse.png", "Lighthouse", "Rust", "language-rust.svg", "Sigma Prime", "#f5f1fc"), ("nimbus.jpg", "Nimbus", "Nim", "language-nim.png", "Nimbus / Status", "#fff7ec"), ("teku.svg", "Teku", "Java", "language-java.png", "Consensys", "#eef8fb"), ("lodestar.png", "Lodestar", "TypeScript", "language-typescript.svg", "ChainSafe", "#fff4f6")]
     for index, (logo, name, language, language_logo, team, color) in enumerate(clients):
