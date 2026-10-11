@@ -6,7 +6,7 @@
   "format": "Reveal.js Markdown with HTML diagrams and Note: speaker notes",
   "audience": "実装・テストの基礎を知る一般のエンジニア。イーサリアムや形式検証の専門知識は前提にしない。",
   "message": "安全性の証明から前提を取り出し、仕様の文章だけから作る確認項目を補う。専門用語の解説が目的ではない。",
-  "main_slides": 20,
+  "main_slides": 21,
   "appendix_slides": 5,
   "structure": [
     {
@@ -15,71 +15,73 @@
         2,
         3,
         4,
-        5
+        5,
+        6
       ]
     },
     {
       "section": "従来の問題点",
       "slides": [
-        6
+        7,
+        8
       ]
     },
     {
       "section": "仮説",
       "slides": [
-        7
+        9
       ]
     },
     {
       "section": "提案",
       "slides": [
-        8,
-        9,
-        10
+        10,
+        11,
+        12
       ]
     },
     {
       "section": "仮説の検証",
       "slides": [
-        11
+        13
       ]
     },
     {
       "section": "この研究の優位性",
       "slides": [
-        12
+        14
       ]
     },
     {
       "section": "適用の一例",
       "slides": [
-        13
+        15
       ]
     },
     {
       "section": "実務への展開",
       "slides": [
-        14,
-        15,
         16,
-        17
-      ]
-    },
-    {
-      "section": "まとめ",
-      "slides": [
+        17,
         18,
         19
       ]
     },
     {
-      "section": "補足",
+      "section": "まとめ",
       "slides": [
         20,
-        21,
+        21
+      ]
+    },
+    {
+      "section": "補足",
+      "slides": [
         22,
         23,
-        24
+        24,
+        25,
+        26
       ]
     }
   ],
@@ -98,31 +100,36 @@
     },
     {
       "slide": 3,
+      "file": "figs/spec-screenshot.png",
+      "purpose": "公式仕様書ページの実物キャプチャ（ethereum.github.io/consensus-specs）"
+    },
+    {
+      "slide": 4,
       "file": "figs/illustration-clients.svg",
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 5,
+      "slide": 6,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 6,
+      "slide": 7,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
-      "slide": 8,
+      "slide": 9,
       "file": "figs/diagram-guarantee-scope.svg",
       "purpose": "仕様準拠の世界と前提Pが満たされる世界の関係図（保証の適用範囲）"
     },
     {
-      "slide": 13,
+      "slide": 14,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
     },
     {
-      "slide": 19,
+      "slide": 20,
       "file": "figs/web-infrastructure.png",
       "purpose": "証明の成果を現場へ渡す説明"
     }
@@ -189,6 +196,10 @@
     {
       "type": "background",
       "title": "イーサリアムについて"
+    },
+    {
+      "type": "background",
+      "title": "そもそも仕様書って、どうできてるの？"
     },
     {
       "type": "logos",

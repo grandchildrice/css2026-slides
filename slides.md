@@ -33,6 +33,22 @@ Note:
 
 <p class="section-tag">背景</p>
 
+## そもそも仕様書って、どうできてるの？
+
+<p>設計・研究で決まったルールを、<strong>疑似コード付きの文書として公開</strong>。版ごとに更新される。</p>
+<img class="spec-screenshot" src="figs/spec-screenshot.png" alt="実物の仕様書ページ（ethereum.github.io/consensus-specs）。左の目次にPhase0からFuluまでの版が並び、本文に疑似コードが見える">
+<p class="message">全チームが<strong>この同じ文書を読んで</strong>、実装を書く。</p>
+<p class="source">実物の仕様書：ethereum/consensus-specs（GitHubで公開・版管理。左の目次に Phase0〜Fulu のバージョン）</p>
+
+Note:
+仕様書は、ある会社が社内で使う設計書ではなく、公開された文書です。イーサリアムの場合、研究や設計の議論を経て決まったルールが、ethereumのconsensus-specsに、MarkdownとPython風の疑似コードで書かれています。
+画面は実物の仕様書です。左の目次を見ると、Phase0、Altair、Bellatrix、Capella、Deneb、Electra、Fuluと、バージョンが並んでいます。アップグレードのたびに仕様は版を重ねます。
+ポイントは、この一つの文書を、全実装チームが読むということです。次の図でその関係を見ます。
+
+---
+
+<p class="section-tag">背景</p>
+
 ## 一つの共通仕様から、別々のソフトが作られる
 
 <p>実装者は<strong>仕様書を読んでコードを書く</strong>。別々の言語の実装が、同じネットワークで動く。</p>
