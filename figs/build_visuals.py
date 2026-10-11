@@ -168,9 +168,7 @@ def scope_scene():
     body += text(890, 246, "前提 P を満たさない実装", 25, ORANGE, "middle", True)
     body += text(890, 290, "→ 保証対象外", 27, NAVY, "middle", True)
     body += text(890, 318, "（壊れるとは、言っていない）", 18, "#516575", "middle")
-    body += text(600, 352, "同じ「仕様どおり」の印。違いは 前提 P を満たすかだけ。", 22, "#516575", "middle", True)
-    body += text(600, 384, "→ 仕様を読むだけでは、区別がつかない", 23, ORANGE, "middle", True)
-    save("diagram-guarantee-scope.svg", body, "証明は保証書。前提Pを満たすなら安全Qを保証すると書くが、届くのはPを満たす実装だけ。満たさない実装は保証対象外（壊れるとは言っていない）。どちらの実装にも同じ「仕様どおり」の印が押されており、違いは前提Pを満たすかだけなので、仕様を読むだけでは区別がつかない", height=395)
+    save("diagram-guarantee-scope.svg", body, "証明は保証書。前提Pを満たすなら安全Qを保証すると書くが、届くのはPを満たす実装だけ。満たさない実装は保証対象外（壊れるとは言っていない）。どちらの実装にも同じ「仕様どおり」の印が押されている", height=335)
 
 
 def result_chart():

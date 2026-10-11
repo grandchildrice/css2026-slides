@@ -157,8 +157,8 @@ Note:
 ## 仕様どおりの実装は、証明の前提まで満たさない
 
 <p>証明は<mark>保証書</mark>と同じ構造。条件内は保証、<strong>条件外は対象外</strong>。</p>
-<img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外。どちらも仕様準拠だが、Pを満たすかは仕様に書かれていない">
-<div class="route"><span>問題</span><strong>仕様どおりに実装しても、前提が満たされるかは分からない</strong></div>
+<img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外。どちらの実装にも同じ「仕様どおり」の印が押されている">
+<div class="route"><span>問題</span><strong>同じ「仕様どおり」でも、前提が満たされるかは仕様を読むだけでは区別がつかない</strong></div>
 <div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
 <div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
 <p class="source">図は説明用の模式図。Lean＝証明を機械が検査する言語。入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
