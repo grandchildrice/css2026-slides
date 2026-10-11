@@ -163,6 +163,7 @@ Note:
 <div class="route"><span>問題</span><strong>同じ「仕様どおり」でも、前提が満たされるかは仕様を読むだけでは区別がつかない</strong></div>
 <div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
 <div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
+<div class="route"><span>その先</span><strong>監査者・実装者が前提まで確認できる → ずれが減り、履歴が分裂しにくい</strong></div>
 <p class="source">図は説明用の模式図。Lean＝証明を機械が検査する言語。入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
 
 Note:
@@ -170,6 +171,7 @@ Note:
 証明は保証書と同じ構造です。「決められた条件で使うなら、これを保証する」と書いてある。条件の外では保証は効きませんが、「必ず壊れる」とも書いていません。図は、仕様に従う実装の中で、前提を満たす領域にだけ保証が効くことを示しています。そしてその境界は、仕様の手順には書かれていません。なお形式証明とは、条件から結論への導出を機械が検査したものです。
 仕様の文章からしか確認項目を作らなければ、文章に現れない前提は拾いにくくなります。そこで、安全性の証明をもう一つの入力にします。証明は「この条件なら、この結論」という形で、必要な前提を持っています。
 本研究の提案は、その前提を取り出し、実装や運用の確認に使える候補へ変換することです。証明を書くこと自体の紹介ではなく、証明の前提を現場へ渡す研究です。
+最後の行は、その先に何が起きるかです。監査者と実装者は、仕様の手順だけでなく証明が要求する前提まで確認できるようになります。確認できるものが増えれば、実装間のずれを早く摘め、履歴が分裂するリスクを下げられます。直接うれしいのは確認する側の人たちで、その結果としてネットワークと利用者が得をする話です。
 
 ---
 
@@ -513,7 +515,7 @@ Nimbusはビット表現の処理、Lighthouseはデータ移行のロック処�
 ## 参照資料・イラスト・公式ロゴの出典
 
 <div class="grid">
-<div class="panel"><h3>仕様・証明・修正PR</h3><p class="small"><a href="https://github.com/ethereum/consensus-specs/tree/2359a5e">consensus-specs @ 2359a5e</a><br><a href="https://eips.ethereum.org/EIPS/eip-3675">EIP-3675</a><br><a href="https://github.com/NyxFoundation/gasper-lean4/tree/7650709">gasper-lean4 @ 7650709</a><br><a href="https://github.com/status-im/nimbus-eth2/pull/461">Nimbus #461</a> / <a href="https://github.com/sigp/lighthouse/pull/4576">Lighthouse #4576</a></p><p class="small">研究の対象・数値・限界は論文正本に基づく。<br>助成：Ethereum Foundation Security Grant FY26-2399（SPECA &amp; LeanAgent）成果群を利用。</p></div>
+<div class="panel"><h3>仕様・証明・修正PR</h3><p class="small"><a href="https://github.com/ethereum/consensus-specs/tree/2359a5e">consensus-specs @ 2359a5e</a><br><a href="https://eips.ethereum.org/EIPS/eip-3675">EIP-3675</a><br><a href="https://github.com/NyxFoundation/gasper-lean4/tree/7650709">gasper-lean4 @ 7650709</a><br><a href="https://github.com/status-im/nimbus-eth2/pull/461">Nimbus #461</a> / <a href="https://github.com/sigp/lighthouse/pull/4576">Lighthouse #4576</a></p><p class="small">研究の対象・数値・限界は論文正本に基づく。</p></div>
 <div class="panel"><h3>イラスト・ブランド素材</h3><p class="small"><a href="https://ethereum.org/en/assets/">ethereum.org / WT</a><br><a href="https://undraw.co/illustrations">unDraw / Katerina Limpitsouni</a>（<a href="https://undraw.co/license">利用条件</a>）<br><a href="https://github.com/rust-lang/rust-artwork/">Rust Foundation / Rust project</a>（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>、変更なし）<br><a href="https://github.com/nim-lang/assets">Nim project</a> / <a href="https://dev.java/">Oracle / Java</a><br><a href="https://www.typescriptlang.org/branding/">Microsoft / TypeScript</a></p><p class="small">ロゴは各ブランドの識別用。推薦・提携を示さない。<br>取得元・ハッシュ・利用条件は <code>figs/*-sources.json</code>。</p></div>
 </div>
 
