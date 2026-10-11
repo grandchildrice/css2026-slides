@@ -113,7 +113,7 @@ def denominator_scene():
         body += text(15, y + 34, f"実装{side}", 30, color, bold=True)
         lo, hi = min(participants), max(participants)
         body += f'<rect x="{157 + (lo - 1) * 88}" y="{y - 8}" width="{(hi - lo) * 88 + 80}" height="80" fill="none" stroke="{color}" stroke-width="3" stroke-dasharray="9 6" rx="12"/>'
-        body += text(157 + (lo - 1) * 88 + 10, y - 14, "分母", 18, color, bold=True)
+        body += text(157 + (lo - 1) * 88 + 10, y - 14, "有権者（分母）", 18, color, bold=True)
         for index in range(1, 9):
             fill = color if index in supporters else "white" if index in participants else "#e4e9ee"
             body += rect(165 + (index - 1) * 88, y, 72, 66, fill, color if index in participants else "#cbd8e2", 8, f'data-side="{side}" data-person="{index}" data-included="{str(index in participants).lower()}" data-support="{str(index in supporters).lower()}"')
