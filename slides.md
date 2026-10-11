@@ -1,5 +1,5 @@
 <div class="cover">
-<p class="eyebrow">CSS2026 / コンピュータセキュリティシンポジウム</p>
+<p class="eyebrow">CSS2026 / BWS ブロックチェーンワークショップ</p>
 <h1>仕様どおりに実装すれば<br>安全か</h1>
 <p class="subtitle">イーサリアムのコンセンサス仕様に明示されない<br>安全性の前提条件（予備調査）</p>
 <p class="authors"><strong>村上 大岳</strong>（愛知総合工科高校）<br>神波 真聖・柳浜 万里（Nyx Foundation）<br>釘宮 由成（Independent Researcher）</p>
