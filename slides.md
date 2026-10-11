@@ -35,15 +35,20 @@ Note:
 
 ## そもそも仕様書って、どうできてるの？
 
-<p>設計・研究で決まったルールを、<strong>疑似コード付きの文書として公開</strong>。版ごとに更新される。</p>
-<img class="spec-screenshot" src="figs/spec-screenshot.png" alt="実物の仕様書ページ（ethereum.github.io/consensus-specs）。左の目次にPhase0からFuluまでの版が並び、本文に疑似コードが見える">
+<p>対象は、<strong>取引履歴を全員で「確定」へ更新する手順</strong>。<br>研究・設計の議論を経て、疑似コード付きの公開文書として版を重ねる。</p>
+
+<div class="grid">
+<div><img class="spec-screenshot" src="figs/spec-screenshot.png" alt="実物の仕様書ページ（ethereum.github.io/consensus-specs）" style="max-height:150px"><p class="small">実物ページ。目次に Phase0〜Fulu の版が並ぶ。</p></div>
+<div><p class="label">書かれ方の実例（抜粋・簡略化）</p><div class="proof-code tight"><div class="muted"># エポック終了時に全員が実行</div><div>def <mark>process_epoch</mark>(state):</div><div>　<mark>process_justification_and_finalization</mark>(state)</div><div class="muted"># 確定ポイントの型＝時刻＋履歴の指紋</div><div>class <mark>Checkpoint</mark>(Container): …</div></div><p class="small">型・関数・<strong>状態の更新</strong>まで書く疑似コード級の詳細設計。</p></div>
+</div>
 <p class="message">全チームが<strong>この同じ文書を読んで</strong>、実装を書く。</p>
-<p class="source">実物の仕様書：ethereum/consensus-specs（GitHubで公開・版管理。左の目次に Phase0〜Fulu のバージョン）</p>
+<p class="source">ethereum/consensus-specs（公開・版管理）。抜粋はbeacon-chain.mdの定義の簡略化。</p>
 
 Note:
-仕様書は、ある会社が社内で使う設計書ではなく、公開された文書です。イーサリアムの場合、研究や設計の議論を経て決まったルールが、ethereumのconsensus-specsに、MarkdownとPython風の疑似コードで書かれています。
-画面は実物の仕様書です。左の目次を見ると、Phase0、Altair、Bellatrix、Capella、Deneb、Electra、Fuluと、バージョンが並んでいます。アップグレードのたびに仕様は版を重ねます。
-ポイントは、この一つの文書を、全実装チームが読むということです。次の図でその関係を見ます。
+「仕様書」といっても粒度が分からないと想像しづらいので、実物を見ます。対象は、取引履歴を全員で「確定」へ更新する手順です。
+右が実物の抜粋です。エポック――32スロット、約6.4分――の終わりに、全員が同じprocess_epochを実行し、その中で確定の判定が走ります。下のCheckpointは確定ポイントの型で、時刻と履歴の指紋の組です。
+つまりこの文書は、概略の設計書ではなく、型・関数名・状態の更新方法まで書かれた疑似コード級の詳細設計です。さらに面白いのは、この疑似コードはそのまま実行できて、仕様から生成されたテストデータで各実装が検査されている点です――「仕様」自体が動く参照実装でもあります。
+左が実物ページで、Phase0からFuluまでアップグレードのたびに版を重ねています。ポイントは、全実装チームがこの一つの文書を読むことです。次の図でその関係を見ます。
 
 ---
 
