@@ -51,10 +51,10 @@ Note:
 
 ## 開発・監査の出発点は、共通の仕様書
 
-<p>仕様には、<strong>どの入力で、どの状態をどう更新するか</strong>が書かれている。</p>
+<p>実際の仕様書の抜粋。<strong>どの入力で、どの状態をどう更新するか</strong>が書かれている。</p>
 
 ```python
-if previous_epoch_target_balance * 3 >= total_active_balance * 2:
+if previous_epoch_target_balance * 3 >= total_active_balance * 2:  # ← ここが「2/3」
     state.current_justified_checkpoint = Checkpoint(
         epoch=previous_epoch, root=get_block_root(state, previous_epoch)
     )
@@ -72,7 +72,8 @@ if previous_epoch_target_balance * 3 >= total_active_balance * 2:
 
 Note:
 合意を担当するソフトの詳細仕様は、consensus-specsという公開文書です。文章と、処理を定義するPythonのコードからなります。
-開発者はこの疑似コードを読んで、RustやNimなど自分の言語で同じ処理を書きます。変数名を覚える必要はありません。この抜粋は、支持する票の重みを集計し、全体の3分の2以上なら状態を更新する手順です。これだけで履歴が直ちに確定するわけではありません。
+開発者はこの疑似コードを読んで、RustやNimなど自分の言語で同じ処理を書きます。なお1行目の「支持する重み×3 ≥ 総重み×2」が、あの「2/3の支持」の判定です。変数名を覚える必要はありませんが、このように数値はコードにあるのに、「どの状態のどの集合を数えているか」は行の中に名前がありません。
+そして最終行で更新している justification_bits こそが、のちの実例で出てくる Nimbus #461 がずらした状態そのものです。覚えておくと繋がります。
 仕様から要求された処理を列挙し、各実装がそのとおり動くか確認する。これは必要な作業です。ただし、同じ計算をしているかだけで、確認が終わるでしょうか。
 
 ---
