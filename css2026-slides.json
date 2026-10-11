@@ -15,13 +15,13 @@
         2,
         3,
         4,
-        5,
-        6
+        5
       ]
     },
     {
       "section": "従来の問題点",
       "slides": [
+        6,
         7,
         8
       ]
@@ -109,12 +109,12 @@
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 6,
+      "slide": 8,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 7,
+      "slide": 6,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
@@ -210,16 +210,16 @@
       "title": "開発・監査の出発点は、共通の仕様書"
     },
     {
-      "type": "origin",
-      "title": "仕様は、証明済みの設計を訳したもの"
-    },
-    {
       "type": "scenario",
       "title": "「2/3」は合っている。でも、何の2/3か？"
     },
     {
       "type": "example",
       "title": "実例：計算は合った。でも状態がずれた"
+    },
+    {
+      "type": "origin",
+      "title": "なぜ、仕様を読むだけでは見えないのか"
     },
     {
       "type": "proposal",
