@@ -109,15 +109,17 @@ def denominator_scene():
         participants = set(scenario[f"participants_{side}"])
         supporters = set(scenario[f"supporters_{side}"])
         assert supporters <= participants
-        y = 55 + row * 125
+        y = 50 + row * 100
         body += text(15, y + 34, f"実装{side}", 30, color, bold=True)
+        lo, hi = min(participants), max(participants)
+        body += f'<rect x="{157 + (lo - 1) * 88}" y="{y - 8}" width="{(hi - lo) * 88 + 80}" height="80" fill="none" stroke="{color}" stroke-width="3" stroke-dasharray="9 6" rx="12"/>'
+        body += text(157 + (lo - 1) * 88 + 10, y - 14, "分母", 18, color, bold=True)
         for index in range(1, 9):
             fill = color if index in supporters else "white" if index in participants else "#e4e9ee"
             body += rect(165 + (index - 1) * 88, y, 72, 66, fill, color if index in participants else "#cbd8e2", 8, f'data-side="{side}" data-person="{index}" data-included="{str(index in participants).lower()}" data-support="{str(index in supporters).lower()}"')
             body += text(201 + (index - 1) * 88, y + 43, str(index), 30, "white" if index in supporters else NAVY, "middle", True)
         body += text(940, y + 44, f"{len(supporters)} / {len(participants)} = 2/3", 35, color, bold=True)
-        body += text(170, y + 94, f"対象：{', '.join(map(str, sorted(participants)))}　　支持：{', '.join(map(str, sorted(supporters)))}", 23)
-    save("scenario-denominators.svg", body, "仮想例。8人のうち実装Aは1〜6、実装Bは3〜8を対象にする。それぞれ4人が支持し4/6を満たすが、支持者は重ならない。色付きは支持、白は対象内で非支持、灰色は対象外", height=315, attributes='data-scenario="illustrative"')
+    save("scenario-denominators.svg", body, "仮想例。8人のうち実装Aは1〜6、実装Bは3〜8を分母にする（破線枠）。それぞれ4人が支持し4/6を満たすが、分母も支持者も重ならない。色付きは支持、白は対象内で非支持、灰色は対象外", height=235, attributes='data-scenario="illustrative"')
 
 
 def pipeline_scene():

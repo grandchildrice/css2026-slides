@@ -104,7 +104,7 @@ Note:
 <p>仕様：「2/3の重みの支持で正当化」　→　監査：「2/3の計算があるか」　→　コードは2/3。<mark>ヨシ</mark></p>
 <p class="small">でも集合は固定ではない——エポック毎に変動し、分岐中は枝ごとに別。「どの集合か」を散文は指名しないので<strong>解釈がずれうる</strong>。</p>
 <p class="label">仮想例：8人・等しい重みで集計（色付き＝支持、白＝対象内で非支持、灰＝対象外）</p>
-<img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を対象に1〜4が支持、実装Bは3〜8を対象に5〜8が支持。両方4/6だが支持者は重ならない">
+<img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を分母にする（破線枠）。それぞれ分子は4人で両方4/6だが、分母も分子も重ならない">
 <p class="message">両方とも4/6 ＝ 2/3。でも母集団が違えば、<strong>同じ保証は使えない。</strong></p>
 <p class="problem">監査は「何を数えた2/3か」を見ない。実例：<strong>Nimbus #461</strong> — 確定判定に使う状態がずれた実バグ。DBでは <strong>chain split に至り得る</strong>と分類。</p>
 <p class="source">Nimbus PR #461（公開・修正済、ethereum-vuln-dataset の impact_type=chain_split）。前提の非明示が原因とは示していない。</p>
