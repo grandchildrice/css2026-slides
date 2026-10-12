@@ -6,7 +6,7 @@
   "format": "Reveal.js Markdown with HTML diagrams and Note: speaker notes",
   "audience": "実装・テストの基礎を知る一般のエンジニア。イーサリアムや形式検証の専門知識は前提にしない。",
   "message": "安全性の証明から前提を取り出し、仕様の文章だけから作る確認項目を補う。専門用語の解説が目的ではない。",
-  "main_slides": 23,
+  "main_slides": 24,
   "appendix_slides": 5,
   "structure": [
     {
@@ -25,65 +25,66 @@
         7,
         8,
         9,
-        10
+        10,
+        11
       ]
     },
     {
       "section": "仮説",
       "slides": [
-        11
+        12
       ]
     },
     {
       "section": "提案",
       "slides": [
-        12,
         13,
-        14
+        14,
+        15
       ]
     },
     {
       "section": "仮説の検証",
       "slides": [
-        15
+        16
       ]
     },
     {
       "section": "この研究の優位性",
       "slides": [
-        16
+        17
       ]
     },
     {
       "section": "適用の一例",
       "slides": [
-        17
+        18
       ]
     },
     {
       "section": "実務への展開",
       "slides": [
-        18,
         19,
         20,
-        21
+        21,
+        22
       ]
     },
     {
       "section": "まとめ",
       "slides": [
-        22,
-        23
+        23,
+        24
       ]
     },
     {
       "section": "補足",
       "slides": [
-        24,
         25,
         26,
         27,
-        28
+        28,
+        29
       ]
     }
   ],
@@ -106,27 +107,27 @@
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 10,
+      "slide": 11,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 8,
+      "slide": 9,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
-      "slide": 11,
+      "slide": 12,
       "file": "figs/diagram-guarantee-scope.svg",
       "purpose": "仕様準拠の世界と前提Pが満たされる世界の関係図（保証の適用範囲）"
     },
     {
-      "slide": 16,
+      "slide": 17,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
     },
     {
-      "slide": 22,
+      "slide": 23,
       "file": "figs/web-infrastructure.png",
       "purpose": "証明の成果を現場へ渡す説明"
     }
@@ -209,6 +210,10 @@
     {
       "type": "specification",
       "title": "開発・監査の出発点は、共通の仕様書"
+    },
+    {
+      "type": "objection",
+      "title": "「仕様に準拠すれば良い」のでは？"
     },
     {
       "type": "observation",
