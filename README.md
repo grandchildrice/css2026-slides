@@ -7,3 +7,5 @@ CSS2026 予備調査 発表スライド（本編18枚＋補足5枚）。
 - 構成一覧・対象読者・研究データ: [css2026-slides.json](css2026-slides.json)（本文は `slides.md`）
 
 論文正本は `sururu-k/css2026-paper`（private）にあり、本リポジトリは発表用スライドのみを公開する。
+
+https://www.linkedin.com/pulse/understanding-zero-knowledge-proofs-encoding-programs-soares-m-sc--dxdkf/
