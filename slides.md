@@ -35,20 +35,20 @@ Note:
 
 ## そもそも仕様書って、どうできてるの？
 
-<p>対象は、<strong>取引履歴を全員で「確定」へ更新する手順</strong>。<br>研究・設計の議論を経て、疑似コード付きの公開文書として版を重ねる。</p>
+<p>具体例：<strong>参加者の投票で「確かな履歴」を全員同じ結果に決める</strong>システムの仕様書。</p>
 
 <div class="grid">
-<div><img class="spec-screenshot" src="figs/spec-screenshot.png" alt="実物の仕様書ページ（ethereum.github.io/consensus-specs）" style="max-height:150px"><p class="small">実物ページ。目次に Phase0〜Fulu の版が並ぶ。</p></div>
-<div><p class="label">書かれ方の実例（抜粋・簡略化）</p><div class="proof-code tight"><div class="muted"># エポック終了時に全員が実行</div><div>def <mark>process_epoch</mark>(state):</div><div>　<mark>process_justification_and_finalization</mark>(state)</div><div class="muted"># 確定ポイントの型＝時刻＋履歴の指紋</div><div>class <mark>Checkpoint</mark>(Container): …</div></div><p class="small">型・関数・<strong>状態の更新</strong>まで書く疑似コード級の詳細設計。</p></div>
+<div><p class="label">システムがやること</p><p>① 参加者は「この履歴が正しい」と投票し続ける<br>② 約6.4分（エポック）ごとに全員が<mark>同じ手順</mark>で集計<br>③ <strong>総支持の2/3超</strong>で「確かな履歴」にマーク</p></div>
+<div><p class="label">仕様書ではこう書いてある（実物抜粋）</p><div class="proof-code tight"><div>class <mark>Checkpoint</mark>(Container):  <span class="muted">#「確かな履歴」＝時刻＋指紋</span></div><div><mark>justification_bits</mark>: Bitvector[4]  <span class="muted"># 確定判定の履歴</span></div><div>def <mark>process_epoch</mark>(state):  <span class="muted"># エポックごとの集計</span></div></div><p class="small">型・フィールド・関数まで定義した、実行可能な疑似コード級の詳細設計。</p></div>
 </div>
 <p class="message">全チームが<strong>この同じ文書を読んで</strong>、実装を書く。</p>
 <p class="source">ethereum/consensus-specs（公開・版管理）。抜粋はbeacon-chain.mdの定義の簡略化。</p>
 
 Note:
-「仕様書」といっても粒度が分からないと想像しづらいので、実物を見ます。対象は、取引履歴を全員で「確定」へ更新する手順です。
-右が実物の抜粋です。エポック――32スロット、約6.4分――の終わりに、全員が同じprocess_epochを実行し、その中で確定の判定が走ります。下のCheckpointは確定ポイントの型で、時刻と履歴の指紋の組です。
-つまりこの文書は、概略の設計書ではなく、型・関数名・状態の更新方法まで書かれた疑似コード級の詳細設計です。さらに面白いのは、この疑似コードはそのまま実行できて、仕様から生成されたテストデータで各実装が検査されている点です――「仕様」自体が動く参照実装でもあります。
-左が実物ページで、Phase0からFuluまでアップグレードのたびに版を重ねています。ポイントは、全実装チームがこの一つの文書を読むことです。次の図でその関係を見ます。
+具体例として、参加者の投票で「確かな履歴」を全員同じ結果に決めるシステムを見ます。左の手順——参加者が投票し続け、約6.4分ごとに全員が同じ手順で集計し、総支持の3分の2超で確かな履歴にマークする——これがこのシステムのやることです。
+右が実物の抜粋です。「確かな履歴」はCheckpointという型で、時刻と履歴の指紋の組。集計はprocess_epochという関数。確定判定の履歴はjustification_bitsという4ビットのフィールドで、これはのちの実例にも繋がるので覚えておいてください。
+つまり仕様書とは、概略の設計書ではなく、型・フィールド名・更新手順まで疑似コードで定義した詳細な文書です。実行も可能で、仕様から生成されるテストデータが各実装の検査に使われます。
+全チームがこの一つの文書を読んで実装を書きます。次の図でその関係を見ます。
 
 ---
 

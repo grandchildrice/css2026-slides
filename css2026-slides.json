@@ -100,11 +100,6 @@
       "purpose": "公式Ethereumカラーロゴ"
     },
     {
-      "slide": 3,
-      "file": "figs/spec-screenshot.png",
-      "purpose": "公式仕様書ページの実物キャプチャ（ethereum.github.io/consensus-specs）"
-    },
-    {
       "slide": 4,
       "file": "figs/illustration-clients.svg",
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
