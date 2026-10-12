@@ -6,7 +6,7 @@
   "format": "Reveal.js Markdown with HTML diagrams and Note: speaker notes",
   "audience": "実装・テストの基礎を知る一般のエンジニア。イーサリアムや形式検証の専門知識は前提にしない。",
   "message": "安全性の証明から前提を取り出し、仕様の文章だけから作る確認項目を補う。専門用語の解説が目的ではない。",
-  "main_slides": 22,
+  "main_slides": 23,
   "appendix_slides": 5,
   "structure": [
     {
@@ -15,74 +15,75 @@
         2,
         3,
         4,
-        5
+        5,
+        6
       ]
     },
     {
       "section": "従来の問題点",
       "slides": [
-        6,
         7,
         8,
-        9
+        9,
+        10
       ]
     },
     {
       "section": "仮説",
       "slides": [
-        10
+        11
       ]
     },
     {
       "section": "提案",
       "slides": [
-        11,
         12,
-        13
+        13,
+        14
       ]
     },
     {
       "section": "仮説の検証",
       "slides": [
-        14
+        15
       ]
     },
     {
       "section": "この研究の優位性",
       "slides": [
-        15
+        16
       ]
     },
     {
       "section": "適用の一例",
       "slides": [
-        16
+        17
       ]
     },
     {
       "section": "実務への展開",
       "slides": [
-        17,
         18,
         19,
-        20
+        20,
+        21
       ]
     },
     {
       "section": "まとめ",
       "slides": [
-        21,
-        22
+        22,
+        23
       ]
     },
     {
       "section": "補足",
       "slides": [
-        23,
         24,
         25,
         26,
-        27
+        27,
+        28
       ]
     }
   ],
@@ -105,27 +106,27 @@
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 9,
+      "slide": 10,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 7,
+      "slide": 8,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
-      "slide": 10,
+      "slide": 11,
       "file": "figs/diagram-guarantee-scope.svg",
       "purpose": "仕様準拠の世界と前提Pが満たされる世界の関係図（保証の適用範囲）"
     },
     {
-      "slide": 15,
+      "slide": 16,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
     },
     {
-      "slide": 21,
+      "slide": 22,
       "file": "figs/web-infrastructure.png",
       "purpose": "証明の成果を現場へ渡す説明"
     }
@@ -200,6 +201,10 @@
     {
       "type": "logos",
       "title": "一つの共通仕様から、別々のソフトが作られる"
+    },
+    {
+      "type": "stakes",
+      "title": "「食い違い」は、なぜ特別に危険なのか"
     },
     {
       "type": "specification",
