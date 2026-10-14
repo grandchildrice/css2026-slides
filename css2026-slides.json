@@ -98,6 +98,11 @@
   "illustration_sources": "figs/illustration-sources.json",
   "visuals": [
     {
+      "slide": 3,
+      "file": "figs/diagram-client-diversity.svg",
+      "purpose": "単一実装の単一障害点と複数実装の多様性による耐障害性の対比図"
+    },
+    {
       "slide": 4,
       "file": "figs/diagram-ethereum-architecture.svg",
       "purpose": "Ethereum実行層・合意層の二層アーキテクチャ図"
@@ -111,6 +116,16 @@
       "slide": 7,
       "file": "figs/illustration-clients.svg",
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
+    },
+    {
+      "slide": 8,
+      "file": "figs/diagram-chain-split.svg",
+      "purpose": "暗黙前提の解釈差によるチェーン分裂と資産喪失の危機を示す図解"
+    },
+    {
+      "slide": 11,
+      "file": "figs/illustration-votes.svg",
+      "purpose": "同じ参加者集合・同じ重みなら2つの2/3支持集合が1/3重なるクォーラム交差のベン図イラスト"
     },
     {
       "slide": 15,

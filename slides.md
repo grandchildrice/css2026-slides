@@ -45,17 +45,9 @@ Note:
 
 ## 「だったら実装を1つに統一すれば？」
 
-<p>Bitcoinのように<strong>公式実装を1本に絞る方式は実際に機能</strong>しています。<br>では、なぜあえて複数実装にするのか。</p>
-
-<div class="flow">
-<div class="panel"><h3>単一実装</h3><p>1つのバグが<br>ネットワーク全体のバグに</p></div>
-<div class="arrow">→</div>
-<div class="panel blue"><h3>複数実装</h3><p>多様性そのものが安全弁。<br>1実装のバグでは<br>過半数を取れない</p></div>
-<div class="arrow">→</div>
-<div class="panel orange"><h3>ただし条件つき</h3><p>全実装が<strong>共通の前提</strong>を<br>共有していなければ<br>多様性は機能しない</p></div>
-</div>
-
-<p class="message">前提は<mark>研究者の間では共有済み</mark>。届いていないのは<strong>実装者・監査者</strong>。</p>
+<img class="diagram diversity-visual" style="height: 240px; margin: 8px auto; display: block;" src="figs/diagram-client-diversity.svg" alt="単一実装の単一障害点（全滅リスク）と複数実装の多様性による耐障害性の対比図">
+<p class="takeaway" style="margin-top: 12px; padding: 10px 18px; font-size: 24px;">多様性そのものが安全機構。ただし<strong>「共通の前提」が共有されていなければ、多様性は機能しない。</strong></p>
+<p class="message" style="margin: 12px 0 6px; font-size: 26px;">前提は研究者の間では共有済み。届いていないのは<strong>実装者・監査者</strong>。</p>
 
 Note:
 「環境差なんて普通だ、公式バイナリを出せばいい」という反論は当然で、実際Bitcoinはその方式で動いています。ただ単一実装は単一障害点でもあります。
@@ -166,18 +158,10 @@ N-version programming、多様性そのものが安全機構です。
 
 ## 「食い違い」は、なぜ特別に危険なのか
 
-<p>普通のソフトのバグは「そのソフトの利用者」の問題。<br>ここで壊れるのは、<mark>「全員が同じ履歴を持つ」という一致そのもの</mark>。</p>
-
-<div class="flow">
-<div class="panel"><h3>別々の「確定」</h3><p>実装ごとに別の履歴を<br>覆せないと確定</p></div>
-<div class="arrow">→</div>
-<div class="panel"><h3>履歴が裂ける</h3><p>不可逆な分岐（State Fork）<br>確定も失われる</p></div>
-<div class="arrow">→</div>
-<div class="panel orange"><h3>資産が危ない</h3><p>確定済みのはずの取引や<br>預けた担保が失われる</p></div>
-</div>
-
-<p class="message">だから「仕様どおり」かだけでなく、<br><strong>全実装が本当に同じ判断をするか</strong>が死活問題。</p>
-<p class="small">「分裂し得る」と分類された修正は実際に公開されている——後の実例で紹介。</p>
+<p style="margin: 6px 0 10px;">普通のソフトのバグは「利用者の問題」。ここで壊れるのは、<strong>「全員が同じ履歴を持つ」という合意そのもの</strong>。</p>
+<img class="diagram split-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-chain-split.svg" alt="暗黙前提の解釈差によるチェーン分裂（Chain Split）と資産喪失の危機を示す図解">
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">各実装が「仕様どおり」に動くだけでは不十分。<strong>暗黙前提のわずかなズレが、不可逆なチェーン分裂を引き起こす。</strong></p>
+<p class="small" style="margin-top: 6px;">「分裂し得る」と分類された修正は実際に公開されている——後の実例で紹介。</p>
 
 Note:
 先に「なぜこれが大事か」を言います。
@@ -262,15 +246,10 @@ Note:
 
 ## 「仕様に準拠すれば良い」のでは？
 
-<p>その通り——<strong>全チームがそうしています</strong>。<br>問題は単なる「準拠ミス」にとどまらず、<mark>同じ記述でも解釈が分かれてしまう</mark>点にあります。</p>
-
-<div class="grid">
-<div class="panel"><p class="label">ふつうの層：手順の記述</p><p>仕様が「この操作をこうする」と具体的<br>ずれる ＝ <strong>誰かのミス</strong><br>→ レビュー・テストで見つかる</p></div>
-<div class="panel"><p class="label">今回の層：条件の記述（数学に近い）</p><p>「〜の2/3」「その時点の〜」と条件を書く<br>ずれる ＝ <strong>別々の妥当な読み</strong><br>→ 全員「仕様準拠」なのに結果が違う</p></div>
-</div>
-
-<p class="message">「どの解釈が正しいか」は、<strong>仕様の文章だけでは裁定できない</strong>。</p>
-<p class="small">Cの規格にも未定義動作はあるが、「どの集合を数えるか」が実装ごとに分かれる種類のずれは、手順が具体的な層では起きにくい。</p>
+<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
+<img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる。面積比は数量を表さない模式図">
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<strong>この前提が仕様の文章に書かれていなければ、各実装で解釈が分かれてしまう。</strong></p>
+<p class="small" style="margin-top: 6px;">どの解釈が正しいかは、仕様書の文章だけでは裁定できない。</p>
 
 Note:
 「仕様書どおりに実装すれば十分ではないか」——その通りであり、世界中の全開発チームが実際にそうしています。
