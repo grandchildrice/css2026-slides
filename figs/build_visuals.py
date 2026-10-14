@@ -193,6 +193,66 @@ def result_chart():
     save("chart-premises.svg", body, f"延べ{total}件中{non_explicit}件（{100 * fraction:.1f}%）は全自動判定で非明示、{disputed}件は判定が分かれた。ドーナツと{total}マスで可視化", attributes=f'data-total="{total}" data-non-explicit="{non_explicit}" data-disputed="{disputed}"')
 
 
+def architecture_scene():
+    body = rect(20, 25, 540, 280, "#f8fafc", "#cbd8e2", 14)
+    body += rect(35, 40, 510, 48, "#eef6fc", BLUE, 8)
+    body += text(290, 72, "実行層（Execution Layer: EL）", 22, BLUE, "middle", True)
+    body += text(290, 125, "取引（Tx）の実行・スマートコントラクト", 21, NAVY, "middle")
+    body += text(290, 160, "状態木（State Trie）の更新・残高管理", 20, "#516575", "middle")
+    body += rect(55, 195, 470, 85, "white", "#cbd8e2", 8)
+    body += text(290, 230, "多様な独立クライアント群", 19, NAVY, "middle", True)
+    body += text(290, 260, "Geth / Nethermind / Besu / Erigon", 21, BLUE, "middle", True)
+
+    body += rect(640, 25, 540, 280, "#f5f1fc", PURPLE, 14)
+    body += rect(655, 40, 510, 48, "#f5f1fc", PURPLE, 8)
+    body += text(910, 72, "合意層（Consensus Layer: CL） ★本研究の対象", 22, PURPLE, "middle", True)
+    body += text(910, 125, "PoS バリデータ投票・フォーク選択", 21, NAVY, "middle")
+    body += text(910, 160, "チェックポイント正当化・ファイナリティ判定", 20, "#516575", "middle")
+    body += rect(675, 195, 470, 85, "white", "#cdbde4", 8)
+    body += text(910, 230, "多様な独立合意クライアント群", 19, NAVY, "middle", True)
+    body += text(910, 260, "Lighthouse / Nimbus / Teku / Lodestar", 21, PURPLE, "middle", True)
+
+    body += arrow("M560 165 H640", BLUE)
+    body += arrow("M640 175 H560", PURPLE)
+    body += text(600, 145, "Engine API", 16, NAVY, "middle", True)
+    save("diagram-ethereum-architecture.svg", body, "Ethereumの二層構造：実行層（EL）と合意層（CL）。本研究が対象とする合意層では複数クライアントが同一仕様に基づきPoS合意を形成する", height=330)
+
+
+def handoff_pipeline_scene():
+    body = rect(20, 25, 340, 280, "#f5f1fc", PURPLE, 12)
+    body += text(190, 68, "形式検証の世界", 24, PURPLE, "middle", True)
+    body += text(190, 105, "定理証明（Lean 4 / Gasper）", 18, NAVY, "middle")
+    body += rect(38, 130, 304, 150, "white", "#cdbde4", 8)
+    body += text(190, 168, "「前提 P ならば 安全 Q」", 20, PURPLE, "middle", True)
+    body += text(190, 205, "定理文に厳密な仮説として", 17, NAVY, "middle")
+    body += text(190, 235, "前提条件が完全に記述", 17, NAVY, "middle")
+    body += text(190, 262, "（機械が受理・抜け漏れゼロ）", 15, "#516575", "middle")
+
+    body += arrow("M360 165 H430", BLUE)
+
+    body += rect(430, 25, 340, 280, "#eef6fc", BLUE, 12)
+    body += text(600, 68, "本研究の提案アプローチ", 24, BLUE, "middle", True)
+    body += text(600, 105, "構文解析による前提の自動抽出", 18, NAVY, "middle")
+    body += rect(448, 130, 304, 150, "white", "#a5cce5", 8)
+    body += text(600, 168, "検証可能な確認候補へ変換", 20, BLUE, "middle", True)
+    body += text(600, 205, "・変数・集合の型と境界条件", 17, NAVY, "middle")
+    body += text(600, 235, "・クォーラム交差の成立前提", 17, NAVY, "middle")
+    body += text(600, 262, "・定理と仕様の対応トレーサビリティ", 15, "#516575", "middle")
+
+    body += arrow("M770 165 H840", BLUE)
+
+    body += rect(840, 25, 340, 280, "#fff6ee", ORANGE, 12)
+    body += text(1010, 68, "実装・監査の現場", 24, ORANGE, "middle", True)
+    body += text(1010, 105, "現場エンジニア・セキュリティ監査", 18, NAVY, "middle")
+    body += rect(858, 130, 304, 150, "white", "#e9c4a8", 8)
+    body += text(1010, 168, "テストとコードレビューへの展開", 20, ORANGE, "middle", True)
+    body += text(1010, 205, "・テストケース（spec-tests）の補強", 17, NAVY, "middle")
+    body += text(1010, 235, "・監査チェックリストの具体的項目化", 17, NAVY, "middle")
+    body += text(1010, 262, "※現場にLean習得は不要", 16, ORANGE, "middle", True)
+
+    save("diagram-proof-handoff.svg", body, "証明の成果を現場が参照できる形へ：形式証明から抽出された前提条件を、現場が使えるテスト項目・監査チェックリストへ変換するパイプライン", height=330)
+
+
 if __name__ == "__main__":
     ledger_scene()
     client_scene()
@@ -201,3 +261,5 @@ if __name__ == "__main__":
     pipeline_scene()
     scope_scene()
     result_chart()
+    architecture_scene()
+    handoff_pipeline_scene()

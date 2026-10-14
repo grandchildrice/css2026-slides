@@ -99,8 +99,8 @@
   "visuals": [
     {
       "slide": 4,
-      "file": "figs/web-connected-world.svg",
-      "purpose": "外部ネットワークイラスト"
+      "file": "figs/diagram-ethereum-architecture.svg",
+      "purpose": "Ethereum実行層・合意層の二層アーキテクチャ図"
     },
     {
       "slide": 4,
@@ -134,8 +134,8 @@
     },
     {
       "slide": 28,
-      "file": "figs/web-infrastructure.png",
-      "purpose": "証明の成果を現場へ渡す説明"
+      "file": "figs/diagram-proof-handoff.svg",
+      "purpose": "証明の成果を現場へ渡すパイプライン図"
     }
   ],
   "motivating_scenario": {
@@ -263,7 +263,7 @@
     },
     {
       "type": "proposal",
-      "title": "率直に言うと：何をして、何をしていないか"
+      "title": "提案手法のスコープ：何をして、何をしていないか"
     },
     {
       "type": "extraction",
