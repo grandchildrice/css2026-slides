@@ -21,7 +21,7 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 29, f"Expected 29 slides, got {slides}"
+        assert slides == 35, f"Expected 35 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
@@ -30,14 +30,14 @@ def verify(url, capture):
         assert page.locator("img.web-illustration").count() == 2
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
-        assert page.locator(".slides section:nth-child(2) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
+        assert page.locator(".slides section:nth-child(4) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
         assert "証明から前提" in page.locator(".cover-claim").text_content()
         assert page.locator("img.result-visual").count() == 1
         assert page.locator("pre code").count() == 5
         assert page.locator("code.language-python").count() == 2
         assert page.locator("code.language-json").count() == 1
         sample = page.locator("code.language-python").nth(1).text_content()
-        expected = "def unpack(bits):\n    return [(bits >> i) & 1\n            for i in range(4)]\nfor bits in range(16):\n    actual = (bits << 1) & 0b1111\n    expected = [0] + unpack(bits)[:3]\n    assert 0 <= actual < 16\n    assert unpack(actual) == expected"
+        expected = "def test_denominator(state, epoch):\n    v = validators(state, epoch)\n    tally = tally(state, epoch)\n    # 前提: q ⊆ v\n    assert tally.voters <= set(v)\n    # 前提: 2/3·wt(v) ≤ wt(q)\n    assert 3 * tally.wt >= 2 * total_wt(v)"
         assert sample == expected
         exec(compile(expected, "slide-test-example", "exec"), {})
         assert page.locator(".slides h1").text_content() == "仕様どおりに実装すれば安全か"
@@ -136,7 +136,7 @@ def verify(url, capture):
         popup.wait_for_load_state()
         popup.wait_for_timeout(1500)
         assert "Speaker" in popup.title(), popup.title()
-        popup.wait_for_function("document.body.innerText.includes('第三者')")
+        popup.wait_for_function("document.body.innerText.includes('ブラウザ')")
         assert not errors, errors
         print("PASS: keyboard navigation, notes popup, images, no JavaScript errors")
         if output:

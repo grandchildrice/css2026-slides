@@ -6,8 +6,8 @@
   "format": "Reveal.js Markdown with HTML diagrams and Note: speaker notes",
   "audience": "実装・テストの基礎を知る一般のエンジニア。イーサリアムや形式検証の専門知識は前提にしない。",
   "message": "安全性の証明から前提を取り出し、仕様の文章だけから作る確認項目を補う。専門用語の解説が目的ではない。",
-  "main_slides": 24,
-  "appendix_slides": 5,
+  "main_slides": 29,
+  "appendix_slides": 6,
   "structure": [
     {
       "section": "背景",
@@ -16,75 +16,81 @@
         3,
         4,
         5,
-        6
+        6,
+        7,
+        8,
+        9
       ]
     },
     {
       "section": "従来の問題点",
       "slides": [
-        7,
-        8,
-        9,
         10,
-        11
-      ]
-    },
-    {
-      "section": "仮説",
-      "slides": [
-        12
-      ]
-    },
-    {
-      "section": "提案",
-      "slides": [
+        11,
+        12,
         13,
         14,
         15
       ]
     },
     {
-      "section": "仮説の検証",
+      "section": "仮説",
       "slides": [
         16
       ]
     },
     {
+      "section": "提案",
+      "slides": [
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "section": "仮説の検証",
+      "slides": [
+        21
+      ]
+    },
+    {
       "section": "この研究の優位性",
       "slides": [
-        17
+        22
       ]
     },
     {
       "section": "適用の一例",
       "slides": [
-        18
+        23
       ]
     },
     {
       "section": "実務への展開",
       "slides": [
-        19,
-        20,
-        21,
-        22
+        24,
+        25,
+        26,
+        27
       ]
     },
     {
       "section": "まとめ",
       "slides": [
-        23,
-        24
+        28,
+        29
       ]
     },
     {
       "section": "補足",
       "slides": [
-        25,
-        26,
-        27,
-        28,
-        29
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
       ]
     }
   ],
@@ -92,42 +98,42 @@
   "illustration_sources": "figs/illustration-sources.json",
   "visuals": [
     {
-      "slide": 2,
+      "slide": 4,
       "file": "figs/web-connected-world.svg",
       "purpose": "外部ネットワークイラスト"
     },
     {
-      "slide": 2,
+      "slide": 4,
       "file": "figs/ethereum.svg",
       "purpose": "公式Ethereumカラーロゴ"
     },
     {
-      "slide": 4,
+      "slide": 7,
       "file": "figs/illustration-clients.svg",
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 11,
+      "slide": 15,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 9,
+      "slide": 13,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
-      "slide": 12,
+      "slide": 16,
       "file": "figs/diagram-guarantee-scope.svg",
       "purpose": "仕様準拠の世界と前提Pが満たされる世界の関係図（保証の適用範囲）"
     },
     {
-      "slide": 17,
+      "slide": 22,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
     },
     {
-      "slide": 23,
+      "slide": 28,
       "file": "figs/web-infrastructure.png",
       "purpose": "証明の成果を現場へ渡す説明"
     }
@@ -193,11 +199,23 @@
     },
     {
       "type": "background",
+      "title": "「同じ仕様書」なのに、動きが違う"
+    },
+    {
+      "type": "background",
+      "title": "「だったら実装を1つに統一すれば？」"
+    },
+    {
+      "type": "background",
       "title": "イーサリアムについて"
     },
     {
       "type": "background",
       "title": "そもそも仕様書って、どうできてるの？"
+    },
+    {
+      "type": "background",
+      "title": "厳密なのは「手順」。「いつ安全か」は書いていない"
     },
     {
       "type": "logos",
@@ -210,6 +228,10 @@
     {
       "type": "specification",
       "title": "開発・監査の出発点は、共通の仕様書"
+    },
+    {
+      "type": "problem",
+      "title": "「分かる」と「書いていない」は、別の層"
     },
     {
       "type": "objection",
@@ -240,6 +262,10 @@
       "title": "足すのは「証明 → 前提 → 確認候補」の経路"
     },
     {
+      "type": "proposal",
+      "title": "率直に言うと：何をして、何をしていないか"
+    },
+    {
       "type": "extraction",
       "title": "実例：定理に書かれた「条件」の部分を取り出す"
     },
@@ -253,7 +279,7 @@
     },
     {
       "type": "chart",
-      "title": "延べ57件中48件は、仕様の文章に非明示と判定"
+      "title": "10概念中7概念は、仕様の文章に非明示と判定"
     },
     {
       "type": "bug-example",
@@ -269,7 +295,7 @@
     },
     {
       "type": "requirements",
-      "title": "仕様を書く人：前提と手順を対応付ける"
+      "title": "仕様を書く人：対応表は仕様の外に置く"
     },
     {
       "type": "generalization",
@@ -298,6 +324,10 @@
     {
       "type": "appendix",
       "title": "補足：同じ処理領域にあることと、同じ原因は別"
+    },
+    {
+      "type": "appendix",
+      "title": "想定される反論と答え"
     },
     {
       "type": "references",
