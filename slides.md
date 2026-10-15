@@ -46,7 +46,7 @@ Note:
 ## 「だったら実装を1つに統一すれば？」
 
 <img class="diagram diversity-visual" style="height: 240px; margin: 8px auto; display: block;" src="figs/diagram-client-diversity.svg" alt="単一実装の単一障害点（全滅リスク）と複数実装の多様性による耐障害性の対比図">
-<p class="takeaway" style="margin-top: 12px; padding: 10px 18px; font-size: 24px;">多様性そのものが安全機構。ただし<strong>「共通の前提」が共有されていなければ、多様性は機能しない。</strong></p>
+<p class="takeaway" style="margin-top: 12px; padding: 10px 18px; font-size: 24px;">多様性そのものが安全機構。<br>ただし<strong>「共通の前提」が共有されていなければ、多様性は機能しない。</strong></p>
 <p class="message" style="margin: 12px 0 6px; font-size: 26px;">前提は研究者の間では共有済み。届いていないのは<strong>実装者・監査者</strong>。</p>
 
 Note:
@@ -158,9 +158,9 @@ N-version programming、多様性そのものが安全機構です。
 
 ## 「食い違い」は、なぜ特別に危険なのか
 
-<p style="margin: 6px 0 10px;">普通のソフトのバグは「利用者の問題」。ここで壊れるのは、<strong>「全員が同じ履歴を持つ」という合意そのもの</strong>。</p>
+<p style="margin: 6px 0 10px;">普通のソフトのバグは「利用者の問題」。<br>ここで壊れるのは、<strong>「全員が同じ履歴を持つ」という合意そのもの</strong>。</p>
 <img class="diagram split-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-chain-split.svg" alt="暗黙前提の解釈差によるチェーン分裂（Chain Split）と資産喪失の危機を示す図解">
-<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">各実装が「仕様どおり」に動くだけでは不十分。<strong>暗黙前提のわずかなズレが、不可逆なチェーン分裂を引き起こす。</strong></p>
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">各実装が「仕様どおり」に動くだけでは不十分。<br><strong>暗黙前提のわずかなズレが、不可逆なチェーン分裂を引き起こす。</strong></p>
 <p class="small" style="margin-top: 6px;">「分裂し得る」と分類された修正は実際に公開されている——後の実例で紹介。</p>
 
 Note:
@@ -224,8 +224,8 @@ Note:
 <div class="panel"><p class="label">仕様書のどこにも「書いていない」もの</p><p>この判定が<strong>いつ安全に効くか</strong>——<br>どの名簿・どの分岐状況・どんな出席率を<br>想定した保証か、という<strong>前提条件</strong><br>→ <mark>文章のどこにも出てこない</mark></p></div>
 </div>
 <p class="small">「よく読めば分かる」「仕様に書き足せばいい」——どちらも正しい。<br>
-ただし仕様書をいくら精読しても、文章に無い前提は出てきません。書き足すにも「何を書くか」の確かな一覧が必要。<br>
-抜け漏れなしの一覧は<strong>証明の中にだけ</strong>ある。</p>
+ただし仕様書をいくら精読しても、文章に無い前提は出てきません。<br>
+書き足すにも「何を書くか」の確かな一覧が必要。抜け漏れなしの一覧は<strong>証明の中にだけ</strong>ある。</p>
 
 <p class="small">監査の確認項目は<strong>仕様の文章から作られる</strong>。書かれていない条件は誰が見る？</p>
 
@@ -246,7 +246,7 @@ Note:
 
 ## 「仕様に準拠すれば良い」のでは？
 
-<p>その通り——<strong>全チームがそうしています</strong>。<br>問題は単なる「準拠ミス」にとどまらず、同じ記述でも解釈が分かれてしまう点にあります。</p>
+<p>その通り——<strong>全チームがそうしています</strong>。<br>問題は単なる準拠ミスではなく、<strong>同じ記述でも解釈が分かれてしまうこと</strong>にあります。</p>
 
 <div class="grid">
 <div class="panel"><p class="label">ふつうの層：手順の記述</p><p>仕様が「この操作をこうする」と具体的<br>ずれる ＝ <strong>誰かのミス</strong><br>→ レビュー・テストで見つかる</p></div>
@@ -277,9 +277,9 @@ Cの規格にも未定義動作はありますが、「どの集合を数える�
 
 ## 安全性の核心：クォーラム交差の前提
 
-<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
+<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：<br>合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
 <img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる。面積比は数量を表さない模式図">
-<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<strong>この前提が仕様の文章に書かれていなければ、各実装で解釈が分かれてしまう。</strong></p>
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<br><strong>この前提が仕様の文章に書かれていなければ、各実装で解釈が分かれてしまう。</strong></p>
 <p class="small" style="margin-top: 6px;">どれだけ算術（2/3）を正しく実装しても、前提が満たされなければ安全性は保証されない。</p>
 
 Note:
@@ -345,7 +345,7 @@ Note:
 ## 「2/3」は合っている。でも、何の2/3か？
 
 <p>仕様：「総重みの2/3が支持すれば、<strong>正当化</strong>＝確かとみなす」<br>→　監査：「2/3の計算があるか」　→　コードは2/3（算術記述の一致を確認）</p>
-<p class="small">コードが書くのは「名簿の計算手順」。<strong>その計算が安全を保証する前提（どの集合関係・どんな出席を想定したか）</strong>は書いていない。<br>同じ手順を写しても、<strong>前提の共有が崩れれば同じ方向に間違える</strong>。</p>
+<p class="small">コードが書くのは「名簿の計算手順」。<br><strong>その計算が安全を保証する前提（どの集合関係・どんな出席を想定したか）</strong>は書いていない。<br>同じ手順を写しても、<strong>前提の共有が崩れれば同じ方向に間違える</strong>。</p>
 <p class="label">仮想例（説明用）：8人・等しい重みで集計（色付き＝支持、白＝対象内で非支持、灰＝対象外）</p>
 <img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする（破線枠）。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
 <p class="message">両方とも4/6 ＝ 2/3。でも母集団が違えば、<strong>同じ保証は使えない。</strong></p>
@@ -378,7 +378,7 @@ Note:
 <p>「2/3の計算があるか」→ コードには2/3があった。<mark>ヨシ</mark></p>
 <p class="label">実際に起きたこと（Nimbus #461）</p>
 <div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
-<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
+<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。<br>実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
 <p class="message">算術は正しい。壊れていたのは、<strong>計算に渡す状態</strong>。</p>
 <p class="source">Nimbus PR #461（公開・修正済、ethereum-vuln-dataset の impact_type=chain_split）。ずれた状態は、先ほどの仕様抜粋の最終行 justification_bits。</p>
 
@@ -770,7 +770,7 @@ BFT系プロトコルにおける有権者集合の変動や、ネットワー�
 ## 証明の成果を、現場が参照できる形へ
 
 <img class="architecture-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-proof-handoff.svg" alt="証明の成果を現場が参照できる形へ：形式証明から抽出された前提条件を、現場が使えるテスト項目・監査チェックリストへ変換するパイプライン">
-<p class="takeaway" style="margin-top: 10px; padding: 12px 18px; font-size: 24px;"><strong>形式手法の成果を現場の実務へ還元：</strong>現場のエンジニア全員がLeanを習得する必要はありません。前提条件の自動抽出が、研究と実装・監査をつなぐインターフェースになります。</p>
+<p class="takeaway" style="margin-top: 10px; padding: 12px 18px; font-size: 24px;"><strong>形式手法の成果を現場の実務へ還元：</strong><br>現場のエンジニア全員がLeanを習得する必要はありません。<br>前提条件の自動抽出が、研究と実装・監査をつなぐインターフェースになります。</p>
 <p class="source" style="margin-top: 8px;">提案アーキテクチャ：定理証明（Lean 4）からテスト・監査チェックリストへの前提条件抽出パイプライン</p>
 
 Note:
@@ -794,7 +794,7 @@ Note:
 <div class="panel blue"><h3>調査結果</h3><p>延べ57件中48件は、<br>仕様の文章に非明示と判定。</p></div>
 <div class="panel"><h3>次の行動</h3><p>前提を仕様・コードへ対応付け、<br>担当と確認方法を決める。</p></div>
 </div>
-<p class="small">今後：人手の正解ラベルによる検証、実バグを見ずに作った項目での再検出実験、他のBFT系への展開。　ご清聴ありがとうございました。</p>
+<p class="small"><strong>今後：</strong>人手の正解ラベルによる検証、実バグでの再検出実験、他のBFT系への展開。<br>ご清聴ありがとうございました。</p>
 
 Note:
 まとめます。
