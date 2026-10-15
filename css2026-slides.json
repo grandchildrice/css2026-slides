@@ -129,14 +129,14 @@
       "purpose": "同じ参加者集合・同じ重みなら2つの2/3支持集合が1/3重なるクォーラム交差のベン図イラスト"
     },
     {
-      "slide": 14,
-      "file": "figs/scenario-denominators.svg",
-      "purpose": "全体の定義が異なる集計を示す仮想例"
-    },
-    {
-      "slide": 16,
+      "slide": 13,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
+    },
+    {
+      "slide": 15,
+      "file": "figs/scenario-denominators.svg",
+      "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
       "slide": 17,
@@ -258,6 +258,10 @@
       "title": "安全性の核心：クォーラム交差の前提"
     },
     {
+      "type": "origin",
+      "title": "なぜ、仕様を読むだけでは見えないのか"
+    },
+    {
       "type": "observation",
       "title": "問題の入口：確認できるのは、仕様に出たものだけ"
     },
@@ -268,10 +272,6 @@
     {
       "type": "example",
       "title": "実例：計算は合った。でも状態がずれた"
-    },
-    {
-      "type": "origin",
-      "title": "なぜ、仕様を読むだけでは見えないのか"
     },
     {
       "type": "proposal",
