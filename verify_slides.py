@@ -25,7 +25,8 @@ def verify(url, capture):
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
-        assert page.locator("img.architecture-visual").count() == 3
+        assert page.locator("img.architecture-visual").count() == 2
+        assert page.locator("img.web-illustration").count() == 1
         assert page.locator("img.scenario-visual").count() == 1
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0

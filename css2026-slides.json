@@ -105,8 +105,8 @@
     },
     {
       "slide": 4,
-      "file": "figs/diagram-ethereum-architecture.svg",
-      "purpose": "Ethereum実行層・合意層の二層アーキテクチャ図"
+      "file": "figs/web-connected-world.svg",
+      "purpose": "外部ネットワークイラスト"
     },
     {
       "slide": 4,

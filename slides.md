@@ -64,18 +64,18 @@ Ethereumはあえて実装の多様性を安全機構にしました。1つの�
 
 ## イーサリアムについて
 
-<div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum：実行層と合意層の分離アーキテクチャ</h3></div>
-<img class="architecture-visual" style="height: 240px; margin: 6px 0;" src="figs/diagram-ethereum-architecture.svg" alt="Ethereumの二層構造：実行層（EL）と合意層（CL）。本研究が対象とする合意層では複数クライアントが同一仕様に基づきPoS合意を形成する">
-<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">世界中の独立ノードが<strong>単一の合意プロトコル仕様</strong>を実装・実行。合意層のわずかな解釈差が<strong>チェーン分裂</strong>に直結する。</p>
-<p class="source" style="margin-top: 8px;">アーキテクチャ解説：<a href="https://ethereum.org/en/developers/docs/nodes-and-clients/">ethereum.org</a> ／ 公式Ethereumロゴ：<a href="https://ethereum.org/en/assets/">brand assets</a></p>
+<div class="visual-story">
+<img class="web-illustration" src="figs/web-connected-world.svg" alt="unDraw Connected world：世界各地がつながるネットワークのイラスト">
+<div class="story-copy"><div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum</h3></div><p class="lead">世界中の第三者が運用する、<br>取引・プログラム実行の基盤。</p><p>全員が<mark>同じ取引履歴</mark>を保存・確認する。<br>管理者ではなく数学に依存。<br>だから、善良な参加者は<br><strong>全員同じ動きをしなければならない。</strong></p></div>
+</div>
+<p class="source">解説：<a href="https://ethereum.org/en/developers/docs/nodes-and-clients/">ethereum.org</a> ／ 公式Ethereumロゴ：<a href="https://ethereum.org/en/assets/">brand assets</a> ／ イラスト：Katerina Limpitsouni, <a href="https://undraw.co/illustration/connected-world_anke">unDraw</a></p>
 
 Note:
-イーサリアムは、世界中の独立した参加者が運用するコンピュータで、取引やプログラムの実行結果を共有する分散基盤です。
-トランザクションを実行する実行層（EL）と、Proof-of-Stakeの合意を担う合意層（CL）が明確に分離されています。
-本研究が対象とするのは、右側の合意層です。
-合意層では、Lighthouse, Nimbus, Teku, Lodestarといった複数の独立したクライアントが、単一の合意仕様書（consensus-specs）に基づいて実装されています。
-もし仕様の解釈や暗黙の前提にわずかでも食い違いがあれば、ブロックの確定結果が分裂し、システム全体の停止や資産の損失につながります。
-だからこそ、合意仕様の厳密性と、暗黙の前提がどこに存在するかを把握することが極めて重要になります。
+イーサリアムは、世界中の第三者が運用するコンピュータで、取引やプログラムの実行結果を共有する基盤です。
+全員が同じ取引履歴を保存し、互いに確認します。
+中央の管理者を置かず、計算と経済的なインセンティブの仕組みに依存して動きます。
+全員で決めるので、善良な参加者は全員が同じ動きをしなければなりません。
+ここで重要なのは、この基盤を動かすソフトが、一つのチームが作った一種類のものではないという点です。
 
 ---
 
