@@ -374,23 +374,23 @@ Note:
 ## 実例：計算は合った。でも状態がずれた
 
 <p class="small">※前提の非明示が直接の原因とは示していない。<strong>同じ処理領域の修正の重大さを示す動機づけの例</strong>。</p>
-<p class="label">表面的な検査で確認されたこと</p>
-<p>「2/3の計算があるか」→ 仕様どおりの閾値計算を実装コード内で確認</p>
-<p class="label">実際に起きたフォーク要因（Nimbus PR #461の実例）</p>
-<div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 4bit境界の型制約の不整合</span></div>
-<p>正当化履歴を保持する4bitビットベクトルの更新時、暗黙のマスク処理が漏れて上位ビットが残留し、<strong>確定（Finality）判定の状態不一致</strong>が発生。<br>公開脆弱性DB（ethereum-vuln-dataset）では<strong>チェーン分裂（chain split）に至る深刻度</strong>と分類。</p>
-<p class="message">算術記述は仕様どおり。問題は<strong>計算に渡す状態表現の暗黙前提</strong>にあった。</p>
+<p class="label">監査が見たもの</p>
+<p>「2/3の計算があるか」→ コードには2/3があった。<mark>ヨシ</mark></p>
+<p class="label">実際に起きたこと（Nimbus #461）</p>
+<div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
+<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
+<p class="message">算術は正しい。壊れていたのは、<strong>計算に渡す状態</strong>。</p>
 <p class="source">Nimbus PR #461（公開・修正済、ethereum-vuln-dataset の impact_type=chain_split）。ずれた状態は、先ほどの仕様抜粋の最終行 justification_bits。</p>
 
 Note:
-監査が見たのは「2/3の計算があるか」で、コードには確かに2/3の算術式が存在していました。
-しかし実際に起きたのは、計算に渡す状態データの境界における不整合です。
+監査が見たのは「2/3の計算があるか」で、コードには確かに2/3がありました。
+実際に起きたのは別の場所のずれです。
 Nimbusの修正#461は、正当化履歴を保持する4ビット、justification_bitsの更新で上位ビットが残り、確定判定に使う状態がずれた実バグです。
 このjustification_bitsは、先ほどの仕様抜粋の最終行で更新していた状態そのものです。
 公開データセットではチェーン分岐に至り得ると分類されています。
-重要なのは、算術の計算式自体が誤っていたわけではなく、型境界や状態更新の暗黙の前提がコードと仕様の間で共有されていなかった点です。
+重要なのは、算術の計算式自体が誤っていたわけではなく、計算に渡す状態データそのものが壊れていた点です。
 なお前提の非明示がこのバグの原因だったとは示していません。
-データセットの分類ラベルが同じ処理領域に位置するという、位置的な共起関係の例示です。
+データセットの分類ラベルが同じ処理領域に位置するという、位置的な共起だけです。
 分母のずれも、状態のずれも、仕様の手順記述の外側にある「前提条件」に起因します。
 では、仕様どおりに作っても前提が満たされないと何が起きるのか、保証の範囲を見ます。
 
