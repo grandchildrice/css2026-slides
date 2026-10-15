@@ -25,7 +25,7 @@ Note:
 <table>
 <thead><tr><th>分野</th><th>共通の仕様</th><th>複数の実装</th><th>ズレた所</th></tr></thead>
 <tbody>
-<tr><td>ブラウザ</td><td>HTML/JSの仕様</td><td>Chrome・Firefox・<mark>Safari</mark></td><td>Safariだけ表示がずれる</td></tr>
+<tr><td>ブラウザ</td><td>HTML/JSの仕様</td><td>Chrome・Firefox・<strong>Safari</strong></td><td>Safariだけ表示がずれる</td></tr>
 <tr><td>Cコンパイラ</td><td>言語規格</td><td>GCC・Clang・MSVC</td><td>未定義動作・拡張で結果が違う</td></tr>
 <tr><td>SQL</td><td>標準SQL</td><td>MySQL・PostgreSQL・SQLite</td><td>方言があり、移植すると壊れる</td></tr>
 </tbody>
@@ -45,17 +45,9 @@ Note:
 
 ## 「だったら実装を1つに統一すれば？」
 
-<p>Bitcoinのように<strong>公式実装を1本に絞る方式は実際に機能</strong>しています。<br>では、なぜあえて複数実装にするのか。</p>
-
-<div class="flow">
-<div class="panel"><h3>単一実装</h3><p>1つのバグが<br>ネットワーク全体のバグに</p></div>
-<div class="arrow">→</div>
-<div class="panel blue"><h3>複数実装</h3><p>多様性そのものが安全弁。<br>1実装のバグでは<br>過半数を取れない</p></div>
-<div class="arrow">→</div>
-<div class="panel orange"><h3>ただし条件つき</h3><p>全実装が<strong>共通の前提</strong>を<br>共有していなければ<br>多様性は機能しない</p></div>
-</div>
-
-<p class="message">前提は<mark>研究者の間では共有済み</mark>。届いていないのは<strong>実装者・監査者</strong>。</p>
+<img class="diagram diversity-visual" style="height: 240px; margin: 8px auto; display: block;" src="figs/diagram-client-diversity.svg" alt="単一実装の単一障害点（全滅リスク）と複数実装の多様性による耐障害性の対比図">
+<p class="takeaway" style="margin-top: 12px; padding: 10px 18px; font-size: 24px;">多様性そのものが安全機構。<br>ただし<strong>「共通の前提」が共有されていなければ、多様性は機能しない。</strong></p>
+<p class="message" style="margin: 12px 0 6px; font-size: 26px;">前提は研究者の間では共有済み。届いていないのは<strong>実装者・監査者</strong>。</p>
 
 Note:
 「環境差なんて普通だ、公式バイナリを出せばいい」という反論は当然で、実際Bitcoinはその方式で動いています。ただ単一実装は単一障害点でもあります。
@@ -94,8 +86,8 @@ Note:
 <p>具体例：<strong>参加者の投票で「確かな履歴」を全員同じ結果に決める</strong>システムの仕様書。</p>
 
 <div class="grid">
-<div class="panel"><p class="label">システムがやること</p><p>① 参加者は「この履歴が正しい」と投票し続ける<br>② 約6.4分（エポック）ごとに全員が<mark>同じ手順</mark>で集計<br>③ <strong>総支持の2/3超</strong>で「確かな履歴」にマーク</p></div>
-<div class="panel"><p class="label">仕様書ではこう書いてある（実物抜粋）</p><div class="proof-code tight"><div>class <mark>Checkpoint</mark>(Container):  <span class="muted">#「確かな履歴」＝時刻＋指紋</span></div><div><mark>justification_bits</mark>: Bitvector[4]  <span class="muted"># 確定判定の履歴</span></div><div>def <mark>process_epoch</mark>(state):  <span class="muted"># エポックごとの集計</span></div></div><p class="small">型・フィールド・関数まで定義した、実行可能な疑似コード級の詳細設計。</p></div>
+<div class="panel"><p class="label">システムがやること</p><p>① 参加者は「この履歴が正しい」と投票し続ける<br>② 約6.4分（エポック）ごとに全員が同じ手順で集計<br>③ <strong>総支持の2/3超</strong>で「確かな履歴」にマーク</p></div>
+<div class="panel"><p class="label">仕様書ではこう書いてある（実物抜粋）</p><div class="proof-code tight"><div>class Checkpoint(Container):  <span class="muted">#「確かな履歴」＝時刻＋指紋</span></div><div>justification_bits: Bitvector[4]  <span class="muted"># 確定判定の履歴</span></div><div>def process_epoch(state):  <span class="muted"># エポックごとの集計</span></div></div><p class="small">型・フィールド・関数まで定義した、実行可能な疑似コード級の詳細設計。</p></div>
 </div>
 <p class="message">全チームが<strong>この同じ文書を読んで</strong>、実装を書く。</p>
 <p class="source">ethereum/consensus-specs（公開・版管理）。抜粋はbeacon-chain.mdの定義の簡略化。</p>
@@ -166,18 +158,10 @@ N-version programming、多様性そのものが安全機構です。
 
 ## 「食い違い」は、なぜ特別に危険なのか
 
-<p>普通のソフトのバグは「そのソフトの利用者」の問題。<br>ここで壊れるのは、<mark>「全員が同じ履歴を持つ」という一致そのもの</mark>。</p>
-
-<div class="flow">
-<div class="panel"><h3>別々の「確定」</h3><p>実装ごとに別の履歴を<br>覆せないと確定</p></div>
-<div class="arrow">→</div>
-<div class="panel"><h3>履歴が裂ける</h3><p>不可逆な分岐（State Fork）<br>確定も失われる</p></div>
-<div class="arrow">→</div>
-<div class="panel orange"><h3>資産が危ない</h3><p>確定済みのはずの取引や<br>預けた担保が失われる</p></div>
-</div>
-
-<p class="message">だから「仕様どおり」かだけでなく、<br><strong>全実装が本当に同じ判断をするか</strong>が死活問題。</p>
-<p class="small">「分裂し得る」と分類された修正は実際に公開されている——後の実例で紹介。</p>
+<p style="margin: 6px 0 10px;">普通のソフトのバグは「利用者の問題」。<br>ここで壊れるのは、<strong>「全員が同じ履歴を持つ」という合意そのもの</strong>。</p>
+<img class="diagram split-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-chain-split.svg" alt="暗黙前提の解釈差によるチェーン分裂（Chain Split）と資産喪失の危機を示す図解">
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">各実装が「仕様どおり」に動くだけでは不十分。<br><strong>暗黙前提のわずかなズレが、不可逆なチェーン分裂を引き起こす。</strong></p>
+<p class="small" style="margin-top: 6px;">「分裂し得る」と分類された修正は実際に公開されている——後の実例で紹介。</p>
 
 Note:
 先に「なぜこれが大事か」を言います。
@@ -240,10 +224,10 @@ Note:
 <div class="panel"><p class="label">仕様書のどこにも「書いていない」もの</p><p>この判定が<strong>いつ安全に効くか</strong>——<br>どの名簿・どの分岐状況・どんな出席率を<br>想定した保証か、という<strong>前提条件</strong><br>→ <mark>文章のどこにも出てこない</mark></p></div>
 </div>
 <p class="small">「よく読めば分かる」「仕様に書き足せばいい」——どちらも正しい。<br>
-ただし<mark>仕様書をいくら精読しても、文章に無い前提は出てこない</mark>。書き足すにも「何を書くか」の確かな一覧が必要。<br>
-抜け漏れなしの一覧は<strong>証明の中にだけ</strong>ある。</p>
+ただし仕様書をいくら精読しても、文章に無い前提は出てきません。<br>
+書き足すにも「何を書くか」の確かな一覧が必要。抜け漏れなしの一覧は<strong>証明の中にだけ</strong>ある。</p>
 
-<p class="small">監査の確認項目は<strong>仕様の文章から作られる</strong>。<mark>書かれていない条件</mark>は誰が見る？</p>
+<p class="small">監査の確認項目は<strong>仕様の文章から作られる</strong>。書かれていない条件は誰が見る？</p>
 
 Note:
 さきほどの式は写せます。変数の中身も、仕様書の中で定義を辿れば追えます。ここは正直に言います、意味は書いてあるんです。
@@ -262,7 +246,7 @@ Note:
 
 ## 「仕様に準拠すれば良い」のでは？
 
-<p>その通り——<strong>全チームがそうしています</strong>。<br>問題は単なる「準拠ミス」にとどまらず、<mark>同じ記述でも解釈が分かれてしまう</mark>点にあります。</p>
+<p>その通り——<strong>全チームがそうしています</strong>。<br>問題は単なる準拠ミスではなく、<strong>同じ記述でも解釈が分かれてしまうこと</strong>にあります。</p>
 
 <div class="grid">
 <div class="panel"><p class="label">ふつうの層：手順の記述</p><p>仕様が「この操作をこうする」と具体的<br>ずれる ＝ <strong>誰かのミス</strong><br>→ レビュー・テストで見つかる</p></div>
@@ -285,7 +269,49 @@ C言語のような普通の実装ではほとんどこれです。
 複数チームがそれぞれ妥当そうに読むと、全員が仕様準拠なのに結果が違う——手順の記述では起きにくい、記述のスタイルに依存した失敗モードです。
 Cの規格にも未定義動作はありますが、「どの集合を数えるか」が実装ごとに分かれる種類のずれは、手順が具体的な層ではあまり起きません。
 そして、どの解釈が正しいかは仕様の文章だけでは決められません。
-では監査では何が見えているのか、次に見ます。
+では、なぜそのような解釈のズレが致命的なのか、次に数学的な定理の構造を見ます。
+
+---
+
+<p class="section-tag">従来の問題点</p>
+
+## 安全性の核心：クォーラム交差の前提
+
+<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：<br>合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
+<img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる。面積比は数量を表さない模式図">
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<br><strong>この前提が仕様の文章に書かれていなければ、各実装で解釈が分かれてしまう。</strong></p>
+<p class="small" style="margin-top: 6px;">どれだけ算術（2/3）を正しく実装しても、前提が満たされなければ安全性は保証されない。</p>
+
+Note:
+合意仕様の安全性を支えているのは、クォーラム交差という数学的定理です。
+全体の3分の2以上の支持を集めた決定が2つあれば、全体の集合が100%である限り、少なくとも3分の1は両方を支持する参加者が重複、つまり交差します。
+これによって「同時に2つの異なる履歴が確定することはない」という安全性が保証されます。
+しかし、この定理が成り立つためには「同じ参加者集合（名簿）を分母とし、同じ票の重みで計算している」という絶対的な前提が必要です。
+仕様書には「2/3以上の支持」という計算手順は書かれていても、「どの参加者集合を分母とすべきか」という前提条件は書かれていません。
+前提が共有されていなければ、各実装が仕様どおりに2/3を計算しても、交差は保証されず、安全性の保証そのものが崩壊します。
+では、その条件は監査で見えているのでしょうか。
+次に見ます。
+
+---
+
+<p class="section-tag">従来の問題点</p>
+
+## なぜ、仕様を読むだけでは見えないのか
+
+<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
+<p class="message"><strong>根本原因：</strong>仕様が成り立つ<strong>前提条件</strong>が、<br>実装者・監査者からは<strong>読めない</strong>。</p>
+<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
+<p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
+
+Note:
+クォーラム交差のような安全性の前提条件が、なぜ仕様書に書かれないのか。
+これは仕様書の欠陥というより、仕様書と証明の「役割分担」に起因する構造的ギャップです。
+先に理論家による研究と設計があり、そこには安全性の証明、つまり「この前提が満たされるとき、安全性が成立する（WHEN）」という数学的議論が存在します。
+その設計を、各ノードが実行可能な状態遷移手順（HOW）へと書き下したものが仕様書です。
+実装者はこの手順に従ってコードを書き、監査者はこの手順を基準に確認します。
+現場は公式テスト（spec-tests）をパスすることで「暗黙の前提も満たしている」と信じていますが、安全性を保証する前提条件（WHEN）は証明側にのみ保持されており、仕様書の手順記述の中には現れません。
+さらに、証明はLeanという形式言語で記述されているため、現場の実装者や監査者が直接読み解くことも困難です。
+では、このギャップのせいで現場の確認はどう歪むのか。次に見ます。
 
 ---
 
@@ -304,12 +330,11 @@ Cの規格にも未定義動作はありますが、「どの集合を数える�
 <p class="small">では実際に、文章に出ていない条件はあるのか——次は具体例です。</p>
 
 Note:
-前のスライドでは「同じ記述を別々に読む」ずれを見ました。
-では監査では何が見えているのか——さきほどの確認の流れをもう一度見ます。
-確認項目は仕様の文章から作られるので、文章に書いてあるものは項目になり、誰かが見ます。
-一方、文章に書いていないものは項目にならず、結果として誰も見ません。
-つまりこの確認方法には、「文章に出たものだけが見える」という見え方の限界があります。
-もし正しさに必要な条件が文章に出ていなかったら、その条件は監査の対象にすらなりません。
+前提が届かない結果、監査やテストの現場で何が起きているのか。
+確認項目は仕様の文章から作られるので、文章に書いてある「手順」は項目になり、誰かが見ます。
+一方、文章に書いていない「前提」は項目にならず、結果として誰も見ません。
+現場は「仕様に書いてある手順（HOW）」しか確認できない見え方の限界を抱えています。
+もし正しさに必要な前提条件（WHEN）が文章に出ていなかったら、その条件は監査の対象にすらなりません。
 では実際に、仕様に出ていない条件はあるのでしょうか。
 次に具体的な例を二つ見ます——一つは仮想例、もう一つは実際に起きた修正です。
 
@@ -319,8 +344,8 @@ Note:
 
 ## 「2/3」は合っている。でも、何の2/3か？
 
-<p>仕様：「総重みの2/3が支持すれば、<strong>正当化</strong>＝確かとみなす」<br>→　監査：「2/3の計算があるか」　→　コードは2/3。<mark>ヨシ</mark></p>
-<p class="small">コードが書くのは「名簿の計算手順」。<strong>その計算が安全を保証する前提（どの集合関係・どんな出席を想定したか）</strong>は書いていない。<br>同じ手順を写しても、<strong>前提の共有が崩れれば同じ方向に間違える</strong>。</p>
+<p>仕様：「総重みの2/3が支持すれば、<strong>正当化</strong>＝確かとみなす」<br>→　監査：「2/3の計算があるか」　→　コードは2/3（算術記述の一致を確認）</p>
+<p class="small">コードが書くのは「名簿の計算手順」。<br><strong>その計算が安全を保証する前提（どの集合関係・どんな出席を想定したか）</strong>は書いていない。<br>同じ手順を写しても、<strong>前提の共有が崩れれば同じ方向に間違える</strong>。</p>
 <p class="label">仮想例（説明用）：8人・等しい重みで集計（色付き＝支持、白＝対象内で非支持、灰＝対象外）</p>
 <img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする（破線枠）。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
 <p class="message">両方とも4/6 ＝ 2/3。でも母集団が違えば、<strong>同じ保証は使えない。</strong></p>
@@ -330,8 +355,7 @@ Note:
 仕様は「総重みの2/3が支持すれば、その履歴を正当化＝確かとみなす」と書いています。
 重みはバリデータが預けた担保の量で、正当化の先には、もう覆せないとみなす「確定」があります。
 監査の確認は「2/3の計算があるか」になります。
-コードを見れば2/3の算術はあります。
-ヨシ。
+コードを見れば2/3の算術は仕様どおりに実装されており、表面上の検査は通過します。
 ところが、その2/3は何を数えた2/3なのでしょうか。
 名簿の計算手順は疑似コードに書いてあります。
 でも「誰が有権者か」は登録名簿で決まり、名簿はエポック毎に変動し、分岐中は枝ごとに別の名簿が存在します。
@@ -354,7 +378,7 @@ Note:
 <p>「2/3の計算があるか」→ コードには2/3があった。<mark>ヨシ</mark></p>
 <p class="label">実際に起きたこと（Nimbus #461）</p>
 <div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
-<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
+<p>正当化履歴を保持する4bitの更新で上位ビットが残り、<strong>「確定」の判定に使う状態がずれた</strong>。<br>確定＝覆せない履歴とみなすこと。<br>実バグDBでは<strong>履歴の分裂（chain split）に至り得る</strong>と分類。</p>
 <p class="message">算術は正しい。壊れていたのは、<strong>計算に渡す状態</strong>。</p>
 <p class="source">Nimbus PR #461（公開・修正済、ethereum-vuln-dataset の impact_type=chain_split）。ずれた状態は、先ほどの仕様抜粋の最終行 justification_bits。</p>
 
@@ -367,40 +391,8 @@ Nimbusの修正#461は、正当化履歴を保持する4ビット、justificatio
 重要なのは、算術の計算式自体が誤っていたわけではなく、計算に渡す状態データそのものが壊れていた点です。
 なお前提の非明示がこのバグの原因だったとは示していません。
 データセットの分類ラベルが同じ処理領域に位置するという、位置的な共起だけです。
-分母のずれも、状態のずれも、仕様の手順には出ていない条件の話でした。
-では、なぜその条件は仕様から見えないのでしょうか。
-仕様がどう作られてきたかに、原因をたどります。
-
----
-
-<p class="section-tag">従来の問題点</p>
-
-## なぜ、仕様を読むだけでは見えないのか
-
-<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
-<p class="message"><strong>根本原因：</strong>仕様が成り立つ<strong>前提条件</strong>が、<br>実装者・監査者からは<strong>読めない</strong>。</p>
-<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
-<p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
-
-Note:
-ここまでの二つの例——分母のずれと、計算に渡す状態のずれ——は、どちらも仕様の手順には出ていない条件の話でした。
-では、なぜその条件は仕様から見えないのでしょうか。
-仕様がどこから来たかを振り返ります。
-先に理論家による研究と設計があり、そこには安全性の証明、つまり「この前提ならこの保証」という議論が存在します。
-その設計を、実装できる手順へ翻訳したものが仕様書です。
-実装者はこの手順に従ってコードを書き、監査者はこの手順を基準に確認します。
-ここで大事なのは、前提を持っているのは上流の理論家だけだという点です。
-下流へ届く道は2つとも閉ざされています。
-仕様経由なら転記で落ちますし、直接読もうとしても、証明はLeanという形式言語で書かれており、実装者も監査者も読みません。
-そして正確な形で書かれた前提は、証明の中にだけあります。
-ならば証明から機械的に取り出して、確認候補として渡せばよい。
-それがこの研究のアイデアであり、次の仮説です。
-「仕様に前提を書けばよい」という意見は正しい方向ですが、誰が何を根拠に書くかが問題です。
-証明の仮説は、証明が受理された時点で抜け漏れなくそろっています。
-人が散文で書き足すのは第二の翻訳で、漏れや揺れが入ります。
-だから一次情報は証明から取ります。
-なお「証明」と聞いて難しそうに感じる必要はありません。
-テストが「動かして確認」なら、証明は「計算で確認」、Leanはその計算を機械が検算する言語です。
+分母のずれも、状態のずれも、仕様の手順記述の外側にある「前提条件」に起因します。
+では、仕様どおりに作っても前提が満たされないと何が起きるのか、保証の範囲を見ます。
 
 ---
 
@@ -449,7 +441,7 @@ Note:
 <div class="flow extraction-flow">
 <div class="panel purple"><h3>安全性の証明</h3><p>条件 ⇒ 保証</p><p class="actor">理論家の成果</p></div>
 <div class="arrow">→</div>
-<div class="panel"><h3>前提を抽出</h3><p><mark>定理の前提を列挙</mark></p><p class="actor">構文的・LLM不使用</p></div>
+<div class="panel"><h3>前提を抽出</h3><p><strong>定理の前提を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
 <div class="arrow">→</div>
 <div class="panel blue"><h3>確認候補へ変換</h3><p>仕様・コードと対応付け</p><p class="actor">研究側が翻訳</p></div>
 </div>
@@ -510,12 +502,12 @@ Note:
 
 ## 実例：定理に書かれた「条件」の部分を取り出す
 
-<div class="grid">
-<div><h3>定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small">括弧群＝前提（Leanでは仮説と呼ぶ）。構文的に列挙し、部品を除く実体条件を選別。</p></div>
-<div class="premise-list"><h3>取り出される前提の意味</h3><p><mark>支持した参加者が、<br>その側の集計対象に含まれる。</mark></p><p><mark>その対象の総重みに対して、<br>2/3以上の重みが支持する。</mark></p><p>この条件を、<strong>両側それぞれ</strong>で扱う。</p></div>
+<div class="grid" style="margin-bottom: 10px;">
+<div><h3 style="margin: 0 0 8px;">定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
+<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラムの重み閾値：</strong><br>その対象の総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
 </div>
-<p class="message">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
-<p class="source">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/blob/7650709/GasperBeaconChain/Core/Theories/SlashableBound.lean">quorum_intersection_weight_lower / gasper-lean4 @ 7650709</a>。原ソースの仮説4式を示す。日本語は説明用の要約。</p>
+<p class="message" style="margin: 10px 0 6px; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
+<p class="source" style="margin-top: 6px;">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/blob/7650709/GasperBeaconChain/Core/Theories/SlashableBound.lean">quorum_intersection_weight_lower / gasper-lean4 @ 7650709</a>。原ソースの仮説4式を示す。日本語は説明用の要約。</p>
 
 Note:
 左側の記号や数式は細かく読む必要はありません。要点は右側の日本語2行です。「支持した人が名簿に入っているか」「全体の2/3以上いるか」。言っていることはこの2点だけです。
@@ -757,24 +749,19 @@ Note:
 ## 共通仕様から作る、他のシステムでも考えられる
 
 <div class="grid three">
-<div class="panel"><h3>分散合意<br>Raft</h3><p>リーダー交代中に構成変更したら？</p><p class="hypothesis"><strong>確認候補：</strong><br>新旧構成の共存期でも、<br>多数派の交差が保証<br>されているか。</p></div>
-<div class="panel"><h3>金融通信<br>FIXでの注文</h3><p>注文が再送されたら？</p><p class="hypothesis"><strong>確認候補：</strong><br>同じ注文を新規注文と<br>誤認し、二度執行<br>しないか。</p></div>
-<div class="panel"><h3>OS基盤<br>POSIXのファイル更新</h3><p>更新直後に電源断したら？</p><p class="hypothesis"><strong>確認候補：</strong><br>原子的な置き換えと、<br>障害後にもデータが残る<br>ことを区別しているか。</p></div>
+<div class="panel"><h3>分散合意<br>Raft / Paxos</h3><p>メンバーシップ動的変更</p><p class="hypothesis"><strong>確認候補：</strong><br>新旧構成の共存期でも、<br>クォーラム交差の前提が<br>満たされているか。</p></div>
+<div class="panel"><h3>BFT合意<br>Tendermint 等</h3><p>有権者集合の動的変動</p><p class="hypothesis"><strong>確認候補：</strong><br>各エポックでアクティブな<br>有権者集合の定義が<br>全実装で一致しているか。</p></div>
+<div class="panel"><h3>分散プロトコル<br>形式仕様モデル</h3><p>ネットワーク環境前提</p><p class="hypothesis"><strong>確認候補：</strong><br>部分同期性や通信順序の<br>数学的前提がコードの<br>仮定と合致しているか。</p></div>
 </div>
-<p class="message">C言語の複数処理系や通信規格にも、<strong>共通仕様＋独立実装</strong>の構造がある。</p>
-<p class="source">説明用の仮想例。これらの対象での仕様不備や監査効果を、本研究が実証したわけではない。</p>
+<p class="message">「共通仕様＋独立した複数実装」を持つシステム全般で、<strong>証明の前提を抽出する枠組み</strong>が有効。</p>
+<p class="source">単一仕様とマルチクライアント構成を持つ分散システム一般への適用可能性の考察。</p>
 
 Note:
-この三つは、他分野で考えられる確認候補の仮想例です。
-構成変更の遷移期に多数派の交差が保つか、再送された注文を二度執行しないか、更新完了の後に電源が落ちても必要なデータが残るか、という条件です。
-Raftの例は、論文の初版ではメンバーシップ変更の安全条件が十分に書かれておらず、博士論文でjoint consensusとして補強された史実に由来します。
-「永続化すべき状態」のようなFigure 2に明記された要件を、書かれていない例として挙げるのは誤りです。
-C言語にも、共通規格とGCCやClangなどの独立した処理系があります。
-通信規格にも別々のベンダーの実装があります。
-分野が違っても、共通仕様から項目を作るという構造はあります。
-持ち帰ってほしいのは、本研究の割合を他の分野へ当てはめることではありません。
-保証が依存する前提を探し、仕様由来の項目と照合するという問いです。
-形式証明がある対象では、その前提を追加の入力として利用できます。
+この三つは、本アプローチが適用可能な分散システム一般の例です。
+Raftなどの分散合意プロトコルでも、メンバーシップ変更の過渡期におけるクォーラム交差条件など、証明側で要求される前提と実装時の手順との間にギャップが生じ得ます。
+BFT系プロトコルにおける有権者集合の変動や、ネットワークの遅延・同期性の前提条件も同様です。
+単一の共通仕様に基づいて複数の開発チームが独立に実装を行うアーキテクチャでは、どのシステムでも「手順の記述」と「安全性の数学的前提」の乖離がリスクとなります。
+本研究が提案する「証明の前提条件を機械抽出し、実装・監査のチェック項目へ渡す」枠組みは、イーサリアムに限らず、安全性が最重要視される分散システム全般に拡張可能です。
 
 ---
 
@@ -782,12 +769,9 @@ C言語にも、共通規格とGCCやClangなどの独立した処理系があ�
 
 ## 証明の成果を、現場が参照できる形へ
 
-<div class="visual-story">
-<img class="web-illustration" src="figs/web-infrastructure.png" alt="ethereum.org Infrastructure：イーサリアムを支えるコンピュータのイラスト">
-<div class="story-copy"><p class="lead">証明を書くのは専門家。<br>前提一覧を使うのは現場。</p><p>条件とその来歴を受け取り、<br>仕様・コードと対応付け、<br>確認責任と方法を決める。</p></div>
-</div>
-<p class="message"><strong>現場の全員がLeanを学ぶ必要はありません。証明の前提条件を共有する枠組みを作ります。</strong></p>
-<p class="source">イラスト：WT, <a href="https://ethereum.org/en/assets/">ethereum.org / Infrastructure</a></p>
+<img class="architecture-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-proof-handoff.svg" alt="証明の成果を現場が参照できる形へ：形式証明から抽出された前提条件を、現場が使えるテスト項目・監査チェックリストへ変換するパイプライン">
+<p class="takeaway" style="margin-top: 10px; padding: 12px 18px; font-size: 24px;"><strong>形式手法の成果を現場の実務へ還元：</strong><br>現場のエンジニア全員がLeanを習得する必要はありません。<br>前提条件の自動抽出が、研究と実装・監査をつなぐインターフェースになります。</p>
+<p class="source" style="margin-top: 8px;">提案アーキテクチャ：定理証明（Lean 4）からテスト・監査チェックリストへの前提条件抽出パイプライン</p>
 
 Note:
 前提抽出の意義は、証明の成果を専門家だけが読むものにしないことです。
@@ -810,7 +794,7 @@ Note:
 <div class="panel blue"><h3>調査結果</h3><p>延べ57件中48件は、<br>仕様の文章に非明示と判定。</p></div>
 <div class="panel"><h3>次の行動</h3><p>前提を仕様・コードへ対応付け、<br>担当と確認方法を決める。</p></div>
 </div>
-<p class="small">今後：人手の正解ラベルによる検証、実バグを見ずに作った項目での再検出実験、他のBFT系への展開。　ご清聴ありがとうございました。</p>
+<p class="small"><strong>今後：</strong>人手の正解ラベルによる検証、実バグでの再検出実験、他のBFT系への展開。<br>ご清聴ありがとうございました。</p>
 
 Note:
 まとめます。

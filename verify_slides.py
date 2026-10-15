@@ -21,13 +21,13 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 35, f"Expected 35 slides, got {slides}"
+        assert slides == 36, f"Expected 36 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
-        assert page.locator("img.architecture-visual").count() == 1
+        assert page.locator("img.architecture-visual").count() == 2
+        assert page.locator("img.web-illustration").count() == 1
         assert page.locator("img.scenario-visual").count() == 1
-        assert page.locator("img.web-illustration").count() == 2
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
         assert page.locator(".slides section:nth-child(4) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
