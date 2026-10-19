@@ -4,7 +4,6 @@
 <p class="subtitle">イーサリアムのコンセンサス仕様に明示されない<br>安全性の前提条件（予備調査）</p>
 <p class="authors"><strong>村上 大岳</strong>（愛知総合工科高校）<br>神波 真聖・柳浜 万里（Nyx Foundation）<br>釘宮 由成（Independent Researcher）</p>
 <p class="cover-claim">安全性の証明から前提を取り出し、確認項目にする。</p>
-<p class="agenda-line">背景 ── 従来の問題点 ── 仮説 ── この研究の優位性</p>
 </div>
 
 Note:
@@ -16,25 +15,58 @@ Note:
 
 <p class="section-tag">背景</p>
 
-## 「同じ仕様書」なのに、動きが違う
+## 研究背景：同じ仕様書なのに、動きが違った
 
-<p>ブロックチェーンの話の前に、エンジニアなら見覚えのある状況から始めます。</p>
+<p class="talk-goal">このスライドで話すこと：仕様を守っても食い違いは起きる。</p>
 
-<p class="label">例：身近な「仕様 × 複数実装」</p>
-<table>
-<thead><tr><th>分野</th><th>共通の仕様</th><th>複数の実装</th><th>ズレた所</th></tr></thead>
-<tbody>
-<tr><td>ブラウザ</td><td>HTML/JSの仕様</td><td>Chrome・Firefox・<strong>Safari</strong></td><td>Safariだけ表示がずれる</td></tr>
-<tr><td>Cコンパイラ</td><td>言語規格</td><td>GCC・Clang・MSVC</td><td>未定義動作・拡張で結果が違う</td></tr>
-<tr><td>SQL</td><td>標準SQL</td><td>MySQL・PostgreSQL・SQLite</td><td>方言があり、移植すると壊れる</td></tr>
-</tbody>
-</table>
-<p class="message">書いてある所のズレはテストで潰せる。<mark>残るのは、書いていない所</mark>。<br>── もしこのズレが、<strong>資産を扱う基盤</strong>で起きたら？</p>
+<p>2013年3月、ビットコインで<strong>新しい版が作ったブロックを古い版が拒否し、チェーンが二つに割れた</strong>。</p>
+<div class="grid">
+<div class="panel"><p class="label">何が起きたか</p><p>ブロック内の入力数が過去より多かった。<br>0.8系は受理し、0.7系は拒否した。</p></div>
+<div class="panel"><p class="label">なぜ食い違ったか</p><p>DBのロック数の上限が版ごとに違った。<br><strong>仕様に書かれていない上限</strong>が、事実上の合意ルールになっていた。</p></div>
+</div>
+<p class="message">仕様に書いていない条件が、そのまま食い違いになった。</p>
+<p class="source"><a href="https://bitcoin.org/bip/50/">BIP 50: March 2013 Chain Fork Post-Mortem</a></p>
 
 Note:
-ブラウザ、Cコンパイラ、SQL。共通の仕様があって複数の実装があり、「仕様どおりのはずが片方でだけ動かない」経験は誰にでもあるはずです。
-ズレが出るのは、仕様が明確に書いた部分ではなく、書いていない部分＝解釈の余地や暗黙の前提です。
-もしこれが資産を扱う基盤で起きたら——次にイーサリアムを見ます。
+2013年3月、ビットコインのブロックチェーンが一時的に二つに割れました。
+新しい0.8系が作ったブロックを、古い0.7系が受け入れなかったためです。
+原因は、古い版のデータベースのロック数の上限でした。
+この上限は合意ルールとして仕様に書かれていませんでした。それでもネットワークを動かすルールとして働いてしまいました。
+今日は、この仕様に書かれていない条件が、なぜ資産を扱う基盤で危険なのかを話します。
+
+---
+
+<!-- .slide: data-section="目次" -->
+
+## 目次
+
+<div class="grid agenda-grid">
+<div class="panel"><h3>背景</h3><p class="small">2、5〜6枚目</p></div>
+<div class="panel"><h3>従来の監査の限界</h3><p class="small">7、9〜11枚目</p></div>
+<div class="panel"><h3>仮説</h3><p class="small">12枚目</p></div>
+<div class="panel"><h3>提案</h3><p class="small">8、13〜15枚目</p></div>
+<div class="panel"><h3>仮説の検証</h3><p class="small">16枚目</p></div>
+<div class="panel"><h3>実務への展開</h3><p class="small">17枚目</p></div>
+<div class="panel"><h3>まとめ</h3><p class="small">18枚目</p></div>
+<div class="panel"><h3>補足</h3><p class="small">19〜26枚目</p></div>
+</div>
+
+Note:
+目次です。背景、従来の監査の限界、仮説、提案、検証、実務、まとめ、補足の順に進みます。
+本編は18枚、補足は8枚です。質疑では補足の該当枚を開きます。
+
+---
+
+<!-- .slide: data-section="メッセージ" -->
+
+## 本日のメッセージ
+
+<p class="summary">安全性の証明から前提を取り出し、<br>仕様だけでは拾えない確認項目を補う。</p>
+<p class="small">その手法と、分析でわかったことを話します。</p>
+
+Note:
+一言で言えば、安全性の証明から前提を取り出して、確認項目として現場へ渡すことです。
+その手法がどう作られたか、どこまで確かめたかを順に話します。
 
 ---
 
@@ -42,11 +74,12 @@ Note:
 
 ## イーサリアムについて
 
+<p class="talk-goal">このスライドで話すこと：Ethereumは、全員が同じ履歴を持つことで成り立つ公開台帳。</p>
+
 <div class="visual-story">
 <img class="web-illustration" src="figs/web-connected-world.svg" alt="unDraw Connected world：世界各地がつながるネットワークのイラスト">
 <div class="story-copy"><div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum</h3></div><p class="lead">世界中の第三者が運用する、<br>取引・プログラム実行の基盤。</p><p>全員が<mark>同じ取引履歴</mark>を保存・確認する。<br>管理者ではなく数学に依存。<br>だから、善良な参加者は<br><strong>全員同じ動きをしなければならない。</strong></p></div>
 </div>
-<p class="source">解説：<a href="https://ethereum.org/en/developers/docs/nodes-and-clients/">ethereum.org</a> ／ 公式Ethereumロゴ：<a href="https://ethereum.org/en/assets/">brand assets</a> ／ イラスト：Katerina Limpitsouni, <a href="https://undraw.co/illustration/connected-world_anke">unDraw</a></p>
 
 Note:
 イーサリアムは、世界中の第三者が運用するコンピュータで、取引やプログラムの実行結果を共有する基盤です。
@@ -60,76 +93,67 @@ Note:
 
 ## 「食い違い」は、なぜ特別に危険なのか
 
-<p style="margin: 6px 0 10px;">普通のソフトのバグは「利用者の問題」。<br>ここで壊れるのは、<strong>「全員が同じ履歴を持つ」という合意そのもの</strong>。</p>
-<img class="diagram split-visual" style="height: 240px; margin: 6px auto; display: block;" src="figs/diagram-chain-split.svg" alt="暗黙前提の解釈差によるチェーン分裂（Chain Split）と資産喪失の危機を示す図解">
-<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">各実装が「仕様どおり」に動くだけでは不十分。<br><strong>暗黙前提のわずかなズレが、不可逆なチェーン分裂を引き起こす。</strong></p>
-<p class="small" style="margin-top: 6px;">Ethereumはあえて実装を多様化し、単一障害点を避ける設計。<br>ただし<strong>全実装が共通の前提を共有している</strong>ことが条件。</p>
+<p class="talk-goal">このスライドで話すこと：食い違いは、パブリックチェーンでは実害として表に出る。</p>
+
+<p class="lead-in">互いに信用しない不特定多数が、それぞれの実装で同じ履歴を確認する。<br>だから食い違いは、「どの履歴が確定したか」として表に出る。</p>
+<img class="diagram split-visual" src="figs/diagram-chain-split.svg" alt="ブロック1〜3は全実装が共有。実装Aは4〜6、実装Bは4′〜6′を確定し、履歴が二つに分かれる。確定は戻せず、巨額資産の停止・取引停止に直結する">
+<p class="takeaway compact">確定した分岐は<strong>戻せない</strong>。巨額資産の停止・取引停止に直結する。</p>
 
 Note:
-普通のソフトのバグは使う人だけが困りますが、コンセンサス実装のずれは別格です。この基盤の商品は「全員が同じ履歴を持つこと」そのものだからです。
-実装AとBが別々の履歴を「確定」すると履歴が二つに裂け、確定済みの取引が消え、預けた資産も危険にさらされます。
-Ethereumは単一障害点を避けるため実装を多様化していますが、それには全実装が共通の前提を共有していることが条件です。
+普通のソフトのバグは、そのソフトを使う人だけが困ります。
+パブリックチェーンでは、実装AとBがそれぞれ別の履歴を確定すると、履歴が二つに分かれます。
+図では、ブロック1〜3は全員が共有しています。その後、AとBが違うブロックを確定しています。
+この分岐は後から戻せません。確定済みの取引が一方で消え、取引や担保が止まります。
+実装を複数にするのは、一つの不具合で全体が止まらないようにするためです。ただしそれには、全実装が同じ前提を共有していることが条件になります。
 
 ---
 
-<p class="section-tag">背景</p>
+<p class="section-tag">従来の監査の限界</p>
 
-## 仕様書は厳密なのに、多実装で読まれる
+## 仕様駆動の監査は、確認項目を人が起こす段階で止まりやすい
 
-<p>共通仕様は<strong>型・フィールド・更新手順まで疑似コードで定義</strong>した詳細文書。各チームが<strong>この文書を読んで</strong>実装を書く。</p>
-<div class="grid">
-<div class="panel"><p class="label">仕様書に書いてある（実物抜粋）</p><div class="proof-code tight"><div>class Checkpoint(Container):  <span class="muted">#「確かな履歴」＝時刻＋指紋</span></div><div>justification_bits: Bitvector[4]  <span class="muted"># 確定判定の履歴</span></div><div>def process_epoch(state):  <span class="muted"># エポックごとの集計</span></div></div><p class="small">実行可能な疑似コード級の詳細設計。</p></div>
-<div class="panel"><p class="label">独立した複数実装が共存</p><img class="architecture-visual" src="figs/illustration-clients.svg" alt="共通仕様からLighthouse、Nimbus、Teku、Lodestarへ分岐" style="height:130px"></div>
-</div>
-<p class="message">全チームが<strong>同じ文書</strong>を読み、別言語で実装 → <strong>多実装環境</strong>。</p>
-
-Note:
-合意を担当するソフトの詳細仕様は consensus-specs という公開文書で、文章と実行可能なPythonコードからなります。
-開発者はこれを読み、RustやNimなど自分の言語で同じ処理を書きます。全チームが同じ文書を読む、これが多実装環境です。
-では開発者や監査者は、何を基準に別々の実装を確認するのか。その前に、なぜズレるとまずいかを先に見ます。ここから確認の出発点を見ます。
-
----
-
-<p class="section-tag">従来の問題点</p>
-
-## 厳密なのは「手順」。書いていないのは「いつ安全か」
+<p class="talk-goal">このスライドで話すこと：監査の最初の作業が、人手に頼っている。</p>
 
 <div class="grid">
-<div class="panel"><p class="label">仕様が定義するもの</p><p>型・フィールド・更新手順<br>実行可能な疑似コード<br>→ <strong>「どう動くか」（HOW）</strong></p></div>
-<div class="panel"><p class="label">仕様に書いていないもの</p><p>その手順が安全に効く条件<br>想定している状況・適用範囲<br>→ <mark>「いつ正しいか」（WHEN）</mark></p></div>
+<div class="panel"><p class="label">仕様書</p><p>型・フィールド・更新手順が書かれている</p></div>
+<div class="panel orange"><p class="label">確認項目の列挙</p><p>人が読んで書き出す</p><p class="actor">ここが止まりやすい</p></div>
+<div class="panel blue"><p class="label">実装の検査</p><p>テスト・レビュー・差分確認</p></div>
 </div>
-<p class="message">＝ <strong>doc に事前条件のない関数</strong>を、各チームが読んで実装している状態。</p>
-<p class="small">手順と意味は書いてある。でも「この前提を満たさない呼び出しは無効」という契約が無い——あの感覚。<br>文章に無い前提は、いくら精読しても出てきません。</p>
+<p class="message">確認項目の質は、<strong>読んだ人の知識</strong>に左右される。</p>
 
 Note:
-仕様書は「どう動くか」については極めて厳密で、型も手順も実行できるほど詳細です。
-でも、ソフトでいう「この関数の事前条件」——その手順がいつ安全に効くかという契約は書かれていません。
-docに前提の無い関数は、読み手ごとに前提の補い方が変わります。全実装がまさにその状態です。
+最近は、仕様書から検査項目を起こして実装を見る監査が増えています。SPECAのような仕様駆動の手法もその一つです。
+ただ、検査項目を仕様書から人が書き出す作業は時間がかかり、抜けも出ます。
+ここを機械的に補えないか。これがこの研究の出発点です。
 
 ---
 
-<p class="section-tag">従来の問題点</p>
+<p class="section-tag">提案</p>
 
-## 「仕様に準拠すれば良い」のでは？
+## 証明の仮説なら、構文から取り出せるのでは
 
-<p>その通り——<strong>全チームがそうしています</strong>。問題は準拠ミスではなく、<strong>同じ記述でも解釈が分かれること</strong>。</p>
+<p class="talk-goal">このスライドで話すこと：人の列挙の代わりに、Leanの定理の仮説を使えないかを試した。</p>
+
+<p>イーサリアムの合意の安全性は、Lean 4で<strong>機械検査済み</strong>（gasper-lean4）。<br>定理の仮説は、「この条件なら保証する」の条件そのものです。</p>
 <div class="grid">
-<div class="panel"><p class="label">ふつうの層：手順の記述</p><p>「この操作をこうする」と具体的<br>ずれる＝<strong>誰かのミス</strong><br>→ レビュー・テストで見つかる</p></div>
-<div class="panel"><p class="label">今回の層：条件の記述（数学に近い）</p><p>「〜の2/3」「その時点の〜」<br>ずれる＝<strong>別々の妥当な読み</strong><br>→ 全員「準拠」なのに結果が違う</p></div>
+<div class="panel purple"><p class="label">定理の形</p><p>仮説（条件） ＋ 結論（保証）</p></div>
+<div class="panel blue"><p class="label">仮説だけを取り出す</p><p>定理文の構文を読む。<br>生成や解釈は入らない。</p></div>
 </div>
-<p class="message">確認項目は<strong>仕様の文章から列挙</strong>する。<br>文章に無い前提は、<strong>監査チェックリストの「行」にすら載らない。</strong></p>
+<p class="message">取り出した条件を、<strong>仕様書の文章と突き合わせる</strong>。</p>
+<p class="source">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/tree/7650709">gasper-lean4 @ 7650709</a> ／ <a href="https://github.com/ethereum/consensus-specs/tree/2359a5e">consensus-specs @ 2359a5e</a></p>
 
 Note:
-「仕様どおりに実装すれば十分では？」——正しく、世界中の全チームが実際にそうしています。
-ずれには二層あり、手順の層のずれは誰かのミスで、レビューやテストで見つかります。
-もう一つ、数学に近い条件文の層では、何を指すかを読む人が決めるため、全員が準拠なのに結果が違うことが起きます。
-そして確認項目は仕様の文章から作られるので、書いていない前提は誰も見ません。
+発想はシンプルです。合意の安全性は既に定理として証明されていて、その定理が要求する条件が仮説として書かれています。
+人が仕様書から列挙する代わりに、この仮説を取り出せば、抜けを減らせると考えました。
+ただし、取り出した条件が仕様書に書かれているかは、別に確かめる必要があります。その確認が、このあとの分析です。
 
 ---
 
-<p class="section-tag">従来の問題点</p>
+<p class="section-tag">従来の監査の限界</p>
 
 ## 安全性の核心：クォーラム交差の前提
+
+<p class="talk-goal">このスライドで話すこと：この安全性の定理は、仕様に書かれていない前提の上に立つ。</p>
 
 <p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
 <img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる">
@@ -143,26 +167,11 @@ Note:
 
 ---
 
-<p class="section-tag">従来の問題点</p>
-
-## なぜ、仕様を読むだけでは見えないのか
-
-<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
-<p class="message"><strong>根本原因：</strong>仕様が成り立つ<strong>前提条件</strong>が、<br>実装者・監査者からは<strong>読めない</strong>。</p>
-<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
-<p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
-
-Note:
-クォーラム交差のような安全性の前提条件が、なぜ仕様書に書かれないのか。これは仕様書の欠陥というより、仕様書と証明の「役割分担」に起因する構造的ギャップです。
-先に理論家による研究と設計があり、そこに安全性の証明（この前提が満たされるとき安全性が成立する＝WHEN）があります。その設計を実行可能な手順（HOW）へ書き下したのが仕様書です。
-実装者は手順に従ってコードを書き、監査者は手順を基準に確認します。しかし安全性を保証する前提（WHEN）は証明側にのみあり、仕様書の手順記述には現れません。証明はLeanで書かれており、現場が直接読むことも困難です。
-では、このギャップのせいで現場の確認はどう歪むのか。次に見ます。
-
----
-
-<p class="section-tag">従来の問題点</p>
+<p class="section-tag">従来の監査の限界</p>
 
 ## 「2/3」は合っている。でも、何の2/3か？
+
+<p class="talk-goal">このスライドで話すこと：2/3という数字だけでは、保証の対象は決まらない。</p>
 
 <p class="label">仮想例（説明用）：8人・等しい重みで集計（色付き＝支持、灰＝対象外）</p>
 <img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
@@ -179,9 +188,30 @@ Note:
 
 ---
 
+<p class="section-tag">従来の監査の限界</p>
+
+## なぜ、仕様を読むだけでは見えないのか
+
+<p class="talk-goal">このスライドで話すこと：証明の前提は上流にあり、実装者と監査者の手元には届きにくい。</p>
+
+<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
+<p class="message"><strong>根本原因：</strong>仕様が成り立つ<strong>前提条件</strong>が、<br>実装者・監査者からは<strong>読めない</strong>。</p>
+<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
+<p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
+
+Note:
+クォーラム交差のような安全性の前提条件が、なぜ仕様書に書かれないのか。これは仕様書の欠陥というより、仕様書と証明の「役割分担」に起因する構造的ギャップです。
+先に理論家による研究と設計があり、そこに安全性の証明（この前提が満たされるとき安全性が成立する＝WHEN）があります。その設計を実行可能な手順（HOW）へ書き下したのが仕様書です。
+実装者は手順に従ってコードを書き、監査者は手順を基準に確認します。しかし安全性を保証する前提（WHEN）は証明側にのみあり、仕様書の手順記述には現れません。証明はLeanで書かれており、現場が直接読むことも困難です。
+では、このギャップのせいで現場の確認はどう歪むのか。次に見ます。
+
+---
+
 <p class="section-tag">仮説</p>
 
 ## 仕様どおりの実装は、証明の前提まで満たさない
+
+<p class="talk-goal">このスライドで話すこと：仕様どおりでも、前提を満たしたかは区別できない。</p>
 
 <p>証明は<mark>保証書</mark>と同じ構造。条件内は保証、<strong>条件外は対象外</strong>。</p>
 <img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外">
@@ -200,6 +230,8 @@ Note:
 <p class="section-tag">提案</p>
 
 ## 足すのは「証明 → 前提 → 確認候補」の経路
+
+<p class="talk-goal">このスライドで話すこと：証明から前提を取り出し、確認候補に変換する経路を足す。</p>
 
 <div class="flow extraction-flow">
 <div class="panel purple"><h3>安全性の証明</h3><p>条件 ⇒ 保証</p></div>
@@ -221,12 +253,13 @@ LLMが登場するのは後段の「仕様に明示されているか」の判�
 
 ## 実例：定理に書かれた「条件」の部分を取り出す
 
-<div class="grid" style="margin-bottom: 10px;">
+<p class="talk-goal" style="margin-bottom: 6px;">このスライドで話すこと：定理の仮説が、どの条件を指すかを具体例で示す。</p>
+
+<div class="grid" style="margin-bottom: 4px;">
 <div><h3 style="margin: 0 0 8px;">定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
 <div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラムの重み閾値：</strong><br>その対象の総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
 </div>
-<p class="message" style="margin: 10px 0 6px; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
-<p class="source" style="margin-top: 6px;">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/blob/7650709/GasperBeaconChain/Core/Theories/SlashableBound.lean">gasper-lean4 @ 7650709</a>。原ソースの仮説4式を示す。日本語は説明用の要約。</p>
+<p class="message" style="margin: 4px 0 0; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
 
 Note:
 左の記号は細かく読む必要はありません。要点は右の日本語2行です。「支持した人が名簿に入っているか」「全体の2/3以上いるか」。
@@ -238,6 +271,8 @@ Note:
 <p class="section-tag">提案</p>
 
 ## 前提を、監査で扱える確認候補へ変換する
+
+<p class="talk-goal">このスライドで話すこと：取り出した前提を、仕様・コード・担当に結びつける。</p>
 
 <div class="grid tl">
 <div><p class="label">人が読む形（確認一覧）</p><table>
@@ -261,7 +296,7 @@ Note:
   "bj ≠ bf" ]
 }</code></pre></div>
 </div>
-<p class="message">人には<strong>確認一覧</strong>、監査ツールには<strong>JSON</strong>を渡す。<br>どちらも、条件・原典の定理・仕様の参照先がつながっている。</p>
+<p class="message" style="font-size: 26px; margin: 8px 0 0;">人には<strong>確認一覧</strong>、監査ツールには<strong>JSON</strong>。条件・定理・仕様の参照先はどちらもつながる。</p>
 
 Note:
 機械抽出して終わりではなく、その条件が仕様や実装のどこに対応するかを示します。右のJSONは監査ツールへ渡すデータ形式で、現場のエンジニアが確認するのは左の日本語一覧表だけで十分です。
@@ -273,6 +308,8 @@ Note:
 <p class="section-tag">仮説の検証</p>
 
 ## 抽出した前提は、仕様に明示されているか
+
+<p class="talk-goal">このスライドで話すこと：抽出した前提は、仕様の文章に明示されていたか。自動判定の結果。</p>
 
 <div class="flow">
 <div class="panel purple"><span class="number">17</span><h3>対象の定理</h3><p class="small">仮説を列挙・原典照合</p></div>
@@ -294,6 +331,8 @@ Note:
 <p class="section-tag">実務への展開</p>
 
 ## 前提ごとに「誰が何を確認するか」を決める
+
+<p class="talk-goal">このスライドで話すこと：前提を、誰がどう確認するかを決める。</p>
 
 <p>取り出した前提を、仕様・コードへ対応付け、<strong>担当と確認方法を割り当てる</strong>。</p>
 <div class="grid">

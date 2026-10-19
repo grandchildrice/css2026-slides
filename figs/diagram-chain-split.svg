@@ -1,5 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 265" width="1200" height="265" role="img" >
-<title>暗黙前提の解釈差によるチェーン分裂（Chain Split）と資産喪失の危機を示す図解</title>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#006ba6"/></marker></defs>
-<g font-family="Arial, Yu Gothic, Meiryo, sans-serif"><rect x="20" y="15" width="1160" height="230" rx="12" fill="#f8fafc" stroke="#cbd8e2" /><rect x="50" y="90" width="80" height="80" rx="8" fill="#eef6fc" stroke="#006ba6" /><text x="90" y="137" font-size="16" fill="#006ba6" text-anchor="middle" font-weight="700">Block 1</text><path d="M130 130 H160" fill="none" stroke="#006ba6" stroke-width="4" marker-end="url(#arrow)"/><rect x="160" y="90" width="80" height="80" rx="8" fill="#eef6fc" stroke="#006ba6" /><text x="200" y="137" font-size="16" fill="#006ba6" text-anchor="middle" font-weight="700">Block 2</text><path d="M240 130 H270" fill="none" stroke="#006ba6" stroke-width="4" marker-end="url(#arrow)"/><rect x="270" y="90" width="80" height="80" rx="8" fill="#eef6fc" stroke="#006ba6" /><text x="310" y="137" font-size="16" fill="#006ba6" text-anchor="middle" font-weight="700">Block 3</text><path d="M350 130 H380" fill="none" stroke="#006ba6" stroke-width="4" marker-end="url(#arrow)"/><text x="160" y="60" font-size="18" fill="#006ba6" text-anchor="middle" font-weight="700">全員が同じ確定履歴（合意成立）</text><rect x="380" y="70" width="120" height="120" rx="10" fill="#fff7ed" stroke="#a84c1d" /><text x="440" y="120" font-size="16" fill="#a84c1d" text-anchor="middle" font-weight="700">暗黙前提の</text><text x="440" y="145" font-size="16" fill="#a84c1d" text-anchor="middle" font-weight="700">解釈不一致</text><path d="M500 110 L590 60" fill="none" stroke="#006ba6" stroke-width="4" marker-end="url(#arrow)"/><rect x="590" y="30" width="160" height="60" rx="8" fill="#eef6fc" stroke="#006ba6" /><text x="670" y="67" font-size="16" fill="#006ba6" text-anchor="middle" font-weight="700">実装A: 履歴Aを確定</text><path d="M500 150 L590 200" fill="none" stroke="#a84c1d" stroke-width="4" marker-end="url(#arrow)"/><rect x="590" y="170" width="160" height="60" rx="8" fill="#fff7ed" stroke="#a84c1d" /><text x="670" y="207" font-size="16" fill="#a84c1d" text-anchor="middle" font-weight="700">実装B: 履歴Bを確定</text><rect x="790" y="45" width="370" height="170" rx="10" fill="#fff1f2" stroke="#f43f5e" /><text x="975" y="85" font-size="18" fill="#be123c" text-anchor="middle" font-weight="700">不可逆なチェーン分裂（Chain Split）</text><text x="975" y="125" font-size="16" fill="#18334c" text-anchor="middle" font-weight="400">・覆せない確定が2通り存在</text><text x="975" y="155" font-size="16" fill="#18334c" text-anchor="middle" font-weight="400">・取引の二重支払い（二重消費）発生</text><text x="975" y="188" font-size="17" fill="#be123c" text-anchor="middle" font-weight="700">・巨額資産喪失・システム停止</text></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" width="920" height="260" font-family="Hiragino Sans, Yu Gothic, Meiryo, Helvetica, Arial, sans-serif">
+  <title>チェーン分裂の図解：ブロック1〜3は共有。実装AとBが4〜6を別々に確定し、分岐が戻せなくなる</title>
+  <rect width="920" height="260" fill="#ffffff"/>
+  <!-- 共有部分 -->
+  <g>
+    <rect x="40" y="120" width="70" height="44" rx="8" fill="#eef6fc" stroke="#18334c" stroke-width="2"/>
+    <text x="75" y="148" font-size="20" font-weight="700" text-anchor="middle" fill="#18334c">1</text>
+    <rect x="130" y="120" width="70" height="44" rx="8" fill="#eef6fc" stroke="#18334c" stroke-width="2"/>
+    <text x="165" y="148" font-size="20" font-weight="700" text-anchor="middle" fill="#18334c">2</text>
+    <rect x="220" y="120" width="70" height="44" rx="8" fill="#eef6fc" stroke="#18334c" stroke-width="2"/>
+    <text x="255" y="148" font-size="20" font-weight="700" text-anchor="middle" fill="#18334c">3</text>
+  </g>
+  <text x="40" y="104" font-size="16" fill="#516575">全実装が共有する履歴</text>
+  <!-- 実装A -->
+  <g stroke="#006ba6" stroke-width="2" fill="#ffffff">
+    <rect x="310" y="60" width="70" height="44" rx="8"/>
+    <rect x="400" y="60" width="70" height="44" rx="8"/>
+    <rect x="490" y="60" width="70" height="44" rx="8"/>
+  </g>
+  <g font-size="20" font-weight="700" text-anchor="middle" fill="#006ba6">
+    <text x="345" y="88">4</text>
+    <text x="435" y="88">5</text>
+    <text x="525" y="88">6</text>
+  </g>
+  <text x="310" y="52" font-size="16" font-weight="700" fill="#006ba6">実装A が確定</text>
+  <!-- 実装B -->
+  <g stroke="#b64b12" stroke-width="2" fill="#ffffff">
+    <rect x="310" y="180" width="70" height="44" rx="8"/>
+    <rect x="400" y="180" width="70" height="44" rx="8"/>
+    <rect x="490" y="180" width="70" height="44" rx="8"/>
+  </g>
+  <g font-size="20" font-weight="700" text-anchor="middle" fill="#b64b12">
+    <text x="345" y="208">4′</text>
+    <text x="435" y="208">5′</text>
+    <text x="525" y="208">6′</text>
+  </g>
+  <text x="310" y="172" font-size="16" font-weight="700" fill="#b64b12">実装B が確定</text>
+  <!-- 分岐線 -->
+  <g stroke="#516575" stroke-width="2" fill="none">
+    <path d="M290 142 L310 82"/>
+    <path d="M290 142 L310 202"/>
+  </g>
+  <!-- 結果 -->
+  <rect x="600" y="60" width="300" height="164" rx="12" fill="#fdecec" stroke="#c33" stroke-width="2"/>
+  <text x="620" y="96" font-size="20" font-weight="700" fill="#18334c">同じ高さで、2つの履歴が確定</text>
+  <text x="620" y="130" font-size="18" fill="#263746">片方の確定は覆せない（不可逆）</text>
+  <text x="620" y="158" font-size="18" fill="#263746">確定済みの取引が一方で消える</text>
+  <text x="620" y="200" font-size="22" font-weight="700" fill="#c33">巨額資産の停止・取引停止</text>
+  <path d="M560 82 L600 110" stroke="#c33" stroke-width="2" fill="none"/>
+  <path d="M560 202 L600 170" stroke="#c33" stroke-width="2" fill="none"/>
 </svg>

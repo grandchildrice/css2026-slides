@@ -91,6 +91,13 @@
     .reveal .guarantee .lead { font-size: 37px; }
     .reveal .hypothesis { font-size: 25px; line-height: 1.55; color: var(--muted); }
     .reveal .message { font-size: 32px; line-height: 1.55; margin: 24px 0 14px; }
+    .reveal .split-visual { height: 190px; margin: 4px auto; }
+    .reveal .talk-goal { font-size: 22px; line-height: 1.5; color: var(--muted); margin: -8px 0 18px; }
+    .reveal .agenda-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .reveal .agenda-grid .panel { padding: 18px; }
+    .reveal .agenda-grid h3 { font-size: 24px; margin: 0 0 6px; }
+    .reveal .agenda-grid .small { font-size: 20px; margin: 0; }
+    #section-indicator { position: fixed; top: 10px; right: 16px; z-index: 50; padding: 5px 14px; font: 700 16px/1.4 "Helvetica Neue", Arial, "Yu Gothic", Meiryo, sans-serif; color: var(--blue); background: var(--blue-bg); border: 1px solid #a5cce5; border-radius: 999px; pointer-events: none; }
     .reveal .brand-lockup { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
     .reveal .brand-lockup h3 { font-size: 36px; margin: 0; color: var(--navy); }
     .reveal .ethereum-logo { display: block; width: 64px; height: 94px; object-fit: contain; margin: 0; }
@@ -178,6 +185,17 @@
       scrollActivationWidth: null,
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
     });
+    const indicator = document.createElement('div');
+    indicator.id = 'section-indicator';
+    document.body.appendChild(indicator);
+    const syncSection = () => {
+      const slide = Reveal.getCurrentSlide();
+      const tag = slide.querySelector('.section-tag');
+      const label = tag ? tag.textContent : (slide.dataset.section || 'はじめに');
+      indicator.textContent = '現在地：' + label;
+    };
+    Reveal.on('ready', syncSection);
+    Reveal.on('slidechanged', syncSection);
   </script>
 </body>
 </html>

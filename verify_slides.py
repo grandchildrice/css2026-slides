@@ -21,16 +21,16 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 25, f"Expected 25 slides, got {slides}"
+        assert slides == 26, f"Expected 26 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
-        assert page.locator("img.architecture-visual").count() == 2
+        assert page.locator("img.architecture-visual").count() == 1
         assert page.locator("img.web-illustration").count() == 1
         assert page.locator("img.scenario-visual").count() == 1
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
-        assert page.locator(".slides section:nth-child(3) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
+        assert page.locator(".slides section:nth-child(5) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
         assert "証明から前提" in page.locator(".cover-claim").text_content()
         assert page.locator("img.result-visual").count() == 1
         assert page.locator("pre code").count() == 3
@@ -38,6 +38,13 @@ def verify(url, capture):
         assert page.locator("code.language-nim").count() == 2
         assert page.locator(".slides h1").text_content() == "仕様どおりに実装すれば安全か"
         inventory = json.loads((Path(__file__).parent / "css2026-slides.json").read_text(encoding="utf-8"))
+        for section in inventory["structure"]:
+            for number in section["slides"]:
+                tag = page.locator(f".slides section:nth-child({number}) .section-tag").text_content()
+                assert tag == section["section"], f"Slide {number} tagged {tag}, expected {section['section']}"
+        agenda = page.locator(".agenda-grid").inner_text()
+        for section in inventory["structure"]:
+            assert section["section"] in agenda, section["section"]
         titles = page.locator(".slides section > h2, .slides .cover h1").all_text_contents()
         assert titles == [slide["title"] for slide in inventory["slides"]]
         assert inventory["main_slides"] + inventory["appendix_slides"] == slides
@@ -114,9 +121,12 @@ def verify(url, capture):
                         return b.left < frame.left - 2 || b.right > frame.right + 2 || b.top < frame.top - 2 || b.bottom > frame.bottom + 2;
                     }).map(e => e.tagName + ':' + e.className);
                     const overflowingCode = Array.from(slide.querySelectorAll('pre, pre code')).filter(e => e.scrollWidth > e.clientWidth + 2).map(e => e.tagName);
-                    return {visible: visible.length, outside, overflowingCode, notes: getComputedStyle(slide.querySelector('aside.notes')).display, title: slide.querySelector('h1,h2').innerText};
+                    return {visible: visible.length, outside, overflowingCode, notes: getComputedStyle(slide.querySelector('aside.notes')).display, title: slide.querySelector('h1,h2').innerText, indicator: document.querySelector('#section-indicator').innerText, tag: slide.querySelector('.section-tag')?.innerText ?? null};
                 }""")
                 assert result["notes"] == "none", f"Visible notes on slide {index + 1}"
+                assert result["indicator"].startswith("現在地："), f"Missing location indicator on slide {index + 1}"
+                if result["tag"]:
+                    assert result["indicator"] == "現在地：" + result["tag"], f"Indicator mismatch on slide {index + 1}: {result}"
                 assert result["visible"] == 1, f"Multiple visible slides: {result}"
                 assert not result["outside"], f"Overflow {viewport} slide {index + 1}: {result}"
                 assert not result["overflowingCode"], f"Code overflow slide {index + 1}: {result}"
@@ -132,7 +142,7 @@ def verify(url, capture):
         popup.wait_for_load_state()
         popup.wait_for_timeout(1500)
         assert "Speaker" in popup.title(), popup.title()
-        popup.wait_for_function("document.body.innerText.includes('ブラウザ')")
+        popup.wait_for_function("document.body.innerText.includes('ビットコイン')")
         assert not errors, errors
         print("PASS: keyboard navigation, notes popup, images, no JavaScript errors")
         if output:
