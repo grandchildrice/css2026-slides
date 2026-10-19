@@ -21,16 +21,16 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 26, f"Expected 26 slides, got {slides}"
+        assert slides == 28, f"Expected 28 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
         assert page.locator("img.architecture-visual").count() == 1
-        assert page.locator("img.web-illustration").count() == 1
+        assert page.locator("img.web-illustration").count() == 0
         assert page.locator("img.scenario-visual").count() == 1
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
-        assert page.locator(".slides section:nth-child(5) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
+        assert page.locator(".slides section:nth-child(4) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
         assert "証明から前提" in page.locator(".cover-claim").text_content()
         assert page.locator("img.result-visual").count() == 1
         assert page.locator("pre code").count() == 3
@@ -42,9 +42,12 @@ def verify(url, capture):
             for number in section["slides"]:
                 tag = page.locator(f".slides section:nth-child({number}) .section-tag").text_content()
                 assert tag == section["section"], f"Slide {number} tagged {tag}, expected {section['section']}"
-        agenda = page.locator(".agenda-grid").inner_text()
+        rows = page.locator(".agenda-row").evaluate_all("els => els.map(e => [e.querySelector('.name').innerText, e.querySelector('.pg').innerText])")
+        pages = dict(rows)
         for section in inventory["structure"]:
-            assert section["section"] in agenda, section["section"]
+            first, last = min(section["slides"]), max(section["slides"])
+            expected = f"{first}枚目" if first == last else f"{first}〜{last}枚目"
+            assert pages.get(section["section"]) == expected, f"Agenda {section['section']}: {pages.get(section['section'])} != {expected}"
         titles = page.locator(".slides section > h2, .slides .cover h1").all_text_contents()
         assert titles == [slide["title"] for slide in inventory["slides"]]
         assert inventory["main_slides"] + inventory["appendix_slides"] == slides
@@ -134,15 +137,15 @@ def verify(url, capture):
                     page.screenshot(path=str(output / f"slide-{index + 1:02}.png"))
             print(f"PASS: {viewport['width']}x{viewport['height']}, {slides} slides")
         page.evaluate("Reveal.slide(0)")
-        page.keyboard.press("ArrowRight")
-        assert page.evaluate("Reveal.getIndices().h") == 1
+        page.evaluate("Reveal.slide(5)")
+        assert page.evaluate("Reveal.getIndices().h") == 5
         with page.expect_popup() as popup_info:
             page.keyboard.press("s")
         popup = popup_info.value
         popup.wait_for_load_state()
         popup.wait_for_timeout(1500)
         assert "Speaker" in popup.title(), popup.title()
-        popup.wait_for_function("document.body.innerText.includes('ビットコイン')")
+        popup.wait_for_function("document.body.innerText.includes('SPECA')")
         assert not errors, errors
         print("PASS: keyboard navigation, notes popup, images, no JavaScript errors")
         if output:

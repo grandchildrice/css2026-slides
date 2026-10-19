@@ -67,6 +67,7 @@
     .reveal .cover .agenda-line { font-size: 19px; color: var(--muted); letter-spacing: .05em; margin-top: 14px; }
     .reveal .arrow { font-size: 42px; text-align: center; color: var(--blue); margin: 12px 0; }
     .reveal .flow { display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; align-items: center; gap: 12px; margin: 24px 0; }
+    .reveal .flow.plain { grid-template-columns: repeat(3, 1fr); }
     .reveal .flow .panel { text-align: center; }
     .reveal .flow .arrow { margin: 0; }
     .reveal .flow .number { font-size: 50px; display: block; color: var(--blue); font-weight: 700; }
@@ -92,16 +93,19 @@
     .reveal .hypothesis { font-size: 25px; line-height: 1.55; color: var(--muted); }
     .reveal .message { font-size: 32px; line-height: 1.55; margin: 24px 0 14px; }
     .reveal .split-visual { height: 190px; margin: 4px auto; }
-    .reveal .talk-goal { font-size: 22px; line-height: 1.5; color: var(--muted); margin: -8px 0 18px; }
-    .reveal .agenda-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .reveal .agenda-grid .panel { padding: 18px; }
-    .reveal .agenda-grid h3 { font-size: 24px; margin: 0 0 6px; }
-    .reveal .agenda-grid .small { font-size: 20px; margin: 0; }
+    .reveal .agenda-list { margin: 8px 0; }
+    .reveal .agenda-row { display: grid; grid-template-columns: 56px 190px 1fr 150px; align-items: baseline; gap: 14px; padding: 13px 4px; border-bottom: 1px solid var(--border); font-size: 27px; }
+    .reveal .agenda-row .no { font-weight: 700; color: var(--blue); text-align: center; }
+    .reveal .agenda-row .name { font-weight: 700; color: var(--navy); }
+    .reveal .agenda-row .pg { font-size: 22px; color: var(--muted); text-align: right; }
+    .reveal .agenda-row.sub { color: var(--muted); }
+    .reveal .agenda-row.sub .name { color: var(--muted); }
     #section-indicator { position: fixed; top: 10px; right: 16px; z-index: 50; padding: 5px 14px; font: 700 16px/1.4 "Helvetica Neue", Arial, "Yu Gothic", Meiryo, sans-serif; color: var(--blue); background: var(--blue-bg); border: 1px solid #a5cce5; border-radius: 999px; pointer-events: none; }
     .reveal .brand-lockup { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
     .reveal .brand-lockup h3 { font-size: 36px; margin: 0; color: var(--navy); }
     .reveal .ethereum-logo { display: block; width: 64px; height: 94px; object-fit: contain; margin: 0; }
     .reveal .architecture-visual { display: block; width: 100%; height: 350px; object-fit: contain; margin: 12px 0; }
+    .reveal .architecture-visual.short { height: 240px; margin: 6px auto; }
     .reveal .scenario-visual { display: block; width: 100%; height: 190px; object-fit: contain; margin: 4px 0; }
     .reveal .spec-screenshot { display: block; margin: 6px auto; max-height: 330px; max-width: 80%; border: 1px solid #c9d4de; border-radius: 8px; box-shadow: 0 4px 14px rgba(30,60,90,.18); }
 

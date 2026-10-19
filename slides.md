@@ -9,30 +9,7 @@
 Note:
 本日は、イーサリアムを例に、共通仕様から作られる複数のソフトの確認方法をお話しします。
 提案は、安全性の証明から前提を取り出し、仕様を読むだけでは拾いにくい確認項目を補うことです。
-背景、従来の問題点、仮説、この研究の優位性の順で話します。
-
----
-
-<p class="section-tag">背景</p>
-
-## 研究背景：同じ仕様書なのに、動きが違った
-
-<p class="talk-goal">このスライドで話すこと：仕様を守っても食い違いは起きる。</p>
-
-<p>2013年3月、ビットコインで<strong>新しい版が作ったブロックを古い版が拒否し、チェーンが二つに割れた</strong>。</p>
-<div class="grid">
-<div class="panel"><p class="label">何が起きたか</p><p>ブロック内の入力数が過去より多かった。<br>0.8系は受理し、0.7系は拒否した。</p></div>
-<div class="panel"><p class="label">なぜ食い違ったか</p><p>DBのロック数の上限が版ごとに違った。<br><strong>仕様に書かれていない上限</strong>が、事実上の合意ルールになっていた。</p></div>
-</div>
-<p class="message">仕様に書いていない条件が、そのまま食い違いになった。</p>
-<p class="source"><a href="https://bitcoin.org/bip/50/">BIP 50: March 2013 Chain Fork Post-Mortem</a></p>
-
-Note:
-2013年3月、ビットコインのブロックチェーンが一時的に二つに割れました。
-新しい0.8系が作ったブロックを、古い0.7系が受け入れなかったためです。
-原因は、古い版のデータベースのロック数の上限でした。
-この上限は合意ルールとして仕様に書かれていませんでした。それでもネットワークを動かすルールとして働いてしまいました。
-今日は、この仕様に書かれていない条件が、なぜ資産を扱う基盤で危険なのかを話します。
+背景、出発点、手法、分析結果、まとめの順で話します。
 
 ---
 
@@ -40,20 +17,18 @@ Note:
 
 ## 目次
 
-<div class="grid agenda-grid">
-<div class="panel"><h3>背景</h3><p class="small">2、5〜6枚目</p></div>
-<div class="panel"><h3>従来の監査の限界</h3><p class="small">7、9〜11枚目</p></div>
-<div class="panel"><h3>仮説</h3><p class="small">12枚目</p></div>
-<div class="panel"><h3>提案</h3><p class="small">8、13〜15枚目</p></div>
-<div class="panel"><h3>仮説の検証</h3><p class="small">16枚目</p></div>
-<div class="panel"><h3>実務への展開</h3><p class="small">17枚目</p></div>
-<div class="panel"><h3>まとめ</h3><p class="small">18枚目</p></div>
-<div class="panel"><h3>補足</h3><p class="small">19〜26枚目</p></div>
+<div class="agenda-list">
+<div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumは複数の実装で動き、食い違いは実害になる</span><span class="pg">4〜5枚目</span></div>
+<div class="agenda-row"><span class="no">2</span><span class="name">出発点</span><span class="desc">仕様駆動の監査（SPECA）が取りこぼしたもの</span><span class="pg">6枚目</span></div>
+<div class="agenda-row"><span class="no">3</span><span class="name">手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span><span class="pg">7〜11枚目</span></div>
+<div class="agenda-row"><span class="no">4</span><span class="name">分析結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span><span class="pg">12〜14枚目</span></div>
+<div class="agenda-row"><span class="no">5</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span><span class="pg">15枚目</span></div>
+<div class="agenda-row sub"><span class="no">－</span><span class="name">補足</span><span class="desc">質疑用の資料</span><span class="pg">16〜28枚目</span></div>
 </div>
 
 Note:
-目次です。背景、従来の監査の限界、仮説、提案、検証、実務、まとめ、補足の順に進みます。
-本編は18枚、補足は8枚です。質疑では補足の該当枚を開きます。
+目次です。背景、出発点、手法、分析結果、まとめの順に進みます。
+本編は15枚、補足は13枚です。質疑では補足の該当枚を開きます。
 
 ---
 
@@ -61,199 +36,150 @@ Note:
 
 ## 本日のメッセージ
 
-<p class="summary">安全性の証明から前提を取り出し、<br>仕様だけでは拾えない確認項目を補う。</p>
-<p class="small">その手法と、分析でわかったことを話します。</p>
+<p class="summary">Leanの定理から前提を取り出し、<br>仕様の文章にどれだけ明示されているかを調べた。</p>
 
 Note:
-一言で言えば、安全性の証明から前提を取り出して、確認項目として現場へ渡すことです。
-その手法がどう作られたか、どこまで確かめたかを順に話します。
+仕様駆動の監査の確認項目を、Leanの定理から作れないか。そう考えて、定理の前提を取り出し、仕様の文章にどれだけ書かれているかを調べました。
+その経緯と結果を、順に話します。
 
 ---
 
 <p class="section-tag">背景</p>
 
-## イーサリアムについて
+## 研究背景：Ethereumは、共通仕様から複数の実装が作られる
 
-<p class="talk-goal">このスライドで話すこと：Ethereumは、全員が同じ履歴を持つことで成り立つ公開台帳。</p>
-
-<div class="visual-story">
-<img class="web-illustration" src="figs/web-connected-world.svg" alt="unDraw Connected world：世界各地がつながるネットワークのイラスト">
-<div class="story-copy"><div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum</h3></div><p class="lead">世界中の第三者が運用する、<br>取引・プログラム実行の基盤。</p><p>全員が<mark>同じ取引履歴</mark>を保存・確認する。<br>管理者ではなく数学に依存。<br>だから、善良な参加者は<br><strong>全員同じ動きをしなければならない。</strong></p></div>
-</div>
+<div class="brand-lockup"><img class="ethereum-logo" src="figs/ethereum.svg" alt="Ethereum 公式カラーロゴ"><h3>Ethereum：全員が同じ履歴を持つ基盤</h3></div>
+<img class="architecture-visual short" src="figs/illustration-clients.svg" alt="共通仕様からLighthouse、Nimbus、Teku、Lodestarへ分岐。Rust、Nim、Java、TypeScriptの各言語名の下にも公式言語ロゴを表示">
+<p class="message">各チームが<strong>同じ仕様書</strong>を読み、別々の言語で実装する。<strong>仕様が土台</strong>。</p>
 
 Note:
-イーサリアムは、世界中の第三者が運用するコンピュータで、取引やプログラムの実行結果を共有する基盤です。
-全員が同じ取引履歴を保存し、互いに確認します。中央の管理者を置かず、計算と経済的インセンティブの仕組みに依存して動きます。
-全員で決めるので、善良な参加者は全員が同じ動きをしなければなりません。
-では、その動きが食い違ったら何が起きるのか。次に見ます。
+このスライドで話すこと：Ethereumは複数言語の実装が動き、土台は共通の仕様書。
+Ethereumは、世界中の第三者が運用するコンピュータで、全員が同じ取引履歴を持つ基盤です。
+このソフトは、一つのチームが作ったものではありません。Rust、Nim、Java、TypeScriptなど、複数の言語で、別々のチームが実装しています。
+全チームが読む土台が、共通の仕様書です。だから、この仕様書に何が書かれているかが、とても大事になります。
 
 ---
 
 <p class="section-tag">背景</p>
 
-## 「食い違い」は、なぜ特別に危険なのか
-
-<p class="talk-goal">このスライドで話すこと：食い違いは、パブリックチェーンでは実害として表に出る。</p>
+## パブリックチェーンでは、実装の食い違いが実害として表に出る
 
 <p class="lead-in">互いに信用しない不特定多数が、それぞれの実装で同じ履歴を確認する。<br>だから食い違いは、「どの履歴が確定したか」として表に出る。</p>
 <img class="diagram split-visual" src="figs/diagram-chain-split.svg" alt="ブロック1〜3は全実装が共有。実装Aは4〜6、実装Bは4′〜6′を確定し、履歴が二つに分かれる。確定は戻せず、巨額資産の停止・取引停止に直結する">
 <p class="takeaway compact">確定した分岐は<strong>戻せない</strong>。巨額資産の停止・取引停止に直結する。</p>
 
 Note:
+このスライドで話すこと：食い違いは、パブリックチェーンでは実害として表に出る。
 普通のソフトのバグは、そのソフトを使う人だけが困ります。
 パブリックチェーンでは、実装AとBがそれぞれ別の履歴を確定すると、履歴が二つに分かれます。
 図では、ブロック1〜3は全員が共有しています。その後、AとBが違うブロックを確定しています。
 この分岐は後から戻せません。確定済みの取引が一方で消え、取引や担保が止まります。
 実装を複数にするのは、一つの不具合で全体が止まらないようにするためです。ただしそれには、全実装が同じ前提を共有していることが条件になります。
+では、そうした食い違いを防ぐための確認は、今どう行われているのか。次に見ます。
 
 ---
 
-<p class="section-tag">従来の監査の限界</p>
+<p class="section-tag">出発点</p>
 
-## 仕様駆動の監査は、確認項目を人が起こす段階で止まりやすい
+## 出発点：SPECAは、暗黙の前提を取りこぼした
 
-<p class="talk-goal">このスライドで話すこと：監査の最初の作業が、人手に頼っている。</p>
+<p>「仕様駆動の監査」は、仕様からチェックリストを大量に作って確認する監査。<br>その一つ SPECA を、Ethereum Fusakaの監査コンテスト（実運用の11クライアント）に適用した。</p>
+<div class="grid">
+<div class="panel"><p class="label">結果（初期版V1・単一の運用）</p><p>High・Mediumの指摘は検出できなかった。</p></div>
+<div class="panel orange"><p class="label">取りこぼしの内訳</p><p><strong>57.1%</strong>：仕様の細部と暗黙の前提<br>28.6%：タイミング・並行処理<br>14.3%：外部ライブラリ</p></div>
+</div>
+<p class="message">取りこぼしの最多は、<strong>仕様の細部と暗黙の前提</strong>だった。</p>
+
+Note:
+このスライドで話すこと：SPECAを使って、気になったこと。
+仕様駆動の監査とは、仕様の要求からチェックリストをたくさん作って、各実装がそれを満たすかを確認していく監査です。最近、広がっています。SPECAはその一つで、私たちの先行研究です。
+SPECAを、Ethereum Fusakaアップグレードの監査コンテストに使いました。対象は実運用の11クライアントです。
+初期版では、High・Mediumの指摘は検出できませんでした。取りこぼしの内訳を見ると、最も多いのが仕様の細部と暗黙の前提で、57.1%を占めます。
+確認項目を仕様の文章から起こしている以上、文章に書かれていない前提は、項目になりにくいのではないか。そこが気になりました。まだ結論ではなく、ここから先で確かめます。
+なお、改良した版では上位の成績が出ていますが、結果は単一の運用によるものです。ここで言いたいのは、取りこぼしの傾向です。
+
+---
+
+<p class="section-tag">手法</p>
+
+## Leanの定理から前提を引っ張れれば、確認項目の元になる
 
 <div class="grid">
-<div class="panel"><p class="label">仕様書</p><p>型・フィールド・更新手順が書かれている</p></div>
-<div class="panel orange"><p class="label">確認項目の列挙</p><p>人が読んで書き出す</p><p class="actor">ここが止まりやすい</p></div>
-<div class="panel blue"><p class="label">実装の検査</p><p>テスト・レビュー・差分確認</p></div>
+<div class="panel orange"><p class="label">グラフ探索で全部たどる（見立て）</p><p>経路が増えて、重くなる。<br>どこが肝かは、結局人が読む。</p></div>
+<div class="panel blue"><p class="label">Leanの定理を使う</p><p>結論に必要な条件は、<br><strong>仮説にすべて書かれる</strong>。<br>肝になる条件が明らかになる。</p></div>
 </div>
-<p class="message">確認項目の質は、<strong>読んだ人の知識</strong>に左右される。</p>
+<p class="message">Leanから前提を引っ張れれば、<strong>確認項目の元</strong>にできるのでは。</p>
 
 Note:
-最近は、仕様書から検査項目を起こして実装を見る監査が増えています。SPECAのような仕様駆動の手法もその一つです。
-ただ、検査項目を仕様書から人が書き出す作業は時間がかかり、抜けも出ます。
-ここを機械的に補えないか。これがこの研究の出発点です。
+このスライドで話すこと：そこで考えた案。確認項目の元を、Leanの定理から取れないか。
+仕様駆動の監査で気になったのは、確認項目のリストが、仕様の文章からしか作れないことでした。
+仕様の全体をグラフにして全部たどる方法もありますが、規模が大きくなると重くなる、というのが私たちの見立てです。ここは測定していません。
+一方、Leanの定理では、結論に必要な条件はすべて仮説に書かないと、証明が通りません。つまり、モデルの範囲では、暗黙の前提が残らない形になっています。
+だったら、Leanの定理から前提を引っ張ってこれれば、確認項目の元にできるのではないか。これが、この研究のスタートです。
+ただし、モデルが現実の仕様を正しく写しているかは、別の問題として残ります。
 
 ---
 
-<p class="section-tag">提案</p>
+<p class="section-tag">手法</p>
 
-## 証明の仮説なら、構文から取り出せるのでは
+## Leanは、定理の証明を機械が検査する言語
 
-<p class="talk-goal">このスライドで話すこと：人の列挙の代わりに、Leanの定理の仮説を使えないかを試した。</p>
+<div class="grid three">
+<div class="panel purple"><h3>定理</h3><p>仮説（条件）と<br>結論（保証）の組。</p></div>
+<div class="panel"><h3>カーネルが検査</h3><p>証明に穴があれば、<br>受理されない。</p></div>
+<div class="panel blue"><h3>Ethereumでは</h3><p>合意の安全性の定理が、<br>Leanで書かれつつある。</p></div>
+</div>
+<p class="message">Ethereumの合意の安全性は、<strong>Leanの定理</strong>として書かれようとしている。</p>
 
-<p>イーサリアムの合意の安全性は、Lean 4で<strong>機械検査済み</strong>（gasper-lean4）。<br>定理の仮説は、「この条件なら保証する」の条件そのものです。</p>
+Note:
+このスライドで話すこと：Leanとは何か、Ethereumでどう使われているか。
+Leanは、定理の証明を機械が検査する言語です。定理は、仮説と結論の組です。
+証明に穴があると、Leanのカーネルが受理しません。通らなければ危ない、という機械的な検査に使われます。
+Ethereumの世界では、合意の安全性を示す定理を、Leanで書く取り組みが進んでいます。まだ書き切られてはいません。私たちが使ったのは、その一つのgasper-lean4です。
+
+---
+
+<p class="section-tag">手法</p>
+
+## 問い：Leanの前提は、仕様の文章にどれだけ明示されているか
+
 <div class="grid">
-<div class="panel purple"><p class="label">定理の形</p><p>仮説（条件） ＋ 結論（保証）</p></div>
-<div class="panel blue"><p class="label">仮説だけを取り出す</p><p>定理文の構文を読む。<br>生成や解釈は入らない。</p></div>
+<div class="panel purple"><p class="label">Leanの定理</p><p>仮説（前提）が、<br>すべて書かれている。</p></div>
+<div class="panel blue"><p class="label">仕様の文章</p><p>その前提は、<br>どこまで書かれているか。</p></div>
 </div>
-<p class="message">取り出した条件を、<strong>仕様書の文章と突き合わせる</strong>。</p>
-<p class="source">原典：<a href="https://github.com/NyxFoundation/gasper-lean4/tree/7650709">gasper-lean4 @ 7650709</a> ／ <a href="https://github.com/ethereum/consensus-specs/tree/2359a5e">consensus-specs @ 2359a5e</a></p>
+<p class="message">Leanの前提が、仕様の文章に<strong>どれだけ明示されているか</strong>を調べた。</p>
 
 Note:
-発想はシンプルです。合意の安全性は既に定理として証明されていて、その定理が要求する条件が仮説として書かれています。
-人が仕様書から列挙する代わりに、この仮説を取り出せば、抜けを減らせると考えました。
-ただし、取り出した条件が仕様書に書かれているかは、別に確かめる必要があります。その確認が、このあとの分析です。
+このスライドで話すこと：案を試すために立てた問い。
+SPECAの側にも、Leanの定理を確認項目へ変換するプラグインがあります。
+これを進めるうちに、定理の前提が、仕様の文章にどのくらい明示されているのかが気になりました。
+これが今回の研究内容です。Leanの定理には前提がすべて書かれています。その前提が、仕様の文章に書かれているかを調べました。
 
 ---
 
-<p class="section-tag">従来の監査の限界</p>
+<p class="section-tag">手法</p>
 
-## 安全性の核心：クォーラム交差の前提
+## 手法：Leanの前提を取り出し、仕様の文章と突き合わせる
 
-<p class="talk-goal">このスライドで話すこと：この安全性の定理は、仕様に書かれていない前提の上に立つ。</p>
-
-<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
-<img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる">
-<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<br><strong>その前提が仕様の文章に書かれていなければ、各実装で解釈が分かれる。</strong></p>
-<p class="small" style="margin-top: 6px;">どれだけ算術（2/3）を正しく実装しても、前提が満たされなければ安全性は保証されない。</p>
-
-Note:
-合意仕様の安全性を支えるのはクォーラム交差という数学的定理です。2/3以上の支持を集めた決定が2つあれば、少なくとも1/3は重なり、「同時に2つの履歴は確定しない」が保証されます。
-ただしそれには「同じ参加者集合を分母に、同じ重みで計算する」という前提が必要で、これは仕様の文章には書かれていません。
-前提が共有されなければ、各実装が仕様どおりに2/3を計算しても保証は崩れます。
-
----
-
-<p class="section-tag">従来の監査の限界</p>
-
-## 「2/3」は合っている。でも、何の2/3か？
-
-<p class="talk-goal">このスライドで話すこと：2/3という数字だけでは、保証の対象は決まらない。</p>
-
-<p class="label">仮想例（説明用）：8人・等しい重みで集計（色付き＝支持、灰＝対象外）</p>
-<img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
-<p class="message">両方とも4/6 ＝ 2/3。でも母集団が違えば、<strong>同じ保証は使えない。</strong></p>
-<p class="label" style="margin-top:12px;">実例：Nimbus #461（justification_bits の更新）</p>
-<div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
-<p class="small">算術は正しい。壊れていたのは<strong>計算に渡す状態</strong>。実バグDBでは chain split に至り得ると分類。<br>※前提の非明示が直接原因とは示していない（位置的共起）。</p>
-
-Note:
-仕様は「総重みの2/3が支持すれば正当化」と書きます。監査は「2/3の計算があるか」を見ますが、コードには確かに2/3があります。
-でもその2/3は何を数えた2/3か。名簿はエポック毎に変動し、分岐中は枝ごとに別名簿です。どの集合・出席を想定した保証かは書かれていません。
-仮想例では実装Aは1〜6、実装Bは3〜8を対象に、どちらも4/6＝2/3ですが母集団が違います。
-実例では、Nimbus #461でjustification_bitsの上位ビットが残り、確定判定に使う状態がずれました。算術ではなく状態が壊れた例です。
-
----
-
-<p class="section-tag">従来の監査の限界</p>
-
-## なぜ、仕様を読むだけでは見えないのか
-
-<p class="talk-goal">このスライドで話すこと：証明の前提は上流にあり、実装者と監査者の手元には届きにくい。</p>
-
-<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
-<p class="message"><strong>根本原因：</strong>仕様が成り立つ<strong>前提条件</strong>が、<br>実装者・監査者からは<strong>読めない</strong>。</p>
-<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
-<p class="source">図は説明用の模式図。設計の安全性議論はCasper FFG・Gasper等の研究に、仕様はconsensus-specs（EIP）に存在。証明の機械化がgasper-lean4。</p>
-
-Note:
-クォーラム交差のような安全性の前提条件が、なぜ仕様書に書かれないのか。これは仕様書の欠陥というより、仕様書と証明の「役割分担」に起因する構造的ギャップです。
-先に理論家による研究と設計があり、そこに安全性の証明（この前提が満たされるとき安全性が成立する＝WHEN）があります。その設計を実行可能な手順（HOW）へ書き下したのが仕様書です。
-実装者は手順に従ってコードを書き、監査者は手順を基準に確認します。しかし安全性を保証する前提（WHEN）は証明側にのみあり、仕様書の手順記述には現れません。証明はLeanで書かれており、現場が直接読むことも困難です。
-では、このギャップのせいで現場の確認はどう歪むのか。次に見ます。
-
----
-
-<p class="section-tag">仮説</p>
-
-## 仕様どおりの実装は、証明の前提まで満たさない
-
-<p class="talk-goal">このスライドで話すこと：仕様どおりでも、前提を満たしたかは区別できない。</p>
-
-<p>証明は<mark>保証書</mark>と同じ構造。条件内は保証、<strong>条件外は対象外</strong>。</p>
-<img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外">
-<div class="route"><span>問題</span><strong>同じ「仕様どおり」でも、前提が満たされるかは仕様を読むだけでは区別がつかない</strong></div>
-<div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
-<div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
-<p class="source">入力：Ethereumの安全性をLean 4で形式化した <strong>gasper-lean4 の証明</strong>。</p>
-
-Note:
-仕様を読んでそのとおり実装するだけでは不十分です。仕様は「こう動け」という手順は教えますが、「証明が要求する前提をあなたの実装が満たしているか」は教えてくれません。
-証明は保証書と同じで、条件内は保証、条件外は対象外です。その境界は仕様の手順には書かれていません。
-そこで安全性の証明をもう一つの入力にします。提案は、証明が要求する前提を取り出し、実装・監査で使える確認候補へ変換することです。
-
----
-
-<p class="section-tag">提案</p>
-
-## 足すのは「証明 → 前提 → 確認候補」の経路
-
-<p class="talk-goal">このスライドで話すこと：証明から前提を取り出し、確認候補に変換する経路を足す。</p>
-
-<div class="flow extraction-flow">
-<div class="panel purple"><h3>安全性の証明</h3><p>条件 ⇒ 保証</p></div>
-<div class="arrow">→</div>
-<div class="panel"><h3>前提を抽出</h3><p><strong>定理の前提を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
-<div class="arrow">→</div>
-<div class="panel blue"><h3>確認候補へ変換</h3><p>仕様・コードと対応付け</p></div>
+<div class="flow plain extraction-flow">
+<div class="panel purple"><h3>Leanの定理</h3><p>仮説（条件） ⇒ 結論（保証）</p></div>
+<div class="panel"><h3>前提を抽出</h3><p><strong>仮説を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
+<div class="panel blue"><h3>仕様の文章と照合</h3><p>書かれているかを判定</p><p class="actor">キーワード照合器＋6種類のLLM</p></div>
 </div>
-<p class="message">抽出は<strong>機械的・LLM不使用</strong>（生成すると証明に無い前提が混ざるが、構文を読むだけなら捏造が起きない）。<br>LLMは後段の「仕様に明示か」の判定のみ。<strong>監査での実効性は未検証</strong>。</p>
+<p class="message">抽出は構文を読むだけで、生成は入らない。<br>判定は自動で、正解ラベルとの照合は<strong>未実施</strong>。</p>
 
 Note:
-従来の、仕様から項目を作る経路を捨てるのではなく、証明から前提を列挙する経路を追加します。実装者・監査者はLeanを読む必要はありません。
-前提は証明の中に既に正確に書かれており、やることはその翻訳です。抽出はAIの生成ではなく、定理文の仮説をLeanの構文として決定的に読み取る処理なので捏造が起きません。
-LLMが登場するのは後段の「仕様に明示されているか」の判定だけです。そして、出した確認候補が実際の監査でバグを拾えるかはまだ評価していません。
+このスライドで話すこと：問いにどう答えたか。前提を取り出す段階と、仕様に書かれているかを判定する段階は別。
+手法は二段です。
+一段目は、Leanの定理文から仮説を取り出す処理です。定理文の構文を読むだけで、AIの生成は入りません。だから、証明に無い前提が混ざることはありません。
+二段目は、取り出した前提が、仕様の文章に安全性の要件として書かれているかの判定です。ここは、キーワード照合器と6種類のLLMによる自動判定です。
+判定器どうしの一致は見ていますが、人が付けた正解ラベルとの照合は、まだしていません。
 
 ---
 
-<p class="section-tag">提案</p>
+<p class="section-tag">手法</p>
 
 ## 実例：定理に書かれた「条件」の部分を取り出す
-
-<p class="talk-goal" style="margin-bottom: 6px;">このスライドで話すこと：定理の仮説が、どの条件を指すかを具体例で示す。</p>
 
 <div class="grid" style="margin-bottom: 4px;">
 <div><h3 style="margin: 0 0 8px;">定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
@@ -262,17 +188,91 @@ LLMが登場するのは後段の「仕様に明示されているか」の判�
 <p class="message" style="margin: 4px 0 0; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
 
 Note:
+このスライドで話すこと：定理の仮説が、どの条件を指すかを具体例で示す。
 左の記号は細かく読む必要はありません。要点は右の日本語2行です。「支持した人が名簿に入っているか」「全体の2/3以上いるか」。
 定理文は「theorem 名前（仮説）…：結論」という形で、コロンの手前の括弧が前提です。ツールはこれをLeanの構文として読み、型やモデルの部品を除いて実体条件だけを選別します。
 解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から延べ57件が出ました。
 
 ---
 
-<p class="section-tag">提案</p>
+<p class="section-tag">分析結果</p>
+
+## 抽出した前提は、仕様に明示されているか
+
+<div class="flow plain">
+<div class="panel purple"><span class="number">17</span><h3>対象の定理</h3><p class="small">仮説を列挙・原典照合</p></div>
+<div class="panel"><span class="number">57</span><h3>延べ前提条件</h3><p class="small">同一概念の反復を含む</p></div>
+<div class="panel blue"><span class="number">89</span><h3>仕様ファイル</h3><p class="small">文章の安全性要件と照合</p></div>
+</div>
+<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:150px">
+<p class="message"><strong>10概念中7概念</strong>が非明示と判定。<strong>「明示」と全員一致は0件。</strong></p>
+
+Note:
+このスライドで話すこと：抽出した前提は、仕様の文章に明示されていたか。自動判定の結果。
+17の定理に由来する延べ57件の前提条件を、89の仕様ファイルと照合しました。
+主な数字は、10概念中7概念が、すべての自動判定で「仕様の文章に安全性要件として明示されていない」と判定されたことです。
+延べ件数では57件中48件で、全員が「明示」と同意した条件は0件でした。57件は同じ概念の反復を含むので、独立した57種類ではありません。
+これはバグの数ではありません。判定はキーワード照合器と6種類のLLMによる自動判定で、正解ラベルとの照合はまだです。判定器どうしが一致した、という意味です。
+
+---
+
+<p class="section-tag">分析結果</p>
+
+## 「2/3」は合っている。でも、何の2/3か？
+
+<p class="label">仮想例（説明用）：8人・等しい重みで集計（色付き＝支持、灰＝対象外）</p>
+<img class="scenario-visual" src="figs/scenario-denominators.svg" alt="実装Aは1〜6を、実装Bは3〜8を有権者（分母）とする。同じ仕様でも使う名簿が違うと分母がずれる。両方4/6だが分母も分子も重ならない">
+<p class="message">両方とも4/6 ＝ 2/3。でも母集団が違えば、<strong>同じ保証は使えない。</strong></p>
+
+Note:
+このスライドで話すこと：2/3という数字だけでは、保証の対象は決まらない。
+仕様は「総重みの2/3が支持すれば正当化」と書きます。監査は「2/3の計算があるか」を見ますが、コードには確かに2/3があります。
+でもその2/3は何を数えた2/3か。名簿はエポック毎に変動し、分岐中は枝ごとに別名簿です。どの集合・出席を想定した保証かは、仕様の文章からは読み取りにくい。
+仮想例では実装Aは1〜6、実装Bは3〜8を対象に、どちらも4/6＝2/3ですが母集団が違います。
+
+---
+
+<p class="section-tag">分析結果</p>
+
+## 実例：Nimbus #461。壊れていたのは、計算ではなく状態
+
+<p class="label">justification_bits の更新（4ビットの履歴）</p>
+<div class="bitstrip"><span class="bitname">justification_bits</span><div class="bit">1</div><div class="bit">0</div><div class="bit stale">0</div><div class="bit stale">1</div><span class="stale-label">← 古いビットが残った</span></div>
+<p class="message">算術は正しい。壊れていたのは、<strong>計算に渡す状態</strong>。</p>
+<p>実バグDBでは chain split に至り得ると分類されている。ただし、前提の非明示が原因だとは示していない。同じ処理領域に位置するだけ。</p>
+
+Note:
+このスライドで話すこと：同じ処理領域で、実際に修正されたバグがある。
+実際に修正された例です。Nimbus #461では、justification_bitsの上位ビットが残り、確定判定に使う状態がずれました。
+算術ではなく、計算に渡す状態が壊れた例です。公開データセットでは、チェーン分岐に至り得ると分類されています。
+ただし、前提の非明示がこのバグの原因だったとは示していません。データセットの分類ラベルが同じ処理領域に位置するという、位置的な共起だけです。
+
+---
+
+<p class="section-tag">まとめ</p>
+
+## まとめ：Leanの前提の多くは、仕様に明示されていなかった
+
+<div class="grid three">
+<div class="panel blue"><h3>分かったこと</h3><p>10概念中7概念が、仕様の文章に非明示と判定された（自動判定）。</p></div>
+<div class="panel"><h3>言えること</h3><p>実装者は仕様書だけでなく、論文も読んで、前提を知っておきたい。</p></div>
+<div class="panel orange"><h3>まだ言えないこと</h3><p>監査で実際にバグを拾えるか。判定が正解と一致するか。</p></div>
+</div>
+<p class="message">前提が仕様に書かれていれば、Leanは要らない。<br>書かれていないから、証明から取り出した。</p>
+
+Note:
+このスライドで話すこと：分かったことと、まだ言えないこと。
+分かったのは、Leanの定理から取り出した前提のうち、10概念中7概念が、仕様の文章に安全性要件として明示されていないと自動判定されたことです。
+ここから言えるのは、実装者は仕様書を読むだけでなく、論文も読んで、どんな前提で作られているかを理解しておく必要がある、というところまでです。
+前提が仕様に書かれていれば、Leanは要りません。書かれていなかったので、証明から取り出しました。
+まだ言えないのは、確認候補が実際の監査でバグを拾えるか、判定が正解と一致するか、他のシステムでも同じかです。
+今後は、人手の正解ラベルによる検証と、実バグを参照せずに作った項目で、修正前のバグを再検出できるかを試します。ご清聴ありがとうございました。
+
+---
+
+<p class="section-tag">補足</p>
 
 ## 前提を、監査で扱える確認候補へ変換する
-
-<p class="talk-goal">このスライドで話すこと：取り出した前提を、仕様・コード・担当に結びつける。</p>
 
 <div class="grid tl">
 <div><p class="label">人が読む形（確認一覧）</p><table>
@@ -299,40 +299,16 @@ Note:
 <p class="message" style="font-size: 26px; margin: 8px 0 0;">人には<strong>確認一覧</strong>、監査ツールには<strong>JSON</strong>。条件・定理・仕様の参照先はどちらもつながる。</p>
 
 Note:
+このスライドで話すこと：取り出した前提を、仕様・コード・担当に結びつける。
 機械抽出して終わりではなく、その条件が仕様や実装のどこに対応するかを示します。右のJSONは監査ツールへ渡すデータ形式で、現場のエンジニアが確認するのは左の日本語一覧表だけで十分です。
 重要度は仕様書の記述量ではなく安全性定理の構造に由来するため、仕様に書かれていない前提でも優先度が落ちません。
 こうした項目が全部で27あり、そのうち17項目が前提条件を持ちます。この候補が、仕様の文章だけから得る項目とどれだけ異なるかを調べました。
 
 ---
 
-<p class="section-tag">仮説の検証</p>
-
-## 抽出した前提は、仕様に明示されているか
-
-<p class="talk-goal">このスライドで話すこと：抽出した前提は、仕様の文章に明示されていたか。自動判定の結果。</p>
-
-<div class="flow">
-<div class="panel purple"><span class="number">17</span><h3>対象の定理</h3><p class="small">仮説を列挙・原典照合</p></div>
-<div class="arrow">-></div>
-<div class="panel"><span class="number">57</span><h3>延べ前提条件</h3><p class="small">同一概念の反復を含む</p></div>
-<div class="arrow">-></div>
-<div class="panel blue"><span class="number">89</span><h3>仕様ファイル</h3><p class="small">文章の安全性要件と照合</p></div>
-</div>
-<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:150px">
-<p class="message">延べ57件中<strong>48件（84.2%）</strong>が非明示。<strong>「明示」と全員一致した条件は0件。</strong></p>
-
-Note:
-17の定理に由来する延べ57件の前提条件を、89の仕様ファイルと照合しました。抽出は機械的、明示の判定はキーワード照合器と6種類のLLMによる自動判定です。
-結果、48件（84.2%）が全会一致で「仕様に安全性要件として明示されていない」と判定され、逆に全員が「明示」と同意した条件は0件でした。
-概念でまとめると10概念中7概念が非明示です。これはバグを見つけた数ではなく、仕様の文章だけを入力にすると証明の前提を拾いきれない可能性を示す結果です。判定は正解ラベルではなく判定器間の一致である点は限界です。
-
----
-
-<p class="section-tag">実務への展開</p>
+<p class="section-tag">補足</p>
 
 ## 前提ごとに「誰が何を確認するか」を決める
-
-<p class="talk-goal">このスライドで話すこと：前提を、誰がどう確認するかを決める。</p>
 
 <p>取り出した前提を、仕様・コードへ対応付け、<strong>担当と確認方法を割り当てる</strong>。</p>
 <div class="grid">
@@ -342,28 +318,64 @@ Note:
 <p class="message"><strong>すべての前提を単一のassertに変換するわけではない。</strong><br>条件の意味に応じて、確認の責任と手法を正しく割り当てる。</p>
 
 Note:
+このスライドで話すこと：前提を、誰がどう確認するかを決める。
 取り出した前提には、実装で保つ条件と、モデルや環境についての仮定が含まれます。すべてをassertに置き換えるのではありません。
 票と集計対象の対応や計算、状態の表現範囲はコードに結び付けられます。一方、攻撃者がどれだけの重みを持つかは関数のassertで確立するものではありません。
-前提一覧を受け取ったら、意味と担当、確認方法を決める。この分担が、証明から得た条件を実務で使うために必要です。同じ枠組みはRaftやBFT系など、共通仕様＋独立複数実装のシステム全般に広げられます。
+前提一覧を受け取ったら、意味と担当、確認方法を決める。この分担が、証明から得た条件を実務で使うために必要です。同じ考え方は、Raftなど共通仕様と独立した複数実装を持つ他のシステムにも当てはまる可能性があります。ただし、他のシステムでの効果は検証していません。
 
 ---
 
-<p class="section-tag">まとめ</p>
+<p class="section-tag">補足</p>
 
-## まとめ：安全性の証明から、前提を取り出そう
+## 安全性の核心：クォーラム交差の前提
 
-<img class="architecture-visual" style="height: 118px; margin: 4px auto; display: block;" src="figs/diagram-proof-handoff.svg" alt="形式証明から抽出された前提条件を、現場が使えるテスト項目・監査チェックリストへ変換するパイプライン">
-<p class="summary" style="font-size:34px; margin:16px 0;">仕様を読むだけの確認に、<br>証明が要求する前提を足す。</p>
-<div class="grid three">
-<div class="panel"><h3>提案</h3><p>定理の前提を機械抽出し、確認候補へ変換する。</p></div>
-<div class="panel blue"><h3>調査結果</h3><p>延べ57件中48件は、仕様の文章に非明示と判定。</p></div>
-<div class="panel"><h3>次の行動</h3><p>前提を仕様・コードへ対応付け、担当と確認方法を決める。</p></div>
-</div>
+<p style="margin: 6px 0 10px;">「仕様どおり」なのに結果が分かれる理由：合意仕様は<strong>数学的な安全性定理（クォーラム交差）</strong>に依存している。</p>
+<img class="diagram votes-visual" style="height: 230px; margin: 6px auto; display: block;" src="figs/illustration-votes.svg" alt="同じ参加者集合と同じ票の重みなら、2つの3分の2の支持集合は少なくとも3分の1重なる">
+<p class="takeaway" style="margin-top: 10px; padding: 10px 18px; font-size: 24px;">定理は「同じ参加者集合・同じ重み」を前提に安全を保証。<br><strong>その前提が仕様の文章に書かれていなければ、各実装で解釈が分かれる。</strong></p>
 
 Note:
-研究の中心は、安全性の証明から前提を取り出し、仕様に基づく確認を補うことです。対象の証明から延べ57件を抽出・対応付け、48件が仕様に非明示と判定されました。
-現場のエンジニア全員がLeanを習得する必要はありません。前提条件の自動抽出が、研究と実装・監査をつなぐインターフェースになります。
-今後は、人手の正解ラベルによる検証と、実バグを一切参照せずに作った項目で修正前のバグを再検出できるかの実験、そして他のBFT系への横展開を予定しています。ご清聴ありがとうございました。
+このスライドで話すこと：この安全性の定理は、仕様に書かれていない前提の上に立つ。
+合意仕様の安全性を支えるのはクォーラム交差という数学的定理です。2/3以上の支持を集めた決定が2つあれば、少なくとも1/3は重なり、「同時に2つの履歴は確定しない」が保証されます。
+ただしそれには「同じ参加者集合を分母に、同じ重みで計算する」という前提が必要です。この前提が仕様の文章に書かれているかは、のちの分析で確かめます。
+前提が共有されなければ、各実装が仕様どおりに2/3を計算しても保証は崩れます。
+
+---
+
+<p class="section-tag">補足</p>
+
+## なぜ、仕様を読むだけでは見えないのか
+
+<img class="pipeline-visual" src="figs/diagram-spec-pipeline.svg" alt="3者の会話。理論家「前提Pなら、この動きで安全」（証明 P⇒Q）。仕様書「こう動いてね」（手順Sのみ）。実装者・監査者「前提がない。いつ正しいの？」（基準はSだけ）。前提Pを持つのは上流だけで、届く道は2つとも閉ざされている。仕様経由は転記で落ち、直接読むにも証明はLeanで下流は読めない">
+<p class="message">安全が成り立つ<strong>前提条件</strong>は証明の側にあり、<br>実装者・監査者からは<strong>読みにくい</strong>。</p>
+<p class="small">「証明」＝「この条件を満たせば保証が必ず成り立つ」を<strong>機械が検算</strong>した文書（Lean）。<br><strong>機械が受理した時点で、仮説に抜け漏れはない</strong>——書くべき前提の確かな一覧は証明の中にだけある。</p>
+
+Note:
+このスライドで話すこと：証明の前提は上流にあり、実装者と監査者の手元には届きにくい。
+クォーラム交差のような安全性の前提が、なぜ仕様書に書かれないのか。
+これは仕様書の欠陥というより、仕様書と証明の役割分担に起因します。
+先に理論家による研究と設計があり、そこに安全性の証明、つまり「この前提が満たされるときに安全が成り立つ」という議論があります。
+その設計を、実行できる手順に書き下したのが仕様書です。
+実装者は手順に従ってコードを書き、監査者は手順を基準に確認します。
+しかし、安全が成り立つための前提は証明の側にあり、仕様書の手順には現れにくいと考えられます。実際にどうかは、のちの分析で確かめます。
+証明はLeanなどの形式言語で書かれており、現場が直接読むのも難しい。
+
+---
+
+<p class="section-tag">補足</p>
+
+## 仕様どおりの実装は、証明の前提まで満たさない
+
+<p>証明は<mark>保証書</mark>と同じ構造。条件内は保証、<strong>条件外は対象外</strong>。</p>
+<img class="scope-visual" src="figs/diagram-guarantee-scope.svg" alt="証明は保証書。「前提Pを満たすなら安全Qを保証」とあるが、届くのはPを満たす実装だけ。満たさない実装は保証対象外">
+<div class="route"><span>問題</span><strong>同じ「仕様どおり」でも、前提が満たされるかは仕様を読むだけでは区別がつかない</strong></div>
+<div class="route"><span>仮説</span><strong>前提には、仕様に書かれていないものがある</strong></div>
+<div class="route"><span>提案</span><strong>証明から取り出して、確認項目として渡す</strong></div>
+
+Note:
+このスライドで話すこと：仕様どおりでも、前提を満たしたかは区別できない。
+仕様を読んでそのとおり実装するだけでは不十分です。仕様は「こう動け」という手順は教えますが、「証明が要求する前提をあなたの実装が満たしているか」は教えてくれません。
+証明は保証書と同じで、条件内は保証、条件外は対象外です。その境界は仕様の手順には書かれていません。
+そこで安全性の証明をもう一つの入力にします。提案は、証明が要求する前提を取り出し、実装・監査で使える確認候補へ変換することです。
 
 ---
 
@@ -482,9 +494,10 @@ Note:
 <p class="source">単一仕様とマルチクライアント構成を持つ分散システム一般への適用可能性の考察。</p>
 
 Note:
-この三つは、本アプローチが適用可能な分散システム一般の例です。Raftなどの分散合意プロトコルでも、メンバーシップ変更の過渡期におけるクォーラム交差条件など、証明側で要求される前提と実装時の手順との間にギャップが生じ得ます。
-単一の共通仕様に基づいて複数の開発チームが独立に実装を行うアーキテクチャでは、どのシステムでも「手順の記述」と「安全性の数学的前提」の乖離がリスクとなります。
-本研究が提案する枠組みは、イーサリアムに限らず、安全性が最重要視される分散システム全般に拡張可能です。
+この三つは、他分野で考えられる確認候補の仮想例です。
+Raftでは、メンバーシップ変更の過渡期に、多数派の交差が保たれるかが論点になります。証明側が要求する前提と、実装の手順との間にずれが生じ得る例です。
+共通の仕様を複数のチームが独立に実装する構造は、他のシステムにもあります。
+ただし、これらの対象で本研究が測定したわけではなく、監査での効果も確かめていません。形式証明がある対象では、その前提を追加の入力にできる、という見通しにとどまります。
 
 ---
 
@@ -515,7 +528,7 @@ Note:
 ## 参照資料・イラスト・公式ロゴの出典
 
 <div class="grid">
-<div><p class="label">仕様・証明・データ</p><p class="small">gasper-lean4（Nyx Foundation, commit 7650709）／ consensus-specs（commit 2359a5e）／ speca-lean4-plugin（tag 20260723-gasper）／ ethereum-vuln-dataset（commit c7c4ccb）</p></div>
+<div><p class="label">仕様・証明・データ</p><p class="small">gasper-lean4（Nyx Foundation, commit 7650709）／ consensus-specs（commit 2359a5e）／ SPECA（Kamba, Sannai, <a href="https://arxiv.org/abs/2602.07513">arXiv:2602.07513 v2</a>）／ speca-lean4-plugin（tag 20260723-gasper）／ ethereum-vuln-dataset（commit c7c4ccb）</p></div>
 <div><p class="label">イラスト・ロゴ</p><p class="small">公式Ethereumロゴ（ethereum.org brand assets）／ クライアント・言語ロゴ（各公式素材、詳細は <code>figs/logo-sources.json</code>）／ イラスト：Katerina Limpitsouni, unDraw</p></div>
 </div>
 
