@@ -84,6 +84,11 @@
       "purpose": "ブロック1〜3を共有し、実装AとBが4〜6を別々に確定して履歴が分かれる図解（不可逆・資産停止）"
     },
     {
+      "slide": 6,
+      "file": "figs/diagram-speca-architecture.svg",
+      "purpose": "SPECAのパイプライン構成。プロパティ生成を強調"
+    },
+    {
       "slide": 12,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
@@ -186,11 +191,11 @@
     },
     {
       "type": "audit-limit",
-      "title": "出発点：SPECAは、暗黙の前提を取りこぼした"
+      "title": "出発点：SPECAは、プロパティ生成が性能を決める"
     },
     {
       "type": "idea",
-      "title": "Leanの定理から前提を引っ張れれば、確認項目の元になる"
+      "title": "Leanで仕様を書けば、プロパティ生成を強化できる"
     },
     {
       "type": "lean",

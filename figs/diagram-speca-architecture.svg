@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 250" width="1100" height="250" font-family="Hiragino Sans, Yu Gothic, Meiryo, Helvetica, Arial, sans-serif">
+  <title>SPECAの構成：仕様 → 仕様の探索 → サブグラフ抽出 → プロパティ生成 → コード箇所の特定 → 証明試行による監査 → レビュー。プロパティ生成が監査の質を決める</title>
+  <rect width="1100" height="250" fill="#ffffff"/>
+  <!-- connectors -->
+  <g stroke="#516575" stroke-width="2">
+    <line x1="159" y1="95" x2="181" y2="95"/>
+    <line x1="311" y1="95" x2="333" y2="95"/>
+    <line x1="463" y1="95" x2="485" y2="95"/>
+    <line x1="615" y1="95" x2="637" y2="95"/>
+    <line x1="767" y1="95" x2="789" y2="95"/>
+    <line x1="919" y1="95" x2="941" y2="95"/>
+  </g>
+  <!-- boxes -->
+  <g stroke="#a5cce5" stroke-width="2" fill="#eef6fc">
+    <rect x="29" y="50" width="130" height="90" rx="10" fill="#f8fafc" stroke="#cbd8e2"/>
+    <rect x="181" y="50" width="130" height="90" rx="10"/>
+    <rect x="333" y="50" width="130" height="90" rx="10"/>
+    <rect x="637" y="50" width="130" height="90" rx="10"/>
+    <rect x="789" y="50" width="130" height="90" rx="10"/>
+    <rect x="941" y="50" width="130" height="90" rx="10"/>
+  </g>
+  <!-- highlighted property generation -->
+  <rect x="485" y="38" width="130" height="114" rx="12" fill="#fff6ee" stroke="#b64b12" stroke-width="4"/>
+  <g text-anchor="middle" fill="#18334c" font-weight="700">
+    <text x="94" y="92" font-size="19">仕様</text>
+    <text x="94" y="118" font-size="15" font-weight="400" fill="#516575">自然言語の文書</text>
+    <text x="246" y="84" font-size="13" fill="#006ba6">01a</text>
+    <text x="246" y="108" font-size="18">仕様の探索</text>
+    <text x="398" y="84" font-size="13" fill="#006ba6">01b</text>
+    <text x="398" y="108" font-size="18">サブグラフ</text>
+    <text x="398" y="130" font-size="18">抽出</text>
+    <text x="550" y="78" font-size="13" fill="#b64b12">01e</text>
+    <text x="550" y="104" font-size="20" fill="#b64b12">プロパティ</text>
+    <text x="550" y="128" font-size="20" fill="#b64b12">生成</text>
+    <text x="702" y="84" font-size="13" fill="#006ba6">02c</text>
+    <text x="702" y="108" font-size="18">コード箇所</text>
+    <text x="702" y="130" font-size="18">の特定</text>
+    <text x="854" y="108" font-size="18">証明試行</text>
+    <text x="854" y="130" font-size="18">による監査</text>
+    <text x="1006" y="108" font-size="18">レビュー</text>
+  </g>
+  <!-- callout -->
+  <path d="M550 152 L550 186" stroke="#b64b12" stroke-width="3" fill="none"/>
+  <rect x="405" y="186" width="290" height="44" rx="10" fill="#b64b12"/>
+  <text x="550" y="215" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">ここが監査の質を決める</text>
+</svg>
