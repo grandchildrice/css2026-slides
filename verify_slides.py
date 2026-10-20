@@ -21,7 +21,7 @@ def verify(url, capture):
         separator = re.search(r'data-separator="([^"]+)"', response.text()).group(1)
         page.wait_for_function("window.Reveal && Reveal.isReady()")
         slides = page.evaluate("Reveal.getSlides().length")
-        assert slides == 28, f"Expected 28 slides, got {slides}"
+        assert slides == 27, f"Expected 27 slides, got {slides}"
         assert page.locator(".slides aside.notes").count() == slides
         assert page.locator(".slides").inner_text().find("Note:") == -1
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
@@ -30,8 +30,8 @@ def verify(url, capture):
         assert page.locator("img.scenario-visual").count() == 1
         assert page.locator("img.scope-visual").count() == 1
         assert page.locator(".slides section:nth-child(2) .takeaway").count() == 0
-        assert page.locator(".slides section:nth-child(4) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
-        assert "証明から前提" in page.locator(".cover-claim").text_content()
+        assert page.locator(".slides section:nth-child(3) img.ethereum-logo").get_attribute("src") == "figs/ethereum.svg"
+        assert page.locator(".cover-claim").count() == 0
         assert page.locator("img.result-visual").count() == 1
         assert page.locator("pre code").count() == 3
         assert page.locator("code.language-json").count() == 1
@@ -42,12 +42,9 @@ def verify(url, capture):
             for number in section["slides"]:
                 tag = page.locator(f".slides section:nth-child({number}) .section-tag").text_content()
                 assert tag == section["section"], f"Slide {number} tagged {tag}, expected {section['section']}"
-        rows = page.locator(".agenda-row").evaluate_all("els => els.map(e => [e.querySelector('.name').innerText, e.querySelector('.pg').innerText])")
-        pages = dict(rows)
-        for section in inventory["structure"]:
-            first, last = min(section["slides"]), max(section["slides"])
-            expected = f"{first}枚目" if first == last else f"{first}〜{last}枚目"
-            assert pages.get(section["section"]) == expected, f"Agenda {section['section']}: {pages.get(section['section'])} != {expected}"
+        agenda_names = page.locator(".agenda-row .name").all_text_contents()
+        assert agenda_names == [section["section"] for section in inventory["structure"] if section["section"] != "補足"], f"Agenda rows mismatch: {agenda_names}"
+        assert page.locator(".agenda-row .pg").count() == 0
         titles = page.locator(".slides section > h2, .slides .cover h1").all_text_contents()
         assert titles == [slide["title"] for slide in inventory["slides"]]
         assert inventory["main_slides"] + inventory["appendix_slides"] == slides
@@ -124,12 +121,9 @@ def verify(url, capture):
                         return b.left < frame.left - 2 || b.right > frame.right + 2 || b.top < frame.top - 2 || b.bottom > frame.bottom + 2;
                     }).map(e => e.tagName + ':' + e.className);
                     const overflowingCode = Array.from(slide.querySelectorAll('pre, pre code')).filter(e => e.scrollWidth > e.clientWidth + 2).map(e => e.tagName);
-                    return {visible: visible.length, outside, overflowingCode, notes: getComputedStyle(slide.querySelector('aside.notes')).display, title: slide.querySelector('h1,h2').innerText, indicator: document.querySelector('#section-indicator').innerText, tag: slide.querySelector('.section-tag')?.innerText ?? null};
+                    return {visible: visible.length, outside, overflowingCode, notes: getComputedStyle(slide.querySelector('aside.notes')).display, title: slide.querySelector('h1,h2').innerText};
                 }""")
                 assert result["notes"] == "none", f"Visible notes on slide {index + 1}"
-                assert result["indicator"].startswith("現在地："), f"Missing location indicator on slide {index + 1}"
-                if result["tag"]:
-                    assert result["indicator"] == "現在地：" + result["tag"], f"Indicator mismatch on slide {index + 1}: {result}"
                 assert result["visible"] == 1, f"Multiple visible slides: {result}"
                 assert not result["outside"], f"Overflow {viewport} slide {index + 1}: {result}"
                 assert not result["overflowingCode"], f"Code overflow slide {index + 1}: {result}"
@@ -137,8 +131,8 @@ def verify(url, capture):
                     page.screenshot(path=str(output / f"slide-{index + 1:02}.png"))
             print(f"PASS: {viewport['width']}x{viewport['height']}, {slides} slides")
         page.evaluate("Reveal.slide(0)")
-        page.evaluate("Reveal.slide(5)")
-        assert page.evaluate("Reveal.getIndices().h") == 5
+        page.evaluate("Reveal.slide(4)")
+        assert page.evaluate("Reveal.getIndices().h") == 4
         with page.expect_popup() as popup_info:
             page.keyboard.press("s")
         popup = popup_info.value

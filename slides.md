@@ -3,13 +3,12 @@
 <h1>仕様どおりに実装すれば<br>安全か</h1>
 <p class="subtitle">イーサリアムのコンセンサス仕様に明示されない<br>安全性の前提条件（予備調査）</p>
 <p class="authors"><strong>村上 大岳</strong>（愛知総合工科高校）<br>神波 真聖・柳浜 万里（Nyx Foundation）<br>釘宮 由成（Independent Researcher）</p>
-<p class="cover-claim">安全性の証明から前提を取り出し、確認項目にする。</p>
 </div>
 
 Note:
 本日は、イーサリアムを例に、共通仕様から作られる複数のソフトの確認方法をお話しします。
 提案は、安全性の証明から前提を取り出し、仕様を読むだけでは拾いにくい確認項目を補うことです。
-背景、出発点、手法、分析結果、まとめの順で話します。
+背景、先行研究、手法、分析結果、まとめの順で話します。
 
 ---
 
@@ -18,29 +17,15 @@ Note:
 ## 目次
 
 <div class="agenda-list">
-<div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumは複数の実装で動き、食い違いは実害になる</span><span class="pg">4〜5枚目</span></div>
-<div class="agenda-row"><span class="no">2</span><span class="name">出発点</span><span class="desc">仕様駆動の監査（SPECA）が取りこぼしたもの</span><span class="pg">6枚目</span></div>
-<div class="agenda-row"><span class="no">3</span><span class="name">手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span><span class="pg">7〜11枚目</span></div>
-<div class="agenda-row"><span class="no">4</span><span class="name">分析結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span><span class="pg">12〜14枚目</span></div>
-<div class="agenda-row"><span class="no">5</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span><span class="pg">15枚目</span></div>
-<div class="agenda-row sub"><span class="no">－</span><span class="name">補足</span><span class="desc">質疑用の資料</span><span class="pg">16〜28枚目</span></div>
+<div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumは複数の実装で動き、食い違いは実害になる</span></div>
+<div class="agenda-row"><span class="no">2</span><span class="name">先行研究</span><span class="desc">チェックリスト生成が、監査の質を決める</span></div>
+<div class="agenda-row"><span class="no">3</span><span class="name">手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
+<div class="agenda-row"><span class="no">4</span><span class="name">分析結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
+<div class="agenda-row"><span class="no">5</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
 </div>
 
 Note:
-目次です。背景、出発点、手法、分析結果、まとめの順に進みます。
-本編は15枚、補足は13枚です。質疑では補足の該当枚を開きます。
-
----
-
-<!-- .slide: data-section="メッセージ" -->
-
-## 本日のメッセージ
-
-<p class="summary">Leanの定理から前提を取り出し、<br>仕様の文章にどれだけ明示されているかを調べた。</p>
-
-Note:
-仕様駆動の監査の確認項目を、Leanの定理から作れないか。そう考えて、定理の前提を取り出し、仕様の文章にどれだけ書かれているかを調べました。
-その経緯と結果を、順に話します。
+この流れで進めます。
 
 ---
 
@@ -79,13 +64,13 @@ Note:
 
 ---
 
-<p class="section-tag">出発点</p>
+<p class="section-tag">先行研究</p>
 
-## 出発点：SPECAは、プロパティ生成が性能を決める
+## 先行研究：SPECAでは、プロパティ生成が監査の質を決める
 
-<p class="term-line"><span class="term">仕様駆動の監査</span><br>仕様からチェックリストを大量に作って確認する監査。<br>その一つが、私たちの先行研究 SPECA（チェックリストを「プロパティ」と呼ぶ）。</p>
+<p class="term-line"><span class="term">仕様駆動の監査</span><br>仕様からチェックリストを大量に作り、それに照らして監査する。<br>その一つが、私たちの先行研究 SPECA（チェックリストを「プロパティ」と呼ぶ）。</p>
 <img class="speca-visual" src="figs/diagram-speca-architecture.svg" alt="SPECAの構成。仕様、仕様の探索、サブグラフ抽出、プロパティ生成、コード箇所の特定、証明試行による監査、レビューの順。プロパティ生成が監査の質を決める">
-<p class="message">監査の質を決める要所は、<strong>プロパティ生成</strong>。</p>
+<p class="message">監査で重要なのは、チェックリスト（プロパティ）を<strong>生成する過程</strong>。</p>
 
 Note:
 このスライドで話すこと：SPECAの構成と、性能を決める箇所。

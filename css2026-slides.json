@@ -6,49 +6,50 @@
   "format": "Reveal.js Markdown with HTML diagrams and Note: speaker notes",
   "audience": "実装・テストの基礎を知る一般のエンジニア。イーサリアムや形式検証の専門知識は前提にしない。",
   "message": "安全性の証明から前提を取り出し、仕様の文章だけから作る確認項目を補う。専門用語の解説が目的ではない。",
-  "main_slides": 15,
+  "main_slides": 14,
   "appendix_slides": 13,
   "structure": [
     {
       "section": "背景",
       "slides": [
-        4,
-        5
+        3,
+        4
       ]
     },
     {
-      "section": "出発点",
+      "section": "先行研究",
       "slides": [
-        6
+        5
       ]
     },
     {
       "section": "手法",
       "slides": [
+        6,
         7,
         8,
         9,
-        10,
-        11
+        10
       ]
     },
     {
       "section": "分析結果",
       "slides": [
+        11,
         12,
-        13,
-        14
+        13
       ]
     },
     {
       "section": "まとめ",
       "slides": [
-        15
+        14
       ]
     },
     {
       "section": "補足",
       "slides": [
+        15,
         16,
         17,
         18,
@@ -60,8 +61,7 @@
         24,
         25,
         26,
-        27,
-        28
+        27
       ]
     }
   ],
@@ -69,47 +69,47 @@
   "illustration_sources": "figs/illustration-sources.json",
   "visuals": [
     {
-      "slide": 4,
+      "slide": 3,
       "file": "figs/ethereum.svg",
       "purpose": "公式Ethereumカラーロゴ"
     },
     {
-      "slide": 4,
+      "slide": 3,
       "file": "figs/illustration-clients.svg",
       "purpose": "実装ロゴと各言語名の下の言語ロゴ"
     },
     {
-      "slide": 5,
+      "slide": 4,
       "file": "figs/diagram-chain-split.svg",
       "purpose": "ブロック1〜3を共有し、実装AとBが4〜6を別々に確定して履歴が分かれる図解（不可逆・資産停止）"
     },
     {
-      "slide": 6,
+      "slide": 5,
       "file": "figs/diagram-speca-architecture.svg",
       "purpose": "SPECAのパイプライン構成。プロパティ生成を強調"
     },
     {
-      "slide": 12,
+      "slide": 11,
       "file": "figs/chart-premises.svg",
       "purpose": "48/57件のドーナツ図と57マス"
     },
     {
-      "slide": 13,
+      "slide": 12,
       "file": "figs/scenario-denominators.svg",
       "purpose": "全体の定義が異なる集計を示す仮想例"
     },
     {
-      "slide": 18,
+      "slide": 17,
       "file": "figs/illustration-votes.svg",
       "purpose": "同じ参加者集合・同じ重みなら2つの2/3支持集合が1/3重なるクォーラム交差のベン図イラスト"
     },
     {
-      "slide": 19,
+      "slide": 18,
       "file": "figs/diagram-spec-pipeline.svg",
       "purpose": "設計→仕様→実装の翻訳で前提が落ちる関係図"
     },
     {
-      "slide": 20,
+      "slide": 19,
       "file": "figs/diagram-guarantee-scope.svg",
       "purpose": "仕様準拠の世界と前提Pが満たされる世界の関係図（保証の適用範囲）"
     }
@@ -178,10 +178,6 @@
       "title": "目次"
     },
     {
-      "type": "message",
-      "title": "本日のメッセージ"
-    },
-    {
       "type": "background",
       "title": "研究背景：Ethereumは、共通仕様から複数の実装が作られる"
     },
@@ -191,7 +187,7 @@
     },
     {
       "type": "audit-limit",
-      "title": "出発点：SPECAは、プロパティ生成が性能を決める"
+      "title": "先行研究：SPECAでは、プロパティ生成が監査の質を決める"
     },
     {
       "type": "idea",
