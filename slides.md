@@ -18,10 +18,13 @@ Note:
 
 <div class="agenda-list">
 <div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumは複数の実装で動き、食い違いは実害になる</span></div>
-<div class="agenda-row"><span class="no">2</span><span class="name">先行研究</span><span class="desc">チェックリスト生成が、監査の質を決める</span></div>
-<div class="agenda-row"><span class="no">3</span><span class="name">手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
-<div class="agenda-row"><span class="no">4</span><span class="name">分析結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
-<div class="agenda-row"><span class="no">5</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
+<div class="agenda-row"><span class="no">2</span><span class="name">先行研究</span><span class="desc">チェックリスト生成が、監査の質を決める。その限界</span></div>
+<div class="agenda-row"><span class="no">3</span><span class="name">過去の事例</span><span class="desc">Ethereumの合意の安全性は、Leanで書かれつつある</span></div>
+<div class="agenda-row"><span class="no">4</span><span class="name">RQ</span><span class="desc">Leanの前提は、仕様の文章にどれだけ明示されているか</span></div>
+<div class="agenda-row"><span class="no">5</span><span class="name">提案手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
+<div class="agenda-row"><span class="no">6</span><span class="name">実験結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
+<div class="agenda-row"><span class="no">7</span><span class="name">考察</span><span class="desc">実際のバグと前提の非明示は、どう関係しうるか</span></div>
+<div class="agenda-row"><span class="no">8</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
 </div>
 
 Note:
@@ -81,29 +84,27 @@ Note:
 
 ---
 
-<p class="section-tag">手法</p>
+<p class="section-tag">先行研究</p>
 
-## Leanで仕様を書けば、プロパティ生成を強化できる
+## 先行研究の限界：プロパティ生成の入力は、仕様の文章だけ
 
 <div class="grid">
-<div class="panel"><p class="label">仕様の文章から生成（現在）</p><p>文章に書かれたことだけが、<br>プロパティの元になる。</p></div>
-<div class="panel blue"><p class="label">Leanで書いた仕様も入力にする</p><p>結論に必要な条件は、<br><strong>仮説にすべて書かれる</strong>。<br>肝になる条件が明らかになる。</p></div>
+<div class="panel"><p class="label">仕様の文章から生成（現在）</p><p>文章に書かれたことだけが、<br>プロパティの元になる。<br>書かれていない前提は拾えない。</p></div>
+<div class="panel blue"><p class="label">だったら</p><p>仕様の文章以外にも、<br>安全性の前提が明示された<br><strong>入力</strong>を使えないか。</p></div>
 </div>
-<p class="message">Leanの定理から前提を引っ張れれば、<strong>プロパティ生成を強化</strong>できるのでは。</p>
+<p class="message">プロパティ生成の入力は、<strong>仕様の文章だけ</strong>に限られている。</p>
 
 Note:
-このスライドで話すこと：そこで考えた案。プロパティ生成に、Leanで書いた仕様を使えないか。
-プロパティ生成は、今は仕様の文章が入力です。文章に書かれていることしか、プロパティの元にできません。
-一方、Leanの定理では、結論に必要な条件はすべて仮説に書かないと、証明が通りません。つまり、モデルの範囲では、暗黙の前提が残らない形になっています。
-だったら、Leanの定理から前提を引っ張ってこれれば、プロパティ生成を強化できるのではないか。これが、この研究のスタートです。
+このスライドで話すこと：先行研究（仕様駆動の監査）の限界。
+プロパティ生成は、今は仕様の文章だけが入力です。文章に書かれていることしか、プロパティの元にできません。
 仕様の全体をグラフにして全部たどる方法もありますが、規模が大きくなると重くなる、というのが私たちの見立てです。ここは測定していません。
-ただし、モデルが現実の仕様を正しく写しているかは、別の問題です。強化できたかどうかを、脆弱性の発見数で比べることは、今後の課題です。
+では、仕様の文章以外に、安全性の前提がすべて明示された入力はないか。そこで目を付けたのがLeanです。
 
 ---
 
-<p class="section-tag">手法</p>
+<p class="section-tag">過去の事例</p>
 
-## Leanは、定理の証明を機械が検査する言語
+## Lean: 定理の証明を機械が検査する言語
 
 <div class="grid three">
 <div class="panel purple"><h3>定理</h3><p>仮説（条件）と<br>結論（保証）の組。</p></div>
@@ -120,9 +121,9 @@ Ethereumの世界では、合意の安全性を示す定理を、Leanで書く�
 
 ---
 
-<p class="section-tag">手法</p>
+<p class="section-tag">RQ</p>
 
-## 問い：Leanの前提は、仕様の文章にどれだけ明示されているか
+## RQ：Leanの前提は、仕様の文章にどれだけ明示されているか
 
 <div class="grid">
 <div class="panel purple"><p class="label">Leanの定理</p><p>仮説（前提）が、<br>すべて書かれている。</p></div>
@@ -138,14 +139,14 @@ SPECAの側にも、Leanの定理を確認項目へ変換するプラグイン�
 
 ---
 
-<p class="section-tag">手法</p>
+<p class="section-tag">提案手法</p>
 
-## 手法：Leanの前提を取り出し、仕様の文章と突き合わせる
+## 提案手法：Leanの前提を取り出し、仕様の文章と突き合わせる
 
 <div class="flow plain extraction-flow">
 <div class="panel purple"><h3>Leanの定理</h3><p>仮説（条件） ⇒ 結論（保証）</p></div>
-<div class="panel"><h3>前提を抽出</h3><p><strong>仮説を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
-<div class="panel blue"><h3>仕様の文章と照合</h3><p>書かれているかを判定</p><p class="actor">キーワード照合器＋6種類のLLM</p></div>
+<div class="panel"><p class="step-label">Step 1</p><h3>前提を抽出</h3><p><strong>仮説を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
+<div class="panel blue"><p class="step-label">Step 2</p><h3>仕様の文章と照合</h3><p>書かれているかを判定</p><p class="actor">キーワード照合器＋6種類のLLM</p></div>
 </div>
 <p class="message">抽出は構文を読むだけで、生成は入らない。<br>判定は自動で、正解ラベルとの照合は<strong>未実施</strong>。</p>
 
@@ -158,13 +159,13 @@ Note:
 
 ---
 
-<p class="section-tag">手法</p>
+<p class="section-tag">提案手法</p>
 
-## 実例：定理に書かれた「条件」の部分を取り出す
+## 実験手法：定理に書かれた「条件」の部分を取り出す
 
 <div class="grid" style="margin-bottom: 4px;">
-<div><h3 style="margin: 0 0 8px;">定理文の、コロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
-<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラムの重み閾値：</strong><br>その対象の総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
+<div><h3 style="margin: 0 0 8px;">定理文のコロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
+<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラムの重み閾値：</strong><br>クォーラムの総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
 </div>
 <p class="message" style="margin: 4px 0 0; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
 
@@ -176,28 +177,23 @@ Note:
 
 ---
 
-<p class="section-tag">分析結果</p>
+<p class="section-tag">実験結果</p>
 
-## 抽出した前提は、仕様に明示されているか
+## 抽出結果
 
-<div class="flow plain">
-<div class="panel purple"><span class="number">17</span><h3>対象の定理</h3><p class="small">仮説を列挙・原典照合</p></div>
-<div class="panel"><span class="number">57</span><h3>延べ前提条件</h3><p class="small">同一概念の反復を含む</p></div>
-<div class="panel blue"><span class="number">89</span><h3>仕様ファイル</h3><p class="small">文章の安全性要件と照合</p></div>
-</div>
-<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:150px">
+<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:260px">
 <p class="message"><strong>10概念中7概念</strong>が非明示と判定。<strong>「明示」と全員一致は0件。</strong></p>
 
 Note:
 このスライドで話すこと：抽出した前提は、仕様の文章に明示されていたか。自動判定の結果。
-17の定理に由来する延べ57件の前提条件を、89の仕様ファイルと照合しました。
+17の定理に由来する延べ57件の前提条件を、89の仕様ファイルと照合しました。「概念」の数え方は補足で説明します。
 主な数字は、10概念中7概念が、すべての自動判定で「仕様の文章に安全性要件として明示されていない」と判定されたことです。
 延べ件数では57件中48件で、全員が「明示」と同意した条件は0件でした。57件は同じ概念の反復を含むので、独立した57種類ではありません。
 これはバグの数ではありません。判定はキーワード照合器と6種類のLLMによる自動判定で、正解ラベルとの照合はまだです。判定器どうしが一致した、という意味です。
 
 ---
 
-<p class="section-tag">分析結果</p>
+<p class="section-tag">実験結果</p>
 
 ## 「2/3」は合っている。でも、何の2/3か？
 
@@ -213,7 +209,7 @@ Note:
 
 ---
 
-<p class="section-tag">分析結果</p>
+<p class="section-tag">考察</p>
 
 ## 実例：Nimbus #461。壊れていたのは、計算ではなく状態
 
@@ -398,6 +394,27 @@ Note:
 本編の例はSlashableBound.leanにある定理の仮説です。包含の仮説2式、重みの閾値の仮説2式を抜粋しました。
 本研究の57件は、確認項目に対応付けたmust-establish一覧の延べ件数であり、原典のすべての仮説行を単純に数えたものではありません。
 安全性の核心を示す定理と、前提の抽出を説明する例の役割を区別してください。Leanのカーネルが受理しても、モデルが現実を忠実に表すことまで自動的に保証されるわけではありません。
+
+---
+
+<p class="section-tag">補足</p>
+
+## 補足：「概念」とは何か
+
+<p>延べ57件の前提条件は、文言は違っても同じ安全性の要求を指すものがある。<br>それらをまとめたものが「概念」。10概念中7概念が、全自動判定で非明示。</p>
+<table>
+<thead><tr><th>概念の例</th><th>延べ件数での表れ方</th></tr></thead>
+<tbody>
+<tr><td>参加者集合の包含</td><td><code>qL ⊆ vL</code>、<code>qR ⊆ vR</code> など、定理ごとに複数回出現</td></tr>
+<tr><td>クォーラムの重み閾値</td><td><code>two_third (wt stake v) ≤ wt stake q</code> など、定理ごとに複数回出現</td></tr>
+</tbody>
+</table>
+<p class="small">同じ概念の反復を1件ずつ数えると延べ57件、重複を除くと10概念になる。延べ件数（57分の48）と概念単位（10分の7）は別の集計であり、取り違えないよう区別する。</p>
+
+Note:
+「概念」は、著者らが延べ57件の前提条件を意味のまとまりで分類した単位です。
+機械的な抽出では、同じ安全性の要求が複数の定理に別々の変数名・式で現れます。それらをまとめたのが概念で、10個あります。
+延べ件数（57分の48、84.2%）と、概念単位（10分の7）は、数え方が違う別の集計です。発表では概念単位の「10分の7」を主に使っています。
 
 ---
 
