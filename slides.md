@@ -219,72 +219,66 @@ Note:
 
 <p class="section-tag">提案手法</p>
 
-## 照合したLeanの証明：8ファイル・17定理
+## コンセンサスプロトコルの安全性に関する17の定理
 
-<div class="grid tl">
-<table class="inv">
-<tr><th>層・ファイル</th><th class="n">定理</th><th class="n">CHK-*</th></tr>
-<tr><td><code>Core/Theories/AccountableSafety</code></td><td class="n">5</td><td class="n">10</td></tr>
-<tr><td><code>Core/Theories/SlashableBound</code></td><td class="n">3</td><td class="n">3</td></tr>
-<tr><td><code>Core/Theories/PlausibleLiveness</code></td><td class="n">1</td><td class="n">2</td></tr>
-<tr><td><code>Core/Lemmas/AccountableSafety</code></td><td class="n">2</td><td class="n">2</td></tr>
-<tr><td><code>Core/Lemmas/Justification</code></td><td class="n">2</td><td class="n">2</td></tr>
-<tr><td><code>Executable/Justification</code></td><td class="n">1</td><td class="n">3</td></tr>
-<tr><td><code>Executable/Slashing</code></td><td class="n">2</td><td class="n">4</td></tr>
-<tr><td><code>Executable/Quorums</code></td><td class="n">1</td><td class="n">1</td></tr>
-<tr class="total"><td>計　8ファイル</td><td class="n">17</td><td class="n">27</td></tr>
+<table class="thm-list">
+<tr><th>定理</th><th>何を言う定理か</th></tr>
+<tr><td><code>k_safety'</code></td><td>相反する2つの確定ブロックは、2/3交差のスラッシュを導く</td></tr>
+<tr><td><code>k_non_equal_height_case</code></td><td>高さが違う相反確定でも、交差はスラッシュ対象</td></tr>
+<tr><td><code>k_slash_surround_case_general</code></td><td>確定をまたぐ正当化リンクも、交差のスラッシュを導く</td></tr>
+<tr><td><code>no_k_finalized_justified_same_height</code></td><td>交差が未スラッシュなら、確定と別の正当化は同じ高さを取れない</td></tr>
+<tr><td><code>finalization_fork_means_same_finalization_fork_one</code></td><td>確定の分岐は、深さ1の分岐と同値</td></tr>
+<tr><td><code>slashable_bound</code></td><td>分岐のときスラッシュされる重みの下界</td></tr>
+<tr><td><code>quorum_intersection_weight_lower</code></td><td>2つのクォーラムの交差が持つ重みの下界</td></tr>
+<tr><td><code>validator_intersection_lower_bound</code></td><td>出入りを調整した名簿の重みは、名簿の交差で押さえられる</td></tr>
+<tr><td><code>plausible_liveness_construct_extension</code></td><td>健全な2/3があれば、確定を進める拡張を構成できる</td></tr>
+<tr><td><code>no_two_justified_same_height</code></td><td>交差が未スラッシュなら、同じ高さで2ブロックは正当化されない</td></tr>
+<tr><td><code>two_justified_same_height_slashed</code></td><td>同じ高さで2ブロックが正当化されたら、交差はスラッシュ対象</td></tr>
+<tr><td><code>finalized_means_justified_child</code></td><td>確定したブロックには、正当化された子がある</td></tr>
+<tr><td><code>k_finalized_means_justified</code></td><td>k-確定したブロックは、正当化されている</td></tr>
+<tr><td><code>justified_iff_bounded</code></td><td>正当化の述語と、実行できる判定関数が一致する</td></tr>
+<tr><td><code>slashed_double_vote_iff_bex</code></td><td>スラッシュ判定と、二重投票の存在が一致する</td></tr>
+<tr><td><code>slashed_surround_vote_iff_bex</code></td><td>スラッシュ判定と、囲い込み投票の存在が一致する</td></tr>
+<tr><td><code>q_intersection_slashed_iff_exists_witness</code></td><td>交差のスラッシュ判定と、証拠の探索が一致する</td></tr>
 </table>
-<div class="funnel">
-<div class="f"><span class="n">17</span><span class="l">定理</span></div>
-<div class="fa">↓　型・モデルの部品を除く</div>
-<div class="f"><span class="n">27</span><span class="l">CHK-* 監査項目</span></div>
-<div class="fa">↓　前提ごとに展開</div>
-<div class="f last"><span class="n">57</span><span class="l">前提条件（must-establish）</span></div>
-</div>
-</div>
 
 Note:
-このスライドで話すこと：照合した左側、つまりLeanの証明が何だったか。件数がどこから来るか。
-使ったのはgasper-lean4のcommit 7650709です。CHK項目を導いた17定理が8ファイルにまたがっています。安全性の核心はCore/Theories/AccountableSafetyの5定理です。17定理はすべて実在し、sorryを含みません。
-右が件数の出どころです。17の定理から、型やモデルの部品を除いた結果、27の監査項目が立ちます。その27項目を前提ごとに展開すると、延べ57件の前提条件になります。27項目のうち、非空の前提を持つのは17項目です。
-この57件が、このあとの分母です。延べ件数なので、同じ概念の反復を含みます。独立した57種類ではありません。
+このスライドで話すこと：照合した左側、Leanの証明が何だったか。
+gasper-lean4のcommit 7650709から、安全性に関わる17の定理を取りました。8ファイルにまたがっています。17定理はすべて実在し、sorryを含みません。
+上の5つが安全性の核心です。相反する2つの確定ブロックがあれば、2/3のクォーラム交差がスラッシュ対象になる。これがaccountable safetyの本体で、残りは高さが同じ場合、違う場合、囲い込み投票の場合と、場合分けの枝です。
+真ん中はスラッシュされる重みの下界と、正当化の基本性質です。
+下の4つは、述語と実行できる判定関数が一致することを言う定理です。証明の世界と実装の世界をつなぐ部分です。
+この17定理から、延べ57件の前提条件が出てきます。この57件が、このあとの分母です。
 
 ---
 
 <p class="section-tag">提案手法</p>
 
-## 照合した仕様書：consensus-specs 89ファイル
+## それに対応するSPECのファイル
 
-<div class="grid tl">
-<div>
-<div class="fork-group">
-<p class="head"><span>稼働中フォーク</span><span class="cnt">50</span></p>
-<p class="files">phase0 7 ／ altair 10 ／ bellatrix 7 ／ capella 9 ／ deneb 9 ／ electra 8</p>
-</div>
-<div class="fork-group">
-<p class="head"><span>次期・実験フォーク</span><span class="cnt">39</span></p>
-<p class="files">fulu 7 ／ gloas 13 ／ heze 8 ／ _features 11</p>
-</div>
-<div class="grep-strip"><code>grep -ri "quorum" specs/</code><span class="count">0 件</span><span>稼働中フォーク</span></div>
-</div>
-<div>
-<p class="label">探索プロトコル（全89ファイル）</p>
-<div class="steps">
-<p class="s"><span class="no">①</span><span>シンボル名で <code>grep</code></span></p>
-<p class="s"><span class="no">②</span><span>同義語・言い換えで <code>grep</code><br><span class="muted">honest majority / quorum intersection / safety assumption / conflicting finalization</span></span></p>
-<p class="s"><span class="no">③</span><span>関連ファイルを通読</span></p>
-</div>
-<p class="pick"><span class="tag">ただし</span><span>安全性の<strong>帰結</strong>を述べた散文はある<br><code>weak-subjectivity.md</code> ・ <code>fast-confirmation.md</code></span></p>
-</div>
-</div>
+<p class="spec-scope">探索は <strong>consensus-specs 89ファイル</strong>すべて。対応づいたのは <strong>3ファイル・8セクション</strong>。</p>
+<table class="thm-list spec-list">
+<tr><th>ファイル／セクション</th><th>どういう仕様か</th><th class="n">定理</th></tr>
+<tr class="group"><td colspan="3"><code>phase0/beacon-chain.md</code>　ビーコンチェーンの状態遷移</td></tr>
+<tr><td class="sec"><code>#process_justification_and_finalization</code></td><td>2/3の集計で正当化と確定を進める</td><td class="n">8</td></tr>
+<tr><td class="sec"><code>#process_slashings</code></td><td>スラッシュの適用と残高の減算</td><td class="n">3</td></tr>
+<tr><td class="sec"><code>#process_attestation</code></td><td>投票の受理と集計への反映</td><td class="n">2</td></tr>
+<tr><td class="sec"><code>#process_epoch</code></td><td>エポック末の一括処理</td><td class="n">1</td></tr>
+<tr><td class="sec"><code>#process_registry_updates</code></td><td>バリデータ名簿の出入り</td><td class="n">1</td></tr>
+<tr><td class="sec"><code>#process_effective_balance_updates</code></td><td>実効残高の更新</td><td class="n">1</td></tr>
+<tr class="group"><td colspan="3"><code>phase0/fork-choice.md</code>　フォーク選択</td></tr>
+<tr><td class="sec"><code>#on_block</code></td><td>ブロックを受け取ったときの選択規則</td><td class="n">1</td></tr>
+<tr class="group"><td colspan="3"><code>phase0/p2p-interface.md</code>　ノード間の通信</td></tr>
+<tr><td class="sec"><code>#the-gossip-domain-gossipsub</code></td><td>ゴシップで受け取る前の検証規則</td><td class="n">2</td></tr>
+</table>
+<p class="small muted" style="margin: 4px 0 0; font-size: 18px;">同じ定理が複数のセクションに対応することがあるため、右列の合計は17を超える。</p>
 
 Note:
-このスライドで話すこと：照合した右側、つまり仕様書が何だったか。どう探したか。
-consensus-specsのcommit 2359a5eの、specs以下のマークダウン全89ファイルです。稼働中フォークが50、次期と実験が39です。
-探索は3段です。シンボル名でgrep、同義語や言い換えでgrep、最後に関連ファイルの通読。1ファイルも残さず全件に対して完了しています。
-結果、quorumという語は稼働中フォークに0件でした。唯一の出現は次期フォークgloasの、ビルダー支払い閾値という無関係な箇所だけです。
-ただし、安全性の帰結を述べた散文はあります。weak-subjectivity.mdは、相反するチェックポイントがfinalizeされれば最低1/3がスラッシュされるという帰結を書いています。fast-confirmation.mdはByzantine割合の閾値を置いています。
-ですから私たちの「非明示」は、安全性の概念が一切無いという意味ではありません。定理が要求する分解された前提が、実装や監査が確認できる検査可能な要件としては与えられていない、という意味です。
+このスライドで話すこと：照合した右側、仕様書が何だったか。
+consensus-specsのcommit 2359a5eの、specs以下のマークダウン全89ファイルを探索しました。シンボル名でgrep、同義語や言い換えでgrep、最後に関連ファイルの通読という3段です。
+その結果、17定理に対応づいたのは3ファイル・8セクションでした。中心はbeacon-chain.mdの正当化とファイナリゼーションの箇所で、8定理がここに対応します。フォーク選択とゴシップの検証規則にもまたがっていて、単一ファイルに閉じた探索ではありません。
+右の列は、そのセクションに対応する定理の数です。同じ定理が複数のセクションに対応することがあるので、合計は17を超えます。
+この対応づけは、Leanの定義から仕様シンボルへの表を引いているだけで、解釈は挟んでいません。
 
 ---
 
