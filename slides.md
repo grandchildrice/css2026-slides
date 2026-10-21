@@ -165,15 +165,16 @@ Note:
 
 <div class="grid" style="margin-bottom: 4px;">
 <div><h3 style="margin: 0 0 8px;">定理文のコロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
-<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラムの重み閾値：</strong><br>クォーラムの総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
+<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラム：</strong><br>その集計対象の総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
 </div>
-<p class="message" style="margin: 4px 0 0; font-size: 28px;">「2/3」という数字だけでなく、<br><strong>どの参加者集合・どの重みを使うか</strong>まで前提に含まれる。</p>
+<p class="message" style="margin: 4px 0 0; font-size: 28px;">この②が、<strong>「クォーラム」</strong>という概念。<br>次のスライドで、この語が仕様の文章にどれだけ出てくるかを見る。</p>
 
 Note:
 このスライドで話すこと：定理の仮説が、どの条件を指すかを具体例で示す。
-左の記号は細かく読む必要はありません。要点は右の日本語2行です。「支持した人が名簿に入っているか」「全体の2/3以上いるか」。
+左の記号は細かく読む必要はありません。要点は右の日本語2行です。「支持した人が名簿に入っているか」「クォーラム（全体の2/3以上）を満たすか」。
 定理文は「theorem 名前（仮説）…：結論」という形で、コロンの手前の括弧が前提です。ツールはこれをLeanの構文として読み、型やモデルの部品を除いて実体条件だけを選別します。
 解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から延べ57件が出ました。
+②の「クォーラム」は、今回の10概念のうちの1つです。次のスライドの結果と、このあと直接つながります。
 
 ---
 
@@ -181,14 +182,15 @@ Note:
 
 ## 抽出結果：Leanの前提は、仕様の文章に明示されていなかった
 
-<p class="lead-in">Leanの定理から取り出した前提を、仕様の文章（89ファイル）と照合した。</p>
-<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:220px">
-<p class="message"><strong>10概念中7概念</strong>が非明示と判定。<strong>「明示」と全員一致は0件。</strong></p>
+<p class="lead-in">さきほどの「クォーラム」を含め、取り出した前提を仕様の文章（89ファイル）と照合した。</p>
+<img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:200px">
+<p class="message"><strong>10概念中7概念</strong>が非明示と判定。<strong>「クォーラム」という語自体、稼働中の仕様には0件。</strong></p>
 
 Note:
 このスライドで話すこと：抽出した前提は、仕様の文章に明示されていたか。自動判定の結果。
 17の定理に由来する延べ57件の前提条件を、89の仕様ファイルと照合しました。「概念」の数え方は補足で説明します。
 主な数字は、10概念中7概念が、すべての自動判定で「仕様の文章に安全性要件として明示されていない」と判定されたことです。
+象徴的なのは、さきほどの「クォーラム」です。この語自体が、稼働中フォークの仕様の散文に一度も出てきません。唯一の出現は、次期フォークの無関係な閾値の箇所だけでした。
 延べ件数では57件中48件で、全員が「明示」と同意した条件は0件でした。57件は同じ概念の反復を含むので、独立した57種類ではありません。
 これはバグの数ではありません。判定はキーワード照合器と6種類のLLMによる自動判定で、正解ラベルとの照合はまだです。判定器どうしが一致した、という意味です。
 次のスライドで、この非明示の前提の一つが、実際のバグと同じラベル圏にあった例を見ます。
