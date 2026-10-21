@@ -17,14 +17,12 @@ Note:
 ## 目次
 
 <div class="agenda-list">
-<div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumは複数の実装で動き、食い違いは実害になる</span></div>
-<div class="agenda-row"><span class="no">2</span><span class="name">先行研究</span><span class="desc">チェックリスト生成が、監査の質を決める。その限界</span></div>
-<div class="agenda-row"><span class="no">3</span><span class="name">過去の事例</span><span class="desc">Ethereumの合意の安全性は、Leanで書かれつつある</span></div>
-<div class="agenda-row"><span class="no">4</span><span class="name">RQ</span><span class="desc">Leanの前提は、仕様の文章にどれだけ明示されているか</span></div>
-<div class="agenda-row"><span class="no">5</span><span class="name">提案手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
-<div class="agenda-row"><span class="no">6</span><span class="name">実験結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
-<div class="agenda-row"><span class="no">7</span><span class="name">考察</span><span class="desc">実際のバグと前提の非明示は、どう関係しうるか</span></div>
-<div class="agenda-row"><span class="no">8</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
+<div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumの仕組みと、仕様駆動の監査。Leanで書かれつつある安全性</span></div>
+<div class="agenda-row"><span class="no">2</span><span class="name">RQ</span><span class="desc">Leanの前提は、仕様の文章にどれだけ明示されているか</span></div>
+<div class="agenda-row"><span class="no">3</span><span class="name">提案手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
+<div class="agenda-row"><span class="no">4</span><span class="name">実験結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
+<div class="agenda-row"><span class="no">5</span><span class="name">考察</span><span class="desc">実際のバグと前提の非明示は、どう関係しうるか</span></div>
+<div class="agenda-row"><span class="no">6</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
 </div>
 
 Note:
@@ -67,9 +65,9 @@ Note:
 
 ---
 
-<p class="section-tag">先行研究</p>
+<p class="section-tag">背景</p>
 
-## 先行研究：SPECAでは、プロパティ生成が監査の質を決める
+## SPECA：プロパティ生成が監査の質を決める
 
 <p class="term-line"><span class="term">仕様駆動の監査</span><br>仕様からチェックリストを大量に作り、それに照らして監査する。<br>その一つが、私たちの先行研究 SPECA（チェックリストを「プロパティ」と呼ぶ）。</p>
 <img class="speca-visual" src="figs/diagram-speca-architecture.svg" alt="SPECAの構成。仕様、仕様の探索、サブグラフ抽出、プロパティ生成、コード箇所の特定、証明試行による監査、レビューの順。プロパティ生成が監査の質を決める">
@@ -84,9 +82,9 @@ Note:
 
 ---
 
-<p class="section-tag">先行研究</p>
+<p class="section-tag">背景</p>
 
-## 先行研究の限界：プロパティ生成の入力は、仕様の文章だけ
+## SPECAの限界：プロパティ生成の入力は、仕様の文章だけ
 
 <div class="grid">
 <div class="panel"><p class="label">仕様の文章から生成（現在）</p><p>文章に書かれたことだけが、<br>プロパティの元になる。<br>書かれていない前提は拾えない。</p></div>
@@ -102,7 +100,7 @@ Note:
 
 ---
 
-<p class="section-tag">過去の事例</p>
+<p class="section-tag">背景</p>
 
 ## Lean: 定理の証明を機械が検査する言語
 
