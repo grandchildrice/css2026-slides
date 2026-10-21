@@ -181,10 +181,42 @@
     .reveal .lean-code mark { background: #ffe49b; color: #513c06; padding: 1px 2px; border-radius: 2px; }
     .reveal .lean-code mark.absent { background: #fbe2d6; color: #8c3a0e; }
     .reveal .pick { display: flex; align-items: baseline; gap: 12px; margin: 10px 0 0; font-size: 19px; }
+    .reveal .pick code { white-space: nowrap; font-size: 17px; }
     .reveal .pick .tag { font-size: 16px; font-weight: 700; color: #8c3a0e; background: #fbe2d6; border-radius: 4px; padding: 2px 10px; white-space: nowrap; }
     .reveal .pick .tag.keep { color: #513c06; background: #ffe49b; }
     .reveal .grep-strip { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 0; padding: 8px 14px; background: #243a4e; border-radius: 6px; font-family: Consolas, monospace; font-size: 15px; color: #cfe0ec; }
     .reveal .grep-strip .count { color: #ff9b76; font-weight: 700; font-size: 18px; }
+    /* 本研究の内容：問いと研究内容のブロック */
+    .reveal .qa-block { border: 1px solid var(--border); border-radius: 10px; background: #f8fafc; padding: 12px 20px 14px; }
+    .reveal .qa-block + .qa-block { margin-top: 12px; }
+    .reveal .qa-block.rq { background: var(--blue-bg); border-color: #a5cce5; }
+    .reveal .qa-block .blabel { font-size: 17px; font-weight: 700; letter-spacing: .07em; color: var(--blue); margin: 0 0 4px; }
+    .reveal .qa-block .btext { font-size: 28px; font-weight: 700; color: var(--navy); margin: 0; line-height: 1.45; }
+    .reveal .qa-block .bnote { font-size: 21px; color: var(--text); margin: 4px 0 0; line-height: 1.5; }
+    .reveal .qa-block .compare { margin-top: 10px; gap: 16px; }
+    .reveal .qa-block .lean-code { font-size: 15px; line-height: 1.55; padding: 8px 12px; }
+    .reveal .qa-block .filebar { font-size: 14px; padding: 5px 12px; }
+    /* 照合対象の一覧 */
+    .reveal table.inv { width: 100%; font-size: 20px; margin: 0; }
+    .reveal table.inv th, .reveal table.inv td { padding: 6px 14px; }
+    .reveal table.inv td.n, .reveal table.inv th.n { text-align: right; }
+    .reveal table.inv tr.total td { font-weight: 700; background: #eef4f8; }
+    .reveal table.inv code { font-size: 18px; }
+    .reveal .funnel { display: grid; gap: 6px; }
+    .reveal .funnel .f { border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; padding: 8px 14px; text-align: center; }
+    .reveal .funnel .f.last { background: var(--blue-bg); border-color: #a5cce5; }
+    .reveal .funnel .f .n { display: block; font-size: 38px; font-weight: 700; color: var(--blue); line-height: 1.15; }
+    .reveal .funnel .f .l { display: block; font-size: 18px; color: var(--muted); }
+    .reveal .funnel .fa { text-align: center; color: var(--blue); font-size: 17px; line-height: 1; }
+    .reveal .fork-group { border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; padding: 10px 16px 12px; }
+    .reveal .fork-group + .fork-group { margin-top: 10px; }
+    .reveal .fork-group .head { display: flex; justify-content: space-between; align-items: baseline; font-size: 21px; font-weight: 700; color: var(--navy); margin: 0 0 6px; }
+    .reveal .fork-group .head .cnt { color: var(--blue); font-size: 26px; }
+    .reveal .fork-group .files { font-family: Consolas, monospace; font-size: 17px; color: var(--muted); margin: 0; line-height: 1.6; }
+    .reveal .steps { display: grid; gap: 7px; margin: 0; }
+    .reveal .steps .s { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: baseline; font-size: 20px; line-height: 1.45; }
+    .reveal .steps .s .no { font-weight: 700; color: var(--blue); }
+    .reveal .steps .s code { font-size: 17px; }
     /* スライド番号 */
     .reveal .slide-number { font-size: 16px; color: var(--muted); background: white; padding: 6px 12px; }
     /* タイトルスライド */

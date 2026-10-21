@@ -152,7 +152,7 @@ Note:
 </div>
 <div class="pipe-arrow"><code>def</code> ↓</div>
 <div class="pipe-box">
-<p class="step-head">C コード → <code>leanc</code> → 実行バイナリ</p>
+<p class="step-head">実行バイナリ</p>
 <div class="c-strip">// Lean compiler output
 LEAN_EXPORT lean_object* l_quorum__2(…)</div>
 </div>
@@ -171,111 +171,120 @@ lake buildを走らせると、ソースは環境（Environment）になりま�
 
 <p class="section-tag">RQ</p>
 
-## RQ：Leanの前提は、仕様の文章にどれだけ明示されているか
+## 本研究の内容
 
+<div class="qa-block rq">
+<p class="blabel">リサーチクエスチョン</p>
+<p class="btext">仕様書に前提条件は、どれだけ明示されているか？</p>
+</div>
+<div class="qa-block">
+<p class="blabel">研究内容</p>
+<p class="bnote">Lean で形式化された仕様と仕様書を<strong>一件ずつ照合</strong>し、前提が明記されている件数をカウントした。</p>
 <div class="compare">
 <div class="lean-editor">
 <div class="filebar"><span>SlashableBound.lean</span><span class="origin">gasper-lean4</span></div>
 <div class="lean-code">
 <div class="ln">1</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
-<div class="ln">2</div><div class="src">    (τ : Threshold)</div>
-<div class="ln">3</div><div class="src">    (stake : Validator → Nat)</div>
-<div class="ln">4</div><div class="src">    {qL qR vL vR : Finset Validator}</div>
-<div class="ln">5</div><div class="src">    (hqLsub : qL ⊆ vL)</div>
-<div class="ln">6</div><div class="src">    (hqRsub : qR ⊆ vR)</div>
-<div class="ln">7</div><div class="src">    (hqLwt : τ.two_third (wt stake vL) ≤ wt stake qL)</div>
-<div class="ln">8</div><div class="src">    (hqRwt : τ.two_third (wt stake vR) ≤ wt stake qR) :</div>
-<div class="ln">9</div><div class="src">    wt stake (vL ∩ vR)</div>
-<div class="ln">10</div><div class="src">      - τ.one_third (wt stake vL)</div>
-<div class="ln">11</div><div class="src">      - τ.one_third (wt stake vR)</div>
-<div class="ln">12</div><div class="src">      ≤</div>
-<div class="ln">13</div><div class="src">    wt stake (qL ∩ qR) :=</div>
+<div class="ln">2</div><div class="src"><span class="cm">    …</span></div>
+<div class="ln">3</div><div class="src">    (hqLsub : <mark>qL ⊆ vL</mark>)</div>
+<div class="ln">4</div><div class="src">    (hqRsub : <mark>qR ⊆ vR</mark>)</div>
+<div class="ln">5</div><div class="src">    (hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark>)</div>
+<div class="ln">6</div><div class="src">    (hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark>) :</div>
+<div class="ln">7</div><div class="src"><span class="cm">    …</span></div>
 </div>
 </div>
 <div class="lean-editor">
 <div class="filebar"><span>phase0/beacon-chain.md</span><span class="origin">consensus-specs</span></div>
 <div class="lean-code">
 <div class="ln">1</div><div class="src"><span class="kw">def</span> weigh_justification_and_finalization(</div>
-<div class="ln">2</div><div class="src">    state: BeaconState,</div>
-<div class="ln">3</div><div class="src">    total_active_balance: Gwei,</div>
-<div class="ln">4</div><div class="src">    previous_epoch_target_balance: Gwei,</div>
-<div class="ln">5</div><div class="src">    current_epoch_target_balance: Gwei,</div>
-<div class="ln">6</div><div class="src">) -> None:</div>
+<div class="ln">2</div><div class="src"><span class="cm">    …</span></div>
+<div class="ln">3</div><div class="src">) -> None:</div>
+<div class="ln">4</div><div class="src"><span class="cm">    …</span></div>
+<div class="ln">5</div><div class="src">    <span class="kw">if</span> <mark>previous_epoch_target_balance * 3</mark> \</div>
+<div class="ln">6</div><div class="src">            <mark>>= total_active_balance * 2</mark>:</div>
 <div class="ln">7</div><div class="src"><span class="cm">    …</span></div>
-<div class="ln">8</div><div class="src">    <span class="kw">if</span> previous_epoch_target_balance * 3 \</div>
-<div class="ln">9</div><div class="src">            >= total_active_balance * 2:</div>
-<div class="ln">10</div><div class="src">        state.current_justified_checkpoint = Checkpoint(</div>
-<div class="ln">11</div><div class="src">            epoch=previous_epoch, root=…)</div>
-<div class="ln">12</div><div class="src">        state.justification_bits[1] = 0b1</div>
-<div class="ln">13</div><div class="src"><span class="cm">    …</span></div>
+</div>
 </div>
 </div>
 </div>
 
 Note:
-このスライドで話すこと：この研究で突き合わせる、2つの実物。
-左はLeanの定理です。さきほどのクォーラム交差の定理そのもので、成立に必要な前提がすべて、定理文の中に並んでいます。
-右は、Ethereumの合意の仕様です。同じ2/3の話をしている、正当化とファイナリゼーションの箇所です。
-両方とも実物で、片方は証明、もう片方は実装が従う仕様。この2つを並べたとき、左の前提が右にどれだけ書かれているか。これが今回の問いです。
+このスライドで話すこと：この研究で何を問い、何をしたか。
+問いは一つです。安全性定理が要求する前提条件が、仕様書にどれだけ明示されているか。
+やったことも一つです。Leanで形式化された仕様と、Ethereumの仕様書を、前提ごとに一件ずつ照合して、明記されている件数を数えました。
+下の2枚がその一件分です。左がLeanの定理で、黄色が成立に必要な前提。右が同じ2/3を扱う仕様書の箇所で、黄色が仕様側で見つかる対応物です。2/3の算術はあります。ですが、左の⊆、つまり集計対象への包含にあたる記述は、右にはありません。
+この作業を全件について繰り返しました。何件を何件と照合したのかは、次の2枚で示します。
 
 ---
 
 <p class="section-tag">提案手法</p>
 
-## 提案手法：Leanの前提を取り出し、仕様の文章と突き合わせる
+## 照合したLeanの証明：8ファイル・17定理
 
-<div class="compare">
-<div>
-<div class="lean-editor">
-<div class="filebar"><span>SlashableBound.lean</span><span class="origin">gasper-lean4</span></div>
-<div class="lean-code">
-<div class="ln">1</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
-<div class="ln">2</div><div class="src"><span class="cm">    (τ : Threshold)</span></div>
-<div class="ln">3</div><div class="src"><span class="cm">    (stake : Validator → Nat)</span></div>
-<div class="ln">4</div><div class="src"><span class="cm">    {qL qR vL vR : Finset Validator}</span></div>
-<div class="ln">5</div><div class="src">    (hqLsub : <mark>qL ⊆ vL</mark>)</div>
-<div class="ln">6</div><div class="src">    (hqRsub : <mark>qR ⊆ vR</mark>)</div>
-<div class="ln">7</div><div class="src">    (hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark>)</div>
-<div class="ln">8</div><div class="src">    (hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark>) :</div>
-<div class="ln">9</div><div class="src"><span class="cm">    wt stake (vL ∩ vR)</span></div>
-<div class="ln">10</div><div class="src"><span class="cm">      - τ.one_third (wt stake vL)</span></div>
-<div class="ln">11</div><div class="src"><span class="cm">      - τ.one_third (wt stake vR)</span></div>
-<div class="ln">12</div><div class="src"><span class="cm">      ≤</span></div>
-<div class="ln">13</div><div class="src"><span class="cm">    wt stake (qL ∩ qR) :=</span></div>
-</div>
-</div>
-<p class="pick"><span class="tag keep">取り出す</span><span>型とモデルの部品を除いた<strong>実体条件</strong></span></p>
-</div>
-<div>
-<div class="lean-editor">
-<div class="filebar"><span>phase0/beacon-chain.md</span><span class="origin">consensus-specs</span></div>
-<div class="lean-code">
-<div class="ln">1</div><div class="src"><span class="kw">def</span> weigh_justification_and_finalization(</div>
-<div class="ln">2</div><div class="src">    state: BeaconState,</div>
-<div class="ln">3</div><div class="src">    total_active_balance: Gwei,</div>
-<div class="ln">4</div><div class="src">    previous_epoch_target_balance: Gwei,</div>
-<div class="ln">5</div><div class="src">    current_epoch_target_balance: Gwei,</div>
-<div class="ln">6</div><div class="src">) -> None:</div>
-<div class="ln">7</div><div class="src"><span class="cm">    …</span></div>
-<div class="ln">8</div><div class="src">    <span class="kw">if</span> <mark>previous_epoch_target_balance * 3</mark> \</div>
-<div class="ln">9</div><div class="src">            <mark>>= total_active_balance * 2</mark>:</div>
-<div class="ln">10</div><div class="src">        state.current_justified_checkpoint = Checkpoint(</div>
-<div class="ln">11</div><div class="src">            epoch=previous_epoch, root=…)</div>
-<div class="ln">12</div><div class="src">        state.justification_bits[1] = 0b1</div>
-<div class="ln">13</div><div class="src"><span class="cm">    …</span></div>
-</div>
-</div>
-<p class="pick"><span class="tag">対応なし</span><span>⊆（集計対象への包含）と、<strong>クォーラム交差</strong></span></p>
-<div class="grep-strip"><code>grep -ri "quorum" specs/</code><span class="count">0 件</span><span>phase0 – electra（50 ファイル）</span></div>
+<div class="grid tl">
+<table class="inv">
+<tr><th>層・ファイル</th><th class="n">定理</th><th class="n">CHK-*</th></tr>
+<tr><td><code>Core/Theories/AccountableSafety</code></td><td class="n">5</td><td class="n">10</td></tr>
+<tr><td><code>Core/Theories/SlashableBound</code></td><td class="n">3</td><td class="n">3</td></tr>
+<tr><td><code>Core/Theories/PlausibleLiveness</code></td><td class="n">1</td><td class="n">2</td></tr>
+<tr><td><code>Core/Lemmas/AccountableSafety</code></td><td class="n">2</td><td class="n">2</td></tr>
+<tr><td><code>Core/Lemmas/Justification</code></td><td class="n">2</td><td class="n">2</td></tr>
+<tr><td><code>Executable/Justification</code></td><td class="n">1</td><td class="n">3</td></tr>
+<tr><td><code>Executable/Slashing</code></td><td class="n">2</td><td class="n">4</td></tr>
+<tr><td><code>Executable/Quorums</code></td><td class="n">1</td><td class="n">1</td></tr>
+<tr class="total"><td>計　8ファイル</td><td class="n">17</td><td class="n">27</td></tr>
+</table>
+<div class="funnel">
+<div class="f"><span class="n">17</span><span class="l">定理</span></div>
+<div class="fa">↓　型・モデルの部品を除く</div>
+<div class="f"><span class="n">27</span><span class="l">CHK-* 監査項目</span></div>
+<div class="fa">↓　前提ごとに展開</div>
+<div class="f last"><span class="n">57</span><span class="l">前提条件（must-establish）</span></div>
 </div>
 </div>
 
 Note:
-このスライドで話すこと：前のページと同じ2つの実物に、色を付けただけです。何を取り出し、何と照らしたか。
-左、黄色が取り出した前提です。定理文は「theorem 名前（仮説）…：結論」という形で、コロンの手前の括弧が前提にあたります。ツールはこれをLeanの構文として読み、型パラメータやモデルの部品、つまり灰色の行を除いて、実体条件だけを選びます。解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から、延べ57件が出ました。
-右、黄色が仕様の側で見つかる対応物です。2/3の算術はあります。ですが、集計対象への包含、つまり左の⊆の2本に対応する記述はありません。
-下の行は、稼働中フォークの仕様全体にquorumという語を探した結果です。0件でした。唯一の出現は次期フォークgloasの、無関係な閾値の箇所だけです。
-この突き合わせの判定自体は、キーワード照合器と6種類のLLMによる自動判定で、人が付けた正解ラベルとの照合はまだしていません。
+このスライドで話すこと：照合した左側、つまりLeanの証明が何だったか。件数がどこから来るか。
+使ったのはgasper-lean4のcommit 7650709です。CHK項目を導いた17定理が8ファイルにまたがっています。安全性の核心はCore/Theories/AccountableSafetyの5定理です。17定理はすべて実在し、sorryを含みません。
+右が件数の出どころです。17の定理から、型やモデルの部品を除いた結果、27の監査項目が立ちます。その27項目を前提ごとに展開すると、延べ57件の前提条件になります。27項目のうち、非空の前提を持つのは17項目です。
+この57件が、このあとの分母です。延べ件数なので、同じ概念の反復を含みます。独立した57種類ではありません。
+
+---
+
+<p class="section-tag">提案手法</p>
+
+## 照合した仕様書：consensus-specs 89ファイル
+
+<div class="grid tl">
+<div>
+<div class="fork-group">
+<p class="head"><span>稼働中フォーク</span><span class="cnt">50</span></p>
+<p class="files">phase0 7 ／ altair 10 ／ bellatrix 7 ／ capella 9 ／ deneb 9 ／ electra 8</p>
+</div>
+<div class="fork-group">
+<p class="head"><span>次期・実験フォーク</span><span class="cnt">39</span></p>
+<p class="files">fulu 7 ／ gloas 13 ／ heze 8 ／ _features 11</p>
+</div>
+<div class="grep-strip"><code>grep -ri "quorum" specs/</code><span class="count">0 件</span><span>稼働中フォーク</span></div>
+</div>
+<div>
+<p class="label">探索プロトコル（全89ファイル）</p>
+<div class="steps">
+<p class="s"><span class="no">①</span><span>シンボル名で <code>grep</code></span></p>
+<p class="s"><span class="no">②</span><span>同義語・言い換えで <code>grep</code><br><span class="muted">honest majority / quorum intersection / safety assumption / conflicting finalization</span></span></p>
+<p class="s"><span class="no">③</span><span>関連ファイルを通読</span></p>
+</div>
+<p class="pick"><span class="tag">ただし</span><span>安全性の<strong>帰結</strong>を述べた散文はある<br><code>weak-subjectivity.md</code> ・ <code>fast-confirmation.md</code></span></p>
+</div>
+</div>
+
+Note:
+このスライドで話すこと：照合した右側、つまり仕様書が何だったか。どう探したか。
+consensus-specsのcommit 2359a5eの、specs以下のマークダウン全89ファイルです。稼働中フォークが50、次期と実験が39です。
+探索は3段です。シンボル名でgrep、同義語や言い換えでgrep、最後に関連ファイルの通読。1ファイルも残さず全件に対して完了しています。
+結果、quorumという語は稼働中フォークに0件でした。唯一の出現は次期フォークgloasの、ビルダー支払い閾値という無関係な箇所だけです。
+ただし、安全性の帰結を述べた散文はあります。weak-subjectivity.mdは、相反するチェックポイントがfinalizeされれば最低1/3がスラッシュされるという帰結を書いています。fast-confirmation.mdはByzantine割合の閾値を置いています。
+ですから私たちの「非明示」は、安全性の概念が一切無いという意味ではありません。定理が要求する分解された前提が、実装や監査が確認できる検査可能な要件としては与えられていない、という意味です。
 
 ---
 
