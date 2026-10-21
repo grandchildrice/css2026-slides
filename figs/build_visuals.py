@@ -176,21 +176,23 @@ def result_chart():
     total = research["conditions_with_repetition"]
     non_explicit = research["unanimously_not_explicit"]
     disputed = research["disputed"]
+    concept_total = research["distinct_concepts"]
+    concept_non_explicit = research["unanimously_not_explicit_concepts"]
     assert non_explicit + disputed == total
-    fraction = non_explicit / total
+    concept_fraction = concept_non_explicit / concept_total
     circumference = math.tau * 112
-    body = f'<circle cx="225" cy="145" r="112" fill="none" stroke="{ORANGE}" stroke-width="40"/>'
-    body += f'<circle class="non-explicit-arc" cx="225" cy="145" r="112" fill="none" stroke="{BLUE}" stroke-width="40" stroke-dasharray="{fraction * circumference:.8f} {circumference:.8f}" transform="rotate(-90 225 145)"/>'
-    body += text(225, 139, f"{100 * fraction:.1f}%", 53, BLUE, "middle", True)
-    body += text(225, 177, f"{non_explicit} / {total} 件", 28, anchor="middle", bold=True)
-    body += text(550, 56, "1マス ＝ 延べ前提1件", 28, bold=True)
+    body = f'<circle cx="225" cy="145" r="112" fill="none" stroke="#dbe4ea" stroke-width="40"/>'
+    body += f'<circle class="non-explicit-arc" cx="225" cy="145" r="112" fill="none" stroke="{BLUE}" stroke-width="40" stroke-dasharray="{concept_fraction * circumference:.8f} {circumference:.8f}" transform="rotate(-90 225 145)"/>'
+    body += text(225, 139, f"{concept_non_explicit} / {concept_total}", 53, BLUE, "middle", True)
+    body += text(225, 177, "概念", 28, anchor="middle", bold=True)
+    body += text(225, 306, "概念単位で非明示と判定", 21, anchor="middle")
+    body += text(550, 56, f"参考：延べ{total}件での内訳（1マス＝延べ前提1件）", 24, bold=True)
     for index in range(total):
         classification = "non-explicit" if index < non_explicit else "disputed"
         body += rect(550 + (index % 19) * 32, 85 + (index // 19) * 48, 26, 36, BLUE if index < non_explicit else ORANGE, "white", 3, f'class="premise {classification}" data-index="{index + 1}"')
-    body += text(550, 272, f"青 {non_explicit} 件：全自動判定で非明示", 26, BLUE, bold=True)
-    body += text(550, 310, f"橙 {disputed} 件：判定が分かれた", 26, ORANGE, bold=True)
-    body += text(225, 306, "安全性要件としての文章の明示", 21, anchor="middle")
-    save("chart-premises.svg", body, f"延べ{total}件中{non_explicit}件（{100 * fraction:.1f}%）は全自動判定で非明示、{disputed}件は判定が分かれた。ドーナツと{total}マスで可視化", attributes=f'data-total="{total}" data-non-explicit="{non_explicit}" data-disputed="{disputed}"')
+    body += text(550, 272, f"青 {non_explicit} 件：全自動判定で非明示", 24, BLUE, bold=True)
+    body += text(550, 310, f"橙 {disputed} 件：判定が分かれた", 24, ORANGE, bold=True)
+    save("chart-premises.svg", body, f"概念単位では{concept_total}概念中{concept_non_explicit}概念が非明示。参考として、延べ{total}件中{non_explicit}件（{100 * non_explicit / total:.1f}%）は全自動判定で非明示、{disputed}件は判定が分かれた内訳をマスで表示", attributes=f'data-total="{total}" data-non-explicit="{non_explicit}" data-disputed="{disputed}" data-concept-total="{concept_total}" data-concept-non-explicit="{concept_non_explicit}"')
 
 
 def architecture_scene():

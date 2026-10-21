@@ -67,10 +67,12 @@ def verify(url, capture):
         assert len(tiles) == 57
         assert sum("non-explicit" in element.attrib["class"].split() for element in tiles) == 48
         assert sum("disputed" in element.attrib["class"].split() for element in tiles) == 9
+        assert int(chart.attrib["data-concept-total"]) == research["distinct_concepts"]
+        assert int(chart.attrib["data-concept-non-explicit"]) == research["unanimously_not_explicit_concepts"]
         arc = next(element for element in chart.iter() if element.attrib.get("class") == "non-explicit-arc")
         arc_length, circumference = map(float, arc.attrib["stroke-dasharray"].split())
         assert math.isclose(circumference, math.tau * float(arc.attrib["r"]), abs_tol=1e-7)
-        assert math.isclose(arc_length / circumference, 48 / 57, abs_tol=1e-9)
+        assert math.isclose(arc_length / circumference, research["unanimously_not_explicit_concepts"] / research["distinct_concepts"], abs_tol=1e-9)
         clients = ET.parse(root / "figs/illustration-clients.svg").getroot()
         logos = clients.findall(".//{http://www.w3.org/2000/svg}image")
         assert len(logos) == 8
