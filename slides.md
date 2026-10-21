@@ -108,7 +108,7 @@ Note:
 
 <div class="lean-layout">
 <div class="lean-editor">
-<div class="filebar">GasperBeaconChain/Core/… ─ Quorums.lean</div>
+<div class="filebar">Quorums.lean</div>
 <div class="lean-code">
 <div class="ln">1</div><div class="src"><span class="kw">structure</span> Threshold <span class="kw">where</span></div>
 <div class="ln">2</div><div class="src">  one_third : Nat → Nat</div>
@@ -123,45 +123,41 @@ Note:
 <div class="ln">11</div><div class="src"> </div>
 <div class="ln">12</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
 <div class="ln">13</div><div class="src">    (hqLsub : qL ⊆ vL) (hqRsub : qR ⊆ vR)</div>
-<div class="ln">14</div><div class="src">    (hqLwt : τ.two_third (wt stake vL) ≤ wt stake qL)</div>
-<div class="ln">15</div><div class="src">    … : … ≤ wt stake (qL ∩ qR) := …</div>
+<div class="ln">14</div><div class="src">    (hqLwt : τ.two_third (wt stake vL)</div>
+<div class="ln">15</div><div class="src">               ≤ wt stake qL)  … :</div>
+<div class="ln">16</div><div class="src">    … ≤ wt stake (qL ∩ qR) := …</div>
 </div>
-<p class="lean-note">gasper-lean4（commit 7650709）からの抜粋。引数の一部を … で省略。</p>
 </div>
 <div class="lean-pipe">
 <div class="pipe-arrow"><code>lake build</code> ↓</div>
 <div class="pipe-box">
-<p class="step-head">環境（Environment）＝宣言の依存グラフ</p>
-<svg class="dep-graph" viewBox="0 0 560 92" role="img" aria-label="Threshold と wt から quorum_2 が作られ、その上に定理 quorum_intersection_weight_lower が乗る依存グラフ">
-<defs><marker id="dep-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#516575"/></marker></defs>
-<g stroke="#516575" stroke-width="1.4" fill="none" marker-end="url(#dep-head)">
-<path d="M104,22 L184,40"/><path d="M104,66 L184,50"/><path d="M300,46 L360,46"/>
+<svg class="dep-graph" viewBox="0 0 560 84" role="img" aria-label="Threshold と wt から quorum_2 が作られ、その上に定理 quorum_intersection_weight_lower が乗る依存ツリー">
+<defs><marker id="dep-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7d909e"/></marker></defs>
+<g stroke="#7d909e" stroke-width="1.5" fill="none" stroke-linejoin="round" marker-end="url(#dep-head)">
+<path d="M112,21 H142 V42 H166"/><path d="M112,63 H142 V42 H166"/><path d="M286,42 H336"/>
 </g>
-<g font-family="Consolas, monospace" font-size="14" text-anchor="middle">
-<rect x="8" y="8" width="94" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="55" y="27" fill="#263746">Threshold</text>
-<rect x="8" y="52" width="94" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="55" y="71" fill="#263746">wt</text>
-<rect x="188" y="32" width="110" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="243" y="51" fill="#263746">quorum_2</text>
-<rect x="364" y="32" width="188" height="28" rx="14" fill="#fdf0e9" stroke="#b64b12" stroke-width="1.6"/><text x="458" y="51" fill="#b64b12" font-size="12.5">quorum_intersection_…</text>
+<g font-family="Consolas, monospace" font-size="15" text-anchor="middle">
+<rect x="8" y="8" width="104" height="26" rx="13" fill="#fff" stroke="#006ba6" stroke-width="1.5"/><text x="60" y="26" fill="#263746">Threshold</text>
+<rect x="8" y="50" width="104" height="26" rx="13" fill="#fff" stroke="#006ba6" stroke-width="1.5"/><text x="60" y="68" fill="#263746">wt</text>
+<rect x="170" y="29" width="116" height="26" rx="13" fill="#fff" stroke="#006ba6" stroke-width="1.5"/><text x="228" y="47" fill="#263746">quorum_2</text>
+<rect x="340" y="29" width="212" height="26" rx="13" fill="#fdf0e9" stroke="#b64b12" stroke-width="1.7"/><text x="446" y="47" fill="#b64b12" font-size="13">quorum_intersection_…</text>
 </g>
 </svg>
 </div>
 <div class="pipe-arrow">↓</div>
 <div class="kernel-band">
-<p class="step-head">カーネルが、宣言ごとに型を検査</p>
+<p class="step-head">カーネルが型を検査</p>
 <p class="verdict ok"><span class="mark">✓</span><span>型が付く　＝　証明完了</span></p>
-<p class="verdict ng"><span class="mark">×</span><span>型が付かない　＝　証明不備（受理されない）</span></p>
+<p class="verdict ng"><span class="mark">×</span><span>型が付かない　＝　証明不備</span></p>
 </div>
-<div class="pipe-arrow"><code>def</code> だけが進む ↓</div>
+<div class="pipe-arrow"><code>def</code> ↓</div>
 <div class="pipe-box">
-<p class="step-head">実行可能なプログラムも出てくる</p>
-<p class="step-sub">型が付いた <code>def</code> は C に落ち、leanc が機械語へ。実装としてそのまま使える。</p>
+<p class="step-head">C コード → <code>leanc</code> → 実行バイナリ</p>
 <div class="c-strip">// Lean compiler output
 LEAN_EXPORT lean_object* l_quorum__2(…)</div>
 </div>
 </div>
 </div>
-<p class="message">定理の前提は、<strong>すべて定理文（型）に書かれている</strong>。だから機械的に取り出せる。</p>
-
 Note:
 このスライドで話すこと：Leanがどう動くか。この仕組みがあるから、次のページ以降の「前提の取り出し」が成り立つ。
 左が実際のソースです。structureで構造を決め、defで関数や述語を定義し、theoremで定理を書きます。ここではThresholdという構造体、重みを合計するwtという関数、2/3クォーラムを表すquorum_2という述語、そしてクォーラム交差の定理を並べています。gasper-lean4の実物からの抜粋で、引数の一部は省略しています。
@@ -177,17 +173,50 @@ lake buildを走らせると、ソースは環境（Environment）になりま�
 
 ## RQ：Leanの前提は、仕様の文章にどれだけ明示されているか
 
-<div class="grid">
-<div class="panel purple"><p class="label">Leanの定理</p><p>仮説（前提）が、<br>すべて書かれている。</p></div>
-<div class="panel blue"><p class="label">仕様の文章</p><p>その前提は、<br>どこまで書かれているか。</p></div>
+<div class="compare">
+<div class="lean-editor">
+<div class="filebar"><span>SlashableBound.lean</span><span class="origin">gasper-lean4</span></div>
+<div class="lean-code">
+<div class="ln">1</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
+<div class="ln">2</div><div class="src">    (τ : Threshold)</div>
+<div class="ln">3</div><div class="src">    (stake : Validator → Nat)</div>
+<div class="ln">4</div><div class="src">    {qL qR vL vR : Finset Validator}</div>
+<div class="ln">5</div><div class="src">    (hqLsub : qL ⊆ vL)</div>
+<div class="ln">6</div><div class="src">    (hqRsub : qR ⊆ vR)</div>
+<div class="ln">7</div><div class="src">    (hqLwt : τ.two_third (wt stake vL) ≤ wt stake qL)</div>
+<div class="ln">8</div><div class="src">    (hqRwt : τ.two_third (wt stake vR) ≤ wt stake qR) :</div>
+<div class="ln">9</div><div class="src">    wt stake (vL ∩ vR)</div>
+<div class="ln">10</div><div class="src">      - τ.one_third (wt stake vL)</div>
+<div class="ln">11</div><div class="src">      - τ.one_third (wt stake vR)</div>
+<div class="ln">12</div><div class="src">      ≤</div>
+<div class="ln">13</div><div class="src">    wt stake (qL ∩ qR) :=</div>
 </div>
-<p class="message">Leanの前提が、仕様の文章に<strong>どれだけ明示されているか</strong>を調べた。</p>
+</div>
+<div class="lean-editor">
+<div class="filebar"><span>phase0/beacon-chain.md</span><span class="origin">consensus-specs</span></div>
+<div class="lean-code">
+<div class="ln">1</div><div class="src"><span class="kw">def</span> weigh_justification_and_finalization(</div>
+<div class="ln">2</div><div class="src">    state: BeaconState,</div>
+<div class="ln">3</div><div class="src">    total_active_balance: Gwei,</div>
+<div class="ln">4</div><div class="src">    previous_epoch_target_balance: Gwei,</div>
+<div class="ln">5</div><div class="src">    current_epoch_target_balance: Gwei,</div>
+<div class="ln">6</div><div class="src">) -> None:</div>
+<div class="ln">7</div><div class="src"><span class="cm">    …</span></div>
+<div class="ln">8</div><div class="src">    <span class="kw">if</span> previous_epoch_target_balance * 3 \</div>
+<div class="ln">9</div><div class="src">            >= total_active_balance * 2:</div>
+<div class="ln">10</div><div class="src">        state.current_justified_checkpoint = Checkpoint(</div>
+<div class="ln">11</div><div class="src">            epoch=previous_epoch, root=…)</div>
+<div class="ln">12</div><div class="src">        state.justification_bits[1] = 0b1</div>
+<div class="ln">13</div><div class="src"><span class="cm">    …</span></div>
+</div>
+</div>
+</div>
 
 Note:
-このスライドで話すこと：案を試すために立てた問い。
-SPECAの側にも、Leanの定理を確認項目へ変換するプラグインがあります。
-これを進めるうちに、定理の前提が、仕様の文章にどのくらい明示されているのかが気になりました。
-これが今回の研究内容です。Leanの定理には前提がすべて書かれています。その前提が、仕様の文章に書かれているかを調べました。
+このスライドで話すこと：この研究で突き合わせる、2つの実物。
+左はLeanの定理です。さきほどのクォーラム交差の定理そのもので、成立に必要な前提がすべて、定理文の中に並んでいます。
+右は、Ethereumの合意の仕様です。同じ2/3の話をしている、正当化とファイナリゼーションの箇所です。
+両方とも実物で、片方は証明、もう片方は実装が従う仕様。この2つを並べたとき、左の前提が右にどれだけ書かれているか。これが今回の問いです。
 
 ---
 
@@ -195,38 +224,58 @@ SPECAの側にも、Leanの定理を確認項目へ変換するプラグイン�
 
 ## 提案手法：Leanの前提を取り出し、仕様の文章と突き合わせる
 
-<p class="lead-in">Leanの定理：<strong>仮説（条件） ⇒ 結論（保証）</strong></p>
-<div class="grid">
-<div class="panel"><p class="step-label">Step 1</p><h3>前提を抽出</h3><p><strong>仮説を列挙</strong></p><p class="actor">構文的・LLM不使用</p></div>
-<div class="panel blue"><p class="step-label">Step 2</p><h3>仕様の文章と照合</h3><p>書かれているかを判定</p><p class="actor">キーワード照合器＋6種類のLLM</p></div>
+<div class="compare">
+<div>
+<div class="lean-editor">
+<div class="filebar"><span>SlashableBound.lean</span><span class="origin">gasper-lean4</span></div>
+<div class="lean-code">
+<div class="ln">1</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
+<div class="ln">2</div><div class="src"><span class="cm">    (τ : Threshold)</span></div>
+<div class="ln">3</div><div class="src"><span class="cm">    (stake : Validator → Nat)</span></div>
+<div class="ln">4</div><div class="src"><span class="cm">    {qL qR vL vR : Finset Validator}</span></div>
+<div class="ln">5</div><div class="src">    (hqLsub : <mark>qL ⊆ vL</mark>)</div>
+<div class="ln">6</div><div class="src">    (hqRsub : <mark>qR ⊆ vR</mark>)</div>
+<div class="ln">7</div><div class="src">    (hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark>)</div>
+<div class="ln">8</div><div class="src">    (hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark>) :</div>
+<div class="ln">9</div><div class="src"><span class="cm">    wt stake (vL ∩ vR)</span></div>
+<div class="ln">10</div><div class="src"><span class="cm">      - τ.one_third (wt stake vL)</span></div>
+<div class="ln">11</div><div class="src"><span class="cm">      - τ.one_third (wt stake vR)</span></div>
+<div class="ln">12</div><div class="src"><span class="cm">      ≤</span></div>
+<div class="ln">13</div><div class="src"><span class="cm">    wt stake (qL ∩ qR) :=</span></div>
 </div>
-<p class="message">抽出は構文を読むだけで、生成は入らない。<br>判定は自動で、正解ラベルとの照合は<strong>未実施</strong>。</p>
+</div>
+<p class="pick"><span class="tag keep">取り出す</span><span>型とモデルの部品を除いた<strong>実体条件</strong></span></p>
+</div>
+<div>
+<div class="lean-editor">
+<div class="filebar"><span>phase0/beacon-chain.md</span><span class="origin">consensus-specs</span></div>
+<div class="lean-code">
+<div class="ln">1</div><div class="src"><span class="kw">def</span> weigh_justification_and_finalization(</div>
+<div class="ln">2</div><div class="src">    state: BeaconState,</div>
+<div class="ln">3</div><div class="src">    total_active_balance: Gwei,</div>
+<div class="ln">4</div><div class="src">    previous_epoch_target_balance: Gwei,</div>
+<div class="ln">5</div><div class="src">    current_epoch_target_balance: Gwei,</div>
+<div class="ln">6</div><div class="src">) -> None:</div>
+<div class="ln">7</div><div class="src"><span class="cm">    …</span></div>
+<div class="ln">8</div><div class="src">    <span class="kw">if</span> <mark>previous_epoch_target_balance * 3</mark> \</div>
+<div class="ln">9</div><div class="src">            <mark>>= total_active_balance * 2</mark>:</div>
+<div class="ln">10</div><div class="src">        state.current_justified_checkpoint = Checkpoint(</div>
+<div class="ln">11</div><div class="src">            epoch=previous_epoch, root=…)</div>
+<div class="ln">12</div><div class="src">        state.justification_bits[1] = 0b1</div>
+<div class="ln">13</div><div class="src"><span class="cm">    …</span></div>
+</div>
+</div>
+<p class="pick"><span class="tag">対応なし</span><span>⊆（集計対象への包含）と、<strong>クォーラム交差</strong></span></p>
+<div class="grep-strip"><code>grep -ri "quorum" specs/</code><span class="count">0 件</span><span>phase0 – electra（50 ファイル）</span></div>
+</div>
+</div>
 
 Note:
-このスライドで話すこと：問いにどう答えたか。前提を取り出す段階と、仕様に書かれているかを判定する段階は別。
-手法は二段です。
-一段目は、Leanの定理文から仮説を取り出す処理です。定理文の構文を読むだけで、AIの生成は入りません。だから、証明に無い前提が混ざることはありません。
-二段目は、取り出した前提が、仕様の文章に安全性の要件として書かれているかの判定です。ここは、キーワード照合器と6種類のLLMによる自動判定です。
-判定器どうしの一致は見ていますが、人が付けた正解ラベルとの照合は、まだしていません。
-
----
-
-<p class="section-tag">提案手法</p>
-
-## 実験手法：定理に書かれた「条件」の部分を取り出す
-
-<div class="grid" style="margin-bottom: 4px;">
-<div><h3 style="margin: 0 0 8px;">定理文のコロンの手前を抜き出す</h3><div class="proof-code tight" style="padding: 8px 12px; font-size: 15px;"><div class="muted">theorem quorum_intersection_weight_lower</div><div class="muted">　{ qL qR vL vR : … }  -- 部品（除外）</div><div>　( hqLsub : <mark>qL ⊆ vL</mark> )</div><div>　( hqRsub : <mark>qR ⊆ vR</mark> )</div><div>　( hqLwt : <mark>τ.two_third (wt stake vL) ≤ wt stake qL</mark> )</div><div>　( hqRwt : <mark>τ.two_third (wt stake vR) ≤ wt stake qR</mark> )</div><div class="muted">　: 結論（保証）</div></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">括弧群＝前提（Leanでは仮説）。構文的に列挙し実体条件を選別。</p></div>
-<div class="premise-list"><h3 style="margin: 0 0 8px;">取り出される前提の意味</h3><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>① 参加者集合の包含：</strong><br>支持した参加者が、その側の集計対象に含まれる。</p></div><div class="premise" style="padding: 6px 10px; margin-bottom: 6px; font-size: 20px;"><p style="margin: 0;"><strong>② クォーラム：</strong><br>その集計対象の総重みに対して、2/3以上の重みが支持する。</p></div><p class="small" style="margin: 4px 0 0; font-size: 18px;">この条件を、<strong>両側（フォーク双方）</strong>で満たす必要がある。</p></div>
-</div>
-<p class="message" style="margin: 4px 0 0; font-size: 28px;">この②が、<strong>「クォーラム」</strong>という概念。<br>次のスライドで、この語が仕様の文章にどれだけ出てくるかを見る。</p>
-
-Note:
-このスライドで話すこと：定理の仮説が、どの条件を指すかを具体例で示す。
-左の記号は細かく読む必要はありません。要点は右の日本語2行です。「支持した人が名簿に入っているか」「クォーラム（全体の2/3以上）を満たすか」。
-定理文は「theorem 名前（仮説）…：結論」という形で、コロンの手前の括弧が前提です。ツールはこれをLeanの構文として読み、型やモデルの部品を除いて実体条件だけを選別します。
-解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から延べ57件が出ました。
-②の「クォーラム」は、今回の10概念のうちの1つです。次のスライドの結果と、このあと直接つながります。
+このスライドで話すこと：前のページと同じ2つの実物に、色を付けただけです。何を取り出し、何と照らしたか。
+左、黄色が取り出した前提です。定理文は「theorem 名前（仮説）…：結論」という形で、コロンの手前の括弧が前提にあたります。ツールはこれをLeanの構文として読み、型パラメータやモデルの部品、つまり灰色の行を除いて、実体条件だけを選びます。解釈も生成も挟まない決定的な処理で、何度やっても同じ一覧が出ます。今回は8ファイル17定理から、延べ57件が出ました。
+右、黄色が仕様の側で見つかる対応物です。2/3の算術はあります。ですが、集計対象への包含、つまり左の⊆の2本に対応する記述はありません。
+下の行は、稼働中フォークの仕様全体にquorumという語を探した結果です。0件でした。唯一の出現は次期フォークgloasの、無関係な閾値の箇所だけです。
+この突き合わせの判定自体は、キーワード照合器と6種類のLLMによる自動判定で、人が付けた正解ラベルとの照合はまだしていません。
 
 ---
 

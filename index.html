@@ -151,28 +151,40 @@
     /* Leanの仕組み：左にソース、右に build → カーネル → 実行バイナリの一本の流れ */
     .reveal .lean-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin: 4px 0 0; }
     .reveal .lean-editor { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #f5f7fa; }
-    .reveal .lean-editor .filebar { background: var(--navy); color: #fff; font-family: Consolas, monospace; font-size: 16px; padding: 5px 14px; }
-    .reveal .lean-code { display: grid; grid-template-columns: 26px 1fr; font-family: Consolas, "Liberation Mono", monospace; font-size: 16px; line-height: 1.46; padding: 6px 12px 2px; }
+    .reveal .lean-editor .filebar { background: var(--navy); color: #fff; font-family: Consolas, monospace; font-size: 17px; padding: 6px 14px; }
+    .reveal .lean-code { display: grid; grid-template-columns: 28px 1fr; font-family: Consolas, "Liberation Mono", monospace; font-size: 17.5px; line-height: 1.6; padding: 10px 14px 10px; }
     .reveal .lean-code .ln { color: #9bacba; text-align: right; padding-right: 10px; }
     .reveal .lean-code .src { white-space: pre; }
     .reveal .lean-code .kw { color: var(--blue); font-weight: 700; }
     .reveal .lean-code .thm { color: var(--orange); font-weight: 700; }
-    .reveal .lean-layout + .message { margin: 8px 0 0; font-size: 29px; }
-    .reveal .lean-note { font-size: 15px; color: var(--muted); margin: 0; padding: 0 14px 6px; }
-    .reveal .lean-pipe .step-head { font-size: 19px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
+    .reveal .lean-pipe .step-head { font-size: 21px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
     .reveal .lean-pipe .step-sub { font-size: 15px; color: var(--muted); margin: 0; }
-    .reveal .pipe-arrow { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--blue); font-size: 17px; line-height: 1; margin: 5px 0; }
-    .reveal .pipe-arrow code { font-size: 15px; color: var(--blue); }
-    .reveal .pipe-box { border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; padding: 8px 14px 10px; }
-    .reveal .dep-graph { display: block; width: 100%; height: 80px; margin: 0; }
+    .reveal .pipe-arrow { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--blue); font-size: 18px; line-height: 1; margin: 7px 0; }
+    .reveal .pipe-arrow code { font-size: 16px; color: var(--blue); }
+    .reveal .pipe-box { border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; padding: 10px 14px 12px; }
+    .reveal .dep-graph { display: block; width: 100%; height: 88px; margin: 0; }
     .reveal .kernel-band { background: var(--navy); border-radius: 8px; padding: 10px 16px; }
-    .reveal .kernel-band .step-head { color: #fff; font-size: 22px; }
+    .reveal .kernel-band .step-head { color: #fff; font-size: 24px; }
     .reveal .kernel-band .step-sub { color: #9fb4c4; }
-    .reveal .verdict { display: flex; gap: 10px; align-items: baseline; font-size: 17px; margin: 5px 0 0; }
+    .reveal .verdict { display: flex; gap: 10px; align-items: baseline; font-size: 19px; margin: 6px 0 0; }
     .reveal .verdict .mark { font-weight: 700; font-size: 19px; width: 18px; }
     .reveal .verdict.ok { color: #e8f3fb; }
     .reveal .verdict.ng { color: #ffb398; }
-    .reveal .c-strip { background: #243a4e; border-radius: 6px; padding: 7px 12px; margin: 6px 0 0; font-family: Consolas, monospace; font-size: 13.5px; line-height: 1.5; color: #9fd0a8; white-space: pre; overflow: hidden; }
+    .reveal .c-strip { background: #243a4e; border-radius: 6px; padding: 8px 12px; margin: 8px 0 0; font-family: Consolas, monospace; font-size: 14.5px; line-height: 1.5; color: #9fd0a8; white-space: pre; overflow: hidden; }
+    /* Lean の定理と仕様の文章の対比（RQ・提案手法） */
+    .reveal .compare { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 20px; align-items: start; margin: 6px 0 0; }
+    .reveal .compare > * { min-width: 0; }
+    .reveal .compare .filebar { background: var(--navy); color: #fff; font-family: Consolas, monospace; font-size: 15px; padding: 6px 14px; display: flex; justify-content: space-between; gap: 12px; }
+    .reveal .compare .filebar .origin { color: #9fb4c4; }
+    .reveal .compare .lean-code { grid-template-columns: 24px 1fr; font-size: 15px; line-height: 1.52; padding: 8px 12px; }
+    .reveal .lean-code .cm { color: #7d909e; }
+    .reveal .lean-code mark { background: #ffe49b; color: #513c06; padding: 1px 2px; border-radius: 2px; }
+    .reveal .lean-code mark.absent { background: #fbe2d6; color: #8c3a0e; }
+    .reveal .pick { display: flex; align-items: baseline; gap: 12px; margin: 10px 0 0; font-size: 19px; }
+    .reveal .pick .tag { font-size: 16px; font-weight: 700; color: #8c3a0e; background: #fbe2d6; border-radius: 4px; padding: 2px 10px; white-space: nowrap; }
+    .reveal .pick .tag.keep { color: #513c06; background: #ffe49b; }
+    .reveal .grep-strip { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 0; padding: 8px 14px; background: #243a4e; border-radius: 6px; font-family: Consolas, monospace; font-size: 15px; color: #cfe0ec; }
+    .reveal .grep-strip .count { color: #ff9b76; font-weight: 700; font-size: 18px; }
     /* スライド番号 */
     .reveal .slide-number { font-size: 16px; color: var(--muted); background: white; padding: 6px 12px; }
     /* タイトルスライド */
