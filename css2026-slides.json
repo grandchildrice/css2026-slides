@@ -20,7 +20,7 @@
       ]
     },
     {
-      "section": "RQ",
+      "section": "研究内容",
       "slides": [
         8
       ]
@@ -36,12 +36,7 @@
       "section": "実験結果",
       "slides": [
         11,
-        12
-      ]
-    },
-    {
-      "section": "考察",
-      "slides": [
+        12,
         13
       ]
     },

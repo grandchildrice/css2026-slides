@@ -18,11 +18,10 @@ Note:
 
 <div class="agenda-list">
 <div class="agenda-row"><span class="no">1</span><span class="name">背景</span><span class="desc">Ethereumの仕組みと、仕様駆動の監査。Leanで書かれつつある安全性</span></div>
-<div class="agenda-row"><span class="no">2</span><span class="name">RQ</span><span class="desc">Leanの前提は、仕様の文章にどれだけ明示されているか</span></div>
+<div class="agenda-row"><span class="no">2</span><span class="name">研究内容</span><span class="desc">仕様書に前提条件は、どれだけ明示されているか</span></div>
 <div class="agenda-row"><span class="no">3</span><span class="name">提案手法</span><span class="desc">Leanの前提を取り出し、仕様の文章と突き合わせる</span></div>
-<div class="agenda-row"><span class="no">4</span><span class="name">実験結果</span><span class="desc">前提は、仕様にどれだけ明示されていたか</span></div>
-<div class="agenda-row"><span class="no">5</span><span class="name">考察</span><span class="desc">実際のバグと前提の非明示は、どう関係しうるか</span></div>
-<div class="agenda-row"><span class="no">6</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
+<div class="agenda-row"><span class="no">4</span><span class="name">実験結果</span><span class="desc">前提は仕様にどれだけ明示されていたか。実際のバグとの関係</span></div>
+<div class="agenda-row"><span class="no">5</span><span class="name">まとめ</span><span class="desc">分かったことと、まだ言えないこと</span></div>
 </div>
 
 Note:
@@ -167,7 +166,7 @@ lake buildを走らせると、ソースは環境（Environment）になりま�
 
 ---
 
-<p class="section-tag">RQ</p>
+<p class="section-tag">研究内容</p>
 
 ## 本研究の内容
 
@@ -313,7 +312,7 @@ Note:
 
 ---
 
-<p class="section-tag">考察</p>
+<p class="section-tag">実験結果</p>
 
 ## 前提②の具体例：Nimbus #461。壊れていたのは、計算ではなく状態
 
