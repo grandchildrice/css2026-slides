@@ -252,11 +252,10 @@ gasper-lean4のcommit 7650709から、安全性に関わる17の定理を取り�
 
 <p class="section-tag">提案手法</p>
 
-## それに対応するSPECのファイル
+## 文字・意味検索により、定理と関連する3つの仕様書を特定
 
-<p class="spec-scope">探索は <strong>consensus-specs 89ファイル</strong>すべて。対応づいたのは <strong>3ファイル・8セクション</strong>。</p>
 <table class="thm-list spec-list">
-<tr><th>ファイル／セクション</th><th>どういう仕様か</th><th class="n">定理</th></tr>
+<tr><th>ファイル／セクション</th><th>仕様の内容</th><th class="n">定理数（重複あり）</th></tr>
 <tr class="group"><td colspan="3"><code>phase0/beacon-chain.md</code>　ビーコンチェーンの状態遷移</td></tr>
 <tr><td class="sec"><code>#process_justification_and_finalization</code></td><td>2/3の集計で正当化と確定を進める</td><td class="n">8</td></tr>
 <tr><td class="sec"><code>#process_slashings</code></td><td>スラッシュの適用と残高の減算</td><td class="n">3</td></tr>
@@ -269,7 +268,6 @@ gasper-lean4のcommit 7650709から、安全性に関わる17の定理を取り�
 <tr class="group"><td colspan="3"><code>phase0/p2p-interface.md</code>　ノード間の通信</td></tr>
 <tr><td class="sec"><code>#the-gossip-domain-gossipsub</code></td><td>ゴシップで受け取る前の検証規則</td><td class="n">2</td></tr>
 </table>
-<p class="small muted" style="margin: 4px 0 0; font-size: 18px;">同じ定理が複数のセクションに対応することがあるため、右列の合計は17を超える。</p>
 
 Note:
 このスライドで話すこと：照合した右側、仕様書が何だったか。
