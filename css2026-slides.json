@@ -41,7 +41,7 @@
       ]
     },
     {
-      "section": "まとめ",
+      "section": "考察・まとめ",
       "slides": [
         14
       ]
@@ -221,7 +221,7 @@
     },
     {
       "type": "summary",
-      "title": "まとめ：Leanの前提の多くは、仕様に明示されていなかった"
+      "title": "考察・まとめ"
     },
     {
       "type": "appendix",
