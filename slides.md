@@ -217,7 +217,7 @@ Note:
 
 <p class="section-tag">提案手法</p>
 
-## コンセンサスプロトコルの安全性に関する17の定理
+## コンセンサスプロトコルの安全性に関する17の定理から、前提条件が57件
 
 <table class="thm-list">
 <tr><th>定理</th><th>何を言う定理か</th></tr>
@@ -280,7 +280,7 @@ consensus-specsのcommit 2359a5eの、specs以下のマークダウン全89フ�
 
 <p class="section-tag">実験結果</p>
 
-## 抽出結果：Leanの前提は、仕様の文章に明示されていなかった
+## 抽出結果：前提条件は、57件中48件が仕様の文章に明示されていなかった
 
 <img class="result-visual" src="figs/chart-premises.svg" alt="48/57件、84.2%のドーナツ図と57マス。青48マスは全自動判定で非明示、橙9マスは判定が分かれた" style="height:470px">
 
