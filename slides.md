@@ -106,18 +106,70 @@ Note:
 
 ## Lean: 定理の証明を機械が検査する言語
 
-<div class="grid three">
-<div class="panel purple"><h3>定理</h3><p>仮説（条件）と<br>結論（保証）の組。</p></div>
-<div class="panel"><h3>カーネルが検査</h3><p>証明に穴があれば、<br>受理されない。</p></div>
-<div class="panel blue"><h3>Ethereumでは</h3><p>合意の安全性の定理が、<br>Leanで書かれつつある。</p></div>
+<div class="lean-layout">
+<div class="lean-editor">
+<div class="filebar">GasperBeaconChain/Core/… ─ Quorums.lean</div>
+<div class="lean-code">
+<div class="ln">1</div><div class="src"><span class="kw">structure</span> Threshold <span class="kw">where</span></div>
+<div class="ln">2</div><div class="src">  one_third : Nat → Nat</div>
+<div class="ln">3</div><div class="src">  two_third : Nat → Nat</div>
+<div class="ln">4</div><div class="src"> </div>
+<div class="ln">5</div><div class="src"><span class="kw">def</span> wt (stake : Validator → Nat)</div>
+<div class="ln">6</div><div class="src">    (s : Finset Validator) : Nat := s.sum stake</div>
+<div class="ln">7</div><div class="src"> </div>
+<div class="ln">8</div><div class="src"><span class="kw">def</span> quorum_2 (τ stake vset vs b) : Prop :=</div>
+<div class="ln">9</div><div class="src">  vs ⊆ vset b ∧</div>
+<div class="ln">10</div><div class="src">  τ.two_third (wt stake (vset b)) ≤ wt stake vs</div>
+<div class="ln">11</div><div class="src"> </div>
+<div class="ln">12</div><div class="src"><span class="thm">theorem</span> quorum_intersection_weight_lower</div>
+<div class="ln">13</div><div class="src">    (hqLsub : qL ⊆ vL) (hqRsub : qR ⊆ vR)</div>
+<div class="ln">14</div><div class="src">    (hqLwt : τ.two_third (wt stake vL) ≤ wt stake qL)</div>
+<div class="ln">15</div><div class="src">    … : … ≤ wt stake (qL ∩ qR) := …</div>
 </div>
-<p class="message">Ethereumの合意の安全性は、<strong>Leanの定理</strong>として書かれようとしている。</p>
+<p class="lean-note">gasper-lean4（commit 7650709）からの抜粋。引数の一部を … で省略。</p>
+</div>
+<div class="lean-pipe">
+<div class="pipe-arrow"><code>lake build</code> ↓</div>
+<div class="pipe-box">
+<p class="step-head">環境（Environment）＝宣言の依存グラフ</p>
+<svg class="dep-graph" viewBox="0 0 560 92" role="img" aria-label="Threshold と wt から quorum_2 が作られ、その上に定理 quorum_intersection_weight_lower が乗る依存グラフ">
+<defs><marker id="dep-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#516575"/></marker></defs>
+<g stroke="#516575" stroke-width="1.4" fill="none" marker-end="url(#dep-head)">
+<path d="M104,22 L184,40"/><path d="M104,66 L184,50"/><path d="M300,46 L360,46"/>
+</g>
+<g font-family="Consolas, monospace" font-size="14" text-anchor="middle">
+<rect x="8" y="8" width="94" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="55" y="27" fill="#263746">Threshold</text>
+<rect x="8" y="52" width="94" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="55" y="71" fill="#263746">wt</text>
+<rect x="188" y="32" width="110" height="28" rx="14" fill="#fff" stroke="#006ba6" stroke-width="1.4"/><text x="243" y="51" fill="#263746">quorum_2</text>
+<rect x="364" y="32" width="188" height="28" rx="14" fill="#fdf0e9" stroke="#b64b12" stroke-width="1.6"/><text x="458" y="51" fill="#b64b12" font-size="12.5">quorum_intersection_…</text>
+</g>
+</svg>
+</div>
+<div class="pipe-arrow">↓</div>
+<div class="kernel-band">
+<p class="step-head">カーネルが、宣言ごとに型を検査</p>
+<p class="verdict ok"><span class="mark">✓</span><span>型が付く　＝　証明完了</span></p>
+<p class="verdict ng"><span class="mark">×</span><span>型が付かない　＝　証明不備（受理されない）</span></p>
+</div>
+<div class="pipe-arrow"><code>def</code> だけが進む ↓</div>
+<div class="pipe-box">
+<p class="step-head">実行可能なプログラムも出てくる</p>
+<p class="step-sub">型が付いた <code>def</code> は C に落ち、leanc が機械語へ。実装としてそのまま使える。</p>
+<div class="c-strip">// Lean compiler output
+LEAN_EXPORT lean_object* l_quorum__2(…)</div>
+</div>
+</div>
+</div>
+<p class="message">定理の前提は、<strong>すべて定理文（型）に書かれている</strong>。だから機械的に取り出せる。</p>
 
 Note:
-このスライドで話すこと：Leanとは何か、Ethereumでどう使われているか。
-Leanは、定理の証明を機械が検査する言語です。定理は、仮説と結論の組です。
-証明に穴があると、Leanのカーネルが受理しません。通らなければ危ない、という機械的な検査に使われます。
-Ethereumの世界では、合意の安全性を示す定理を、Leanで書く取り組みが進んでいます。まだ書き切られてはいません。私たちが使ったのは、その一つのgasper-lean4です。
+このスライドで話すこと：Leanがどう動くか。この仕組みがあるから、次のページ以降の「前提の取り出し」が成り立つ。
+左が実際のソースです。structureで構造を決め、defで関数や述語を定義し、theoremで定理を書きます。ここではThresholdという構造体、重みを合計するwtという関数、2/3クォーラムを表すquorum_2という述語、そしてクォーラム交差の定理を並べています。gasper-lean4の実物からの抜粋で、引数の一部は省略しています。
+lake buildを走らせると、ソースは環境（Environment）になります。環境は宣言の依存グラフです。Thresholdとwtの上にquorum_2が立ち、その上に定理が乗る、という関係が機械的に出てきます。
+カーネルはこの依存グラフを一つずつたどって型を検査します。命題と証明が型と項に対応しているので、証明の検査が型検査になります。型が付けば証明完了、付かなければ証明不備で、受理されません。
+さらに、型が付いたdefはコード生成に回ります。Cが出て、leancがそれをコンパイルし、実行可能なバイナリになります。証明した定義を、そのまま実装として動かせるということです。theoremはPropなので実行コードには残りません。
+カーネルが検査するのは型付けであって、どの前提を置くかは人が決めます。聞かれたら、追加公理やsorryは#print axiomsで別に監査する、と答えます。
+ここで大事なのは右上の一点です。定理の前提は、証明の中ではなく、定理文の型シグネチャにすべて書かれています。だから前提は、解釈なしに機械的に列挙できます。これが次のページ以降の出発点です。
 
 ---
 

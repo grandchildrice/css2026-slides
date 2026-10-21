@@ -1,1 +1,4 @@
 IPSJ-CSS2026232.pdf
+dist/
+node_modules/
+.wrangler/
