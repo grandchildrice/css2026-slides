@@ -1,9 +1,14 @@
 {
-  // CSS2026 発表スライドの静的配信。`python build_site.py` が組み立てた dist/ を配る。
-  // リポジトリ直下をそのまま配ると materials/（カンペ・想定問答）まで公開されるため、
-  // 配信対象はビルドで明示的に絞る。
+  // CSS2026 発表スライドの静的配信。
+  // build.command が dist/ を組み立ててから配るので、Workers Builds 側に
+  // ビルドコマンドを設定しなくても `npx wrangler deploy` だけで通る。
+  // リポジトリ直下をそのまま配ると materials/（カンペ・想定問答）まで
+  // 公開されるため、配信対象はビルドで明示的に絞る。
   "name": "css2026-slides",
   "compatibility_date": "2026-10-21",
+  "build": {
+    "command": "node build_site.mjs"
+  },
   "assets": {
     "directory": "./dist"
   }
