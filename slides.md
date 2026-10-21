@@ -218,6 +218,7 @@ Note:
 <p class="section-tag">提案手法</p>
 
 ## コンセンサスプロトコルの安全性に関する17の定理から、前提条件が57件
+<!-- .element: class="one-line" -->
 
 <table class="thm-list">
 <tr><th>定理</th><th>何を言う定理か</th></tr>
